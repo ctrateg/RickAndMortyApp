@@ -4,8 +4,9 @@
 target 'RickAndMorty' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
- 
-  'SwiftLint'
+  pod 'Alamofire'
+  pod 'SwiftLint'
+  pod 'Locksmith'
   # Pods for RickAndMorty
 
 end

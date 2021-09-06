@@ -1,3 +1,24 @@
-PODFILE CHECKSUM: a34057fdee82f75b5ced8b606876b02f02e72c5a
+PODS:
+  - Alamofire (5.4.3)
+  - Locksmith (4.0.0)
+  - SwiftLint (0.43.1)
+
+DEPENDENCIES:
+  - Alamofire
+  - Locksmith
+  - SwiftLint
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - Locksmith
+    - SwiftLint
+
+SPEC CHECKSUMS:
+  Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
+  Locksmith: e9bebbaaa4cee3c511bc358a44f843c3fe00e21f
+  SwiftLint: 99f82d07b837b942dd563c668de129a03fc3fb52
+
+PODFILE CHECKSUM: 15a241a419c30545a009e4583f655f54bcdfa4e2
 
 COCOAPODS: 1.9.3
