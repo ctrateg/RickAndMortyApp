@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Preview-->
+        <!--Preview View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="Preview" customModule="RickAndMorty" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="PreviewViewController" customModule="RickAndMorty" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC" userLabel="Preview">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -33,7 +33,7 @@
                                 <color key="pageIndicatorTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="currentPageIndicatorTintColor" name="MainColor"/>
                                 <connections>
-                                    <action selector="previewChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="IYA-Ne-UK1"/>
+                                    <action selector="previewPCAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="7ia-q3-ows"/>
                                 </connections>
                             </pageControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lg4-uw-ims">
@@ -65,8 +65,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="ZaO-HU-LOv"/>
                     <connections>
-                        <outlet property="previewImage" destination="U0B-Lm-6wQ" id="ISy-Xe-y30"/>
-                        <outlet property="previewPageControl" destination="sv2-f9-wFJ" id="3bn-rr-1DR"/>
+                        <outlet property="previewImage" destination="U0B-Lm-6wQ" id="4iK-0I-vNZ"/>
+                        <outlet property="previewPCOutlet" destination="sv2-f9-wFJ" id="WZK-1a-UDc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
