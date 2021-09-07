@@ -135,8 +135,8 @@
 			buildConfigurationList = 1B21F4C926E0D8E8008F0470 /* Build configuration list for PBXNativeTarget "RickAndMorty" */;
 			buildPhases = (
 				2467F884336A483D2E4A5C29 /* [CP] Check Pods Manifest.lock */,
-				1B21F4CC26E0D99A008F0470 /* SwiftLint */,
 				1B21F4AE26E0D8E5008F0470 /* Sources */,
+				1B21F4CC26E0D99A008F0470 /* SwiftLint */,
 				1B21F4AF26E0D8E5008F0470 /* Frameworks */,
 				1B21F4B026E0D8E5008F0470 /* Resources */,
 				A6E9E0CF27F01445DBD95D02 /* [CP] Embed Pods Frameworks */,
