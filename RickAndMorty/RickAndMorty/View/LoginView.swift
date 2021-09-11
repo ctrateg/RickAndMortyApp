@@ -6,7 +6,6 @@ class Login: UIViewController {
   @IBOutlet weak var passwordField: UITextField!
   @IBOutlet weak var loginButtonOutlet: UIButton!
   @IBOutlet weak var errorMessage: UILabel!
-    // toDo прикрутить алерты на ошибку
   let showPasswordButton = UIButton(type: .custom)
   let eyeImage = UIImage(systemName: "eye.fill")
   let account = KeyChainAccount(username: "admin", password: "admin1")

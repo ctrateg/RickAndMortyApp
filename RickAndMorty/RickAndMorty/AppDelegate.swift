@@ -3,15 +3,14 @@ import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-  // swiftlint:disable unneeded_parentheses_in_closure_argument
-    lazy var persistentContainer: NSPersistentContainer = {
-      let container = NSPersistentContainer(name: "StudentsData")
-        container.loadPersistentStores {(_, error) in
-        if let error = error as NSError? {
-          fatalError("Unresolved error \(error), \(error.userInfo)")
-          }
+  lazy var persistentContainer: NSPersistentContainer = {
+    let container = NSPersistentContainer(name: "StudentsData")
+      container.loadPersistentStores { _, error in
+      if let error = error as NSError? {
+        fatalError("Unresolved error \(error), \(error.userInfo)")
         }
-        return container
+      }
+      return container
     }()
     func saveContext () {
       let context = persistentContainer.viewContext
