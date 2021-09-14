@@ -1,6 +1,7 @@
 import UIKit
 
 class PreviewViewController: UIViewController {
+  @IBOutlet weak var pageControl: UIPageControl!
   @IBOutlet weak var contentView: UIView!
   @IBAction func skipButton(_ sender: Any) {
     let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -9,6 +10,7 @@ class PreviewViewController: UIViewController {
     loginTVC.modalPresentationStyle = .fullScreen
     present(loginTVC, animated: true)
   }
+  let image = ImageViewController().previewImage
   var currentVCIndex = 0
   let images = ["hello1", "hello2", "hello3"]
   override func viewDidLoad() {
@@ -16,6 +18,11 @@ class PreviewViewController: UIViewController {
     configurePageViewController()
   }
   func configurePageViewController() {
+    pageControl.backgroundColor = .white
+    pageControl.currentPageIndicatorTintColor = UIColor(named: "MainColor")
+    pageControl.pageIndicatorTintColor = UIColor(named: "MainColor")
+    pageControl.preferredIndicatorImage = UIImage(named: "emptyDot")
+    pageControl.setIndicatorImage(UIImage(named: "fullDot"), forPage: 0)
     let idintifier = String(describing: PageViewController.self)
     guard let pageVC = storyboard?.instantiateViewController(withIdentifier: idintifier) as? PageViewController else {
       return
@@ -38,11 +45,11 @@ class PreviewViewController: UIViewController {
       options: NSLayoutConstraint.FormatOptions(rawValue: 0),
       metrics: nil,
       views: views))
-    guard let startVC = detailViewControllerAt(index: currentVCIndex) else { return }
+    guard let startVC = detailViewControllerAt(index: 0) else { return }
     pageVC.setViewControllers([startVC], direction: .forward, animated: true)
   }
   func detailViewControllerAt(index: Int) -> ImageViewController? {
-    if index >= images.count || images.isEmpty {
+    if index >= images.count || images.isEmpty || index < 0 {
       return nil
     }
     guard let imageVC = storyboard?.instantiateViewController(
@@ -61,32 +68,38 @@ extension PreviewViewController: UIPageViewControllerDelegate, UIPageViewControl
     return images.count
   }
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    if currentVCIndex < 0 { return nil }
     let imageVC = viewController as? ImageViewController
     guard var currentIndex = imageVC?.index else { return nil }
     currentVCIndex = currentIndex
-    if currentIndex == 0 { return nil }
     currentIndex -= 1
     return detailViewControllerAt(index: currentIndex)
   }
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    if currentVCIndex >= images.count { return nil }
     let imageViewController = viewController as? ImageViewController
     guard var currentIndex = imageViewController?.index else { return nil }
-    if currentIndex == images.count { return nil }
-    currentIndex += 1
     currentVCIndex = currentIndex
+    currentIndex += 1
     return detailViewControllerAt(index: currentIndex)
   }
   func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-    let pageControl = UIPageControl.appearance(whenContainedInInstancesOf: [PageViewController.self])
-    pageControl.currentPageIndicatorTintColor = .black
-    pageControl.pageIndicatorTintColor = .white
-    pageControl.numberOfPages = images.count
-    for i in 0..<images.count {
-      if currentVCIndex == i {
-        pageControl.setIndicatorImage(UIImage(named: "fullDot"), forPage: i)
-      } else {
-        pageControl.setIndicatorImage(UIImage(named: "emptyDot"), forPage: i)
-      }
+    guard let pageCurrent = pageViewController.viewControllers?.first else { return }
+    let nextImageVC = pageViewController.dataSource?.pageViewController(pageViewController, viewControllerAfter: pageCurrent) as? ImageViewController
+    switch nextImageVC?.index {
+    case 1: pageSwipe(0)
+    case 2: pageSwipe(1)
+    case nil: pageSwipe(2)
+    default:
+      pageSwipe(0)
+    }
+  }
+  func pageSwipe(_ index: Int) {
+    let activePageIcon = UIImage(named: "fullDot")
+    let otherPageIcon = UIImage(named: "emptyDot")
+    (0..<pageControl.numberOfPages).forEach { i in
+      let pageIcon = i == index ? activePageIcon : otherPageIcon
+      pageControl.setIndicatorImage(pageIcon, forPage: i)
     }
   }
 }

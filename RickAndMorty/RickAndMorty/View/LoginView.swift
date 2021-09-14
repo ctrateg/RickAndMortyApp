@@ -44,7 +44,7 @@ class Login: UIViewController {
     let dictLogin = Locksmith.loadDataForUserAccount(userAccount: loginField.text ?? "", inService: "KeyChainAccount")
     if passwordField.text == dictLogin?["password"] as? String {
       let storyboard = UIStoryboard(name: "Main", bundle: nil)
-      let mainTVC = storyboard.instantiateViewController(identifier: "NavigationController")
+      let mainTVC = storyboard.instantiateViewController(identifier: "ContainerViewController")
       mainTVC.loadViewIfNeeded()
       mainTVC.modalPresentationStyle = .fullScreen
       present(mainTVC, animated: true)
