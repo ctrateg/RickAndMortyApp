@@ -22,7 +22,7 @@ class Login: UIViewController {
   }
   func textFieldLine(textField: UITextField) {
     let bottomLine = CALayer()
-    let borderWidth = CGFloat(1.0)
+    let borderWidth = CGFloat(0.5)
     let hight = textField.frame.height
     let width = textField.frame.width
     bottomLine.frame = CGRect(x: 1, y: hight - borderWidth, width: width - 2, height: borderWidth)

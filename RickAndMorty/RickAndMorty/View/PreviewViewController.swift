@@ -23,6 +23,7 @@ class PreviewViewController: UIViewController {
     pageControl.pageIndicatorTintColor = UIColor(named: "MainColor")
     pageControl.preferredIndicatorImage = UIImage(named: "emptyDot")
     pageControl.setIndicatorImage(UIImage(named: "fullDot"), forPage: 0)
+    pageControl.isUserInteractionEnabled = false
     let idintifier = String(describing: PageViewController.self)
     guard let pageVC = storyboard?.instantiateViewController(withIdentifier: idintifier) as? PageViewController else {
       return
@@ -85,7 +86,9 @@ extension PreviewViewController: UIPageViewControllerDelegate, UIPageViewControl
   }
   func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
     guard let pageCurrent = pageViewController.viewControllers?.first else { return }
-    let nextImageVC = pageViewController.dataSource?.pageViewController(pageViewController, viewControllerAfter: pageCurrent) as? ImageViewController
+    let nextImageVC = pageViewController.dataSource?.pageViewController(
+      pageViewController,
+      viewControllerAfter: pageCurrent) as? ImageViewController
     switch nextImageVC?.index {
     case 1: pageSwipe(0)
     case 2: pageSwipe(1)

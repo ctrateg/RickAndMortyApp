@@ -9,7 +9,9 @@ class ContainerViewController: UIViewController, MainInfoTableViewDelegate {
     configureMainInfoTableView()
     }
   func configureMainInfoTableView() {
-    let mainInfoTV = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainInfoTableView") as? MainInfoTableView
+    let mainInfoTV = UIStoryboard(
+      name: "Main",
+      bundle: nil).instantiateViewController(withIdentifier: "MainInfoTableView") as? MainInfoTableView
     mainInfoTV?.delegate = self
     controller = mainInfoTV
     view.addSubview(controller.view)
@@ -25,26 +27,27 @@ class ContainerViewController: UIViewController, MainInfoTableViewDelegate {
 
   func showBurgerMenuViewController(_ shouldMove: Bool) {
     if shouldMove {
-      UIView.animate( withDuration: 0.5,
-                      delay: 0,
-                      usingSpringWithDamping: 0.8,
-                      initialSpringVelocity: 0,
-                      options: .curveEaseInOut,
-                      animations: {
-                      self.controller.view.frame.origin.x = self.controller.view.frame.width - 140
-                     }) { (fininshed) in
+      UIView.animate(
+        withDuration: 0.5,
+        delay: 0,
+        usingSpringWithDamping: 0.8,
+        initialSpringVelocity: 0,
+        options: .curveEaseInOut,
+        animations: {
+        self.controller.view.frame.origin.x = self.controller.view.frame.width - 140
+        }) { (fininshed) in
       }
     } else {
-      UIView.animate(withDuration: 0.5,
-                     delay: 0,
-                     usingSpringWithDamping: 0.8,
-                     initialSpringVelocity: 0,
-                     options: .curveEaseInOut,
-                     animations: {
-                      self.controller.view.frame.origin.x = 0
-                     }) { (fininshed) in
+      UIView.animate(
+        withDuration: 0.5,
+        delay: 0,
+        usingSpringWithDamping: 0.8,
+        initialSpringVelocity: 0,
+        options: .curveEaseInOut,
+        animations: {
+        self.controller.view.frame.origin.x = 0
+        }) { (fininshed) in
       }
-
     }
   }
   // MARK: MainInfoTableViewDelegate
