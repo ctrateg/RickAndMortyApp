@@ -14,11 +14,14 @@
 		1B21F4C226E0D8E8008F0470 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B21F4C126E0D8E8008F0470 /* Assets.xcassets */; };
 		1B21F4C526E0D8E8008F0470 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B21F4C326E0D8E8008F0470 /* LaunchScreen.storyboard */; };
 		1B21F4D526E2279B008F0470 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B21F4D426E2279B008F0470 /* Utility.swift */; };
-		1B21F4D726E27480008F0470 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B21F4D626E27480008F0470 /* LoginView.swift */; };
+		1B21F4D726E27480008F0470 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B21F4D626E27480008F0470 /* LoginViewController.swift */; };
 		1BEB420126E806E9002B1574 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420026E806E9002B1574 /* PageViewController.swift */; };
-		1BEB420326E8A7F2002B1574 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420226E8A7F2002B1574 /* ImageViewController.swift */; };
+		1BEB420326E8A7F2002B1574 /* LabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420226E8A7F2002B1574 /* LabelViewController.swift */; };
 		1BEB420526EF93C4002B1574 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420426EF93C4002B1574 /* ContainerViewController.swift */; };
-		1BEB420726EF93D1002B1574 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420626EF93D1002B1574 /* MenuViewController.swift */; };
+		1BEB420726EF93D1002B1574 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420626EF93D1002B1574 /* MenuTableViewController.swift */; };
+		1BEB420E26F8A5BD002B1574 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420D26F8A5BD002B1574 /* Protocols.swift */; };
+		1BEB421026F8C9BB002B1574 /* MenuButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420F26F8C9BB002B1574 /* MenuButtonCell.swift */; };
+		1BEB421326F8CE2F002B1574 /* InfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB421226F8CE2F002B1574 /* InfoCell.swift */; };
 		1BF7B6BA26E66361006E610D /* MainInfoTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF7B6B926E66361006E610D /* MainInfoTableView.swift */; };
 		1BF7B6BC26E66E68006E610D /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF7B6BB26E66E68006E610D /* PreviewViewController.swift */; };
 		E52CB61DD74036FC0BF1E519 /* Pods_RickAndMorty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E63B0C1BE14E4B9E1DC808 /* Pods_RickAndMorty.framework */; };
@@ -34,13 +37,16 @@
 		1B21F4C426E0D8E8008F0470 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1B21F4C626E0D8E8008F0470 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1B21F4D426E2279B008F0470 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
-		1B21F4D626E27480008F0470 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		1B21F4D626E27480008F0470 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		1BEB420026E806E9002B1574 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
-		1BEB420226E8A7F2002B1574 /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		1BEB420226E8A7F2002B1574 /* LabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelViewController.swift; sourceTree = "<group>"; };
 		1BEB420426EF93C4002B1574 /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
-		1BEB420626EF93D1002B1574 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		1BEB420626EF93D1002B1574 /* MenuTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
+		1BEB420D26F8A5BD002B1574 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		1BEB420F26F8C9BB002B1574 /* MenuButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButtonCell.swift; sourceTree = "<group>"; };
+		1BEB421226F8CE2F002B1574 /* InfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCell.swift; sourceTree = "<group>"; };
 		1BF7B6B926E66361006E610D /* MainInfoTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInfoTableView.swift; sourceTree = "<group>"; };
-		1BF7B6BB26E66E68006E610D /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PreviewViewController.swift; path = RickAndMorty/View/PreviewViewController.swift; sourceTree = SOURCE_ROOT; };
+		1BF7B6BB26E66E68006E610D /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PreviewViewController.swift; path = RickAndMorty/View/PreviewControllers/PreviewViewController.swift; sourceTree = SOURCE_ROOT; };
 		3BCD332416152DBE4E9CA4F9 /* Pods-RickAndMorty.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RickAndMorty.release.xcconfig"; path = "Target Support Files/Pods-RickAndMorty/Pods-RickAndMorty.release.xcconfig"; sourceTree = "<group>"; };
 		44FDD57C9690AC29581A8B17 /* Pods-RickAndMorty.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RickAndMorty.debug.xcconfig"; path = "Target Support Files/Pods-RickAndMorty/Pods-RickAndMorty.debug.xcconfig"; sourceTree = "<group>"; };
 		E7E63B0C1BE14E4B9E1DC808 /* Pods_RickAndMorty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RickAndMorty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +101,7 @@
 			children = (
 				1B21F4BE26E0D8E5008F0470 /* RickAndMorty.xcdatamodeld */,
 				1B21F4D426E2279B008F0470 /* Utility.swift */,
+				1BEB420D26F8A5BD002B1574 /* Protocols.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -102,12 +109,10 @@
 		1B21F4CE26E223E3008F0470 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1BEB420826EF94D9002B1574 /* BurgerMenu */,
-				1BF7B6BB26E66E68006E610D /* PreviewViewController.swift */,
-				1B21F4D626E27480008F0470 /* LoginView.swift */,
-				1BEB420026E806E9002B1574 /* PageViewController.swift */,
-				1BEB420226E8A7F2002B1574 /* ImageViewController.swift */,
 				1BF7B6B926E66361006E610D /* MainInfoTableView.swift */,
+				1BEB420A26F36433002B1574 /* LoginViewController */,
+				1BEB420926F363B0002B1574 /* PreviewControllers */,
+				1BEB420826EF94D9002B1574 /* BurgerMenu */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -124,10 +129,38 @@
 		1BEB420826EF94D9002B1574 /* BurgerMenu */ = {
 			isa = PBXGroup;
 			children = (
-				1BEB420626EF93D1002B1574 /* MenuViewController.swift */,
+				1BEB421126F8CD4E002B1574 /* Cells */,
+				1BEB420626EF93D1002B1574 /* MenuTableViewController.swift */,
 				1BEB420426EF93C4002B1574 /* ContainerViewController.swift */,
 			);
 			path = BurgerMenu;
+			sourceTree = "<group>";
+		};
+		1BEB420926F363B0002B1574 /* PreviewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				1BEB420226E8A7F2002B1574 /* LabelViewController.swift */,
+				1BEB420026E806E9002B1574 /* PageViewController.swift */,
+				1BF7B6BB26E66E68006E610D /* PreviewViewController.swift */,
+			);
+			path = PreviewControllers;
+			sourceTree = "<group>";
+		};
+		1BEB420A26F36433002B1574 /* LoginViewController */ = {
+			isa = PBXGroup;
+			children = (
+				1B21F4D626E27480008F0470 /* LoginViewController.swift */,
+			);
+			path = LoginViewController;
+			sourceTree = "<group>";
+		};
+		1BEB421126F8CD4E002B1574 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				1BEB420F26F8C9BB002B1574 /* MenuButtonCell.swift */,
+				1BEB421226F8CE2F002B1574 /* InfoCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		393B61C807F1E153C4BFF656 /* Pods */ = {
@@ -280,17 +313,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BEB421026F8C9BB002B1574 /* MenuButtonCell.swift in Sources */,
 				1B21F4D526E2279B008F0470 /* Utility.swift in Sources */,
-				1BEB420326E8A7F2002B1574 /* ImageViewController.swift in Sources */,
+				1BEB420326E8A7F2002B1574 /* LabelViewController.swift in Sources */,
 				1BEB420526EF93C4002B1574 /* ContainerViewController.swift in Sources */,
+				1BEB420E26F8A5BD002B1574 /* Protocols.swift in Sources */,
 				1B21F4C026E0D8E5008F0470 /* RickAndMorty.xcdatamodeld in Sources */,
-				1BEB420726EF93D1002B1574 /* MenuViewController.swift in Sources */,
+				1BEB420726EF93D1002B1574 /* MenuTableViewController.swift in Sources */,
 				1BF7B6BC26E66E68006E610D /* PreviewViewController.swift in Sources */,
-				1B21F4D726E27480008F0470 /* LoginView.swift in Sources */,
+				1B21F4D726E27480008F0470 /* LoginViewController.swift in Sources */,
 				1BF7B6BA26E66361006E610D /* MainInfoTableView.swift in Sources */,
 				1B21F4B626E0D8E5008F0470 /* AppDelegate.swift in Sources */,
 				1B21F4B826E0D8E5008F0470 /* SceneDelegate.swift in Sources */,
 				1BEB420126E806E9002B1574 /* PageViewController.swift in Sources */,
+				1BEB421326F8CE2F002B1574 /* InfoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
