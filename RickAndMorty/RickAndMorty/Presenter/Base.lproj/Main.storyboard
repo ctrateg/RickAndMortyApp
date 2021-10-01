@@ -502,8 +502,8 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="R6h-ky-uiT" firstAttribute="height" secondItem="fY5-EQ-0Or" secondAttribute="height" multiplier="0.193548" id="2dk-UM-KEw"/>
-                                        <constraint firstAttribute="trailing" secondItem="jPS-KX-4yy" secondAttribute="trailing" constant="75" id="4JI-Y5-cyl"/>
-                                        <constraint firstItem="jPS-KX-4yy" firstAttribute="leading" relation="lessThanOrEqual" secondItem="R6h-ky-uiT" secondAttribute="trailing" constant="144" id="FfN-e5-h5a"/>
+                                        <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="jPS-KX-4yy" secondAttribute="trailing" constant="75" id="4JI-Y5-cyl"/>
+                                        <constraint firstItem="jPS-KX-4yy" firstAttribute="leading" secondItem="R6h-ky-uiT" secondAttribute="trailing" constant="144" id="FfN-e5-h5a"/>
                                         <constraint firstItem="GX9-aE-XcM" firstAttribute="top" secondItem="fY5-EQ-0Or" secondAttribute="top" constant="16" id="KeP-rb-3Bp"/>
                                         <constraint firstItem="GX9-aE-XcM" firstAttribute="leading" secondItem="fY5-EQ-0Or" secondAttribute="leading" constant="16" id="Mqa-bB-tlu"/>
                                         <constraint firstAttribute="bottom" secondItem="DIV-X1-3GQ" secondAttribute="bottom" id="O91-CW-bhg"/>
