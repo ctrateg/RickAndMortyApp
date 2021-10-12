@@ -4,7 +4,7 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
   lazy var persistentContainer: NSPersistentContainer = {
-    let container = NSPersistentContainer(name: "StudentsData")
+    let container = NSPersistentContainer(name: "RickAndMorty")
       container.loadPersistentStores { _, error in
       if let error = error as NSError? {
         fatalError("Unresolved error \(error), \(error.userInfo)")

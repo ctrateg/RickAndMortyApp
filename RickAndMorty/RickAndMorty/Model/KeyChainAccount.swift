@@ -1,8 +1,5 @@
 import Locksmith
 
-class Utility {
-}
-
 struct KeyChainAccount: CreateableSecureStorable, GenericPasswordSecureStorable {
   let username: String
   let password: String

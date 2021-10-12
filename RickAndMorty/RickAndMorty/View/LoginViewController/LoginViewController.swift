@@ -8,7 +8,7 @@ class LoginViewController: UIViewController {
   @IBOutlet weak var errorMessage: UILabel!
   private let showPasswordButton = UIButton(type: .custom)
   private let eyeImage = UIImage(systemName: "eye.fill")
-  private let account = KeyChainAccount(username: "admin", password: "admin1")
+  private let account = KeyChainAccount(username: "Rick", password: "Morty")
   private var gesture = UITapGestureRecognizer()
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -78,7 +78,7 @@ class LoginViewController: UIViewController {
     let dictLogin = Locksmith.loadDataForUserAccount(userAccount: loginField.text ?? "", inService: "KeyChainAccount")
     if passwordField.text == dictLogin?["password"] as? String {
       let storyboard = UIStoryboard(name: "Main", bundle: nil)
-      let mainTVC = storyboard.instantiateViewController(identifier: "ContainerViewController")
+      let mainTVC = storyboard.instantiateViewController(identifier: "TabBarViewController")
       mainTVC.loadViewIfNeeded()
       mainTVC.modalPresentationStyle = .fullScreen
       present(mainTVC, animated: true)
