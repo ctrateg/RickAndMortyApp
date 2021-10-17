@@ -16,8 +16,7 @@
 		1B21F4D726E27480008F0470 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B21F4D626E27480008F0470 /* LoginViewController.swift */; };
 		1BEB420126E806E9002B1574 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420026E806E9002B1574 /* PageViewController.swift */; };
 		1BEB420326E8A7F2002B1574 /* LabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420226E8A7F2002B1574 /* LabelViewController.swift */; };
-		1BEB420526EF93C4002B1574 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420426EF93C4002B1574 /* ContainerViewController.swift */; };
-		1BEB420E26F8A5BD002B1574 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420D26F8A5BD002B1574 /* Protocols.swift */; };
+		1BEB420E26F8A5BD002B1574 /* RequestServiceProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEB420D26F8A5BD002B1574 /* RequestServiceProtocols.swift */; };
 		1BF7B6BA26E66361006E610D /* CharactersTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF7B6B926E66361006E610D /* CharactersTableView.swift */; };
 		1BF7B6BC26E66E68006E610D /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF7B6BB26E66E68006E610D /* PreviewViewController.swift */; };
 		1BFD31452703051400901BCB /* InfoDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31442703051400901BCB /* InfoDTO.swift */; };
@@ -36,10 +35,17 @@
 		1BFD316D270F792100901BCB /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD316C270F792100901BCB /* TabBarViewController.swift */; };
 		1BFD316F270F793C00901BCB /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD316E270F793C00901BCB /* CustomTabBar.swift */; };
 		1BFD31782711D4C300901BCB /* LocationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31772711D4C300901BCB /* LocationTableViewController.swift */; };
-		1BFD317A2711D4DF00901BCB /* EpisodesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31792711D4DF00901BCB /* EpisodesTableViewController.swift */; };
+		1BFD317A2711D4DF00901BCB /* EpisodesTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31792711D4DF00901BCB /* EpisodesTableView.swift */; };
 		1BFD317C2711DEF000901BCB /* CharacterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD317B2711DEF000901BCB /* CharacterTableViewCell.swift */; };
 		1BFD318027158FE200901BCB /* EpisodesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD317F27158FE200901BCB /* EpisodesTableViewCell.swift */; };
 		1BFD31832715A2BF00901BCB /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31822715A2BF00901BCB /* LocationTableViewCell.swift */; };
+		1BFD31862717041F00901BCB /* InformatorProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31852717041F00901BCB /* InformatorProtocols.swift */; };
+		1BFD31892717045500901BCB /* UserCacheDataProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31882717045500901BCB /* UserCacheDataProtocols.swift */; };
+		1BFD318F2719945700901BCB /* CharacterCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD318E2719945700901BCB /* CharacterCardViewController.swift */; };
+		1BFD3193271C43A900901BCB /* CharactersTableUI.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BFD3192271C43A900901BCB /* CharactersTableUI.storyboard */; };
+		1BFD3195271C442700901BCB /* LocationTableUI.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BFD3194271C442700901BCB /* LocationTableUI.storyboard */; };
+		1BFD3198271C44B800901BCB /* EpisodesTableUI.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BFD3197271C44B800901BCB /* EpisodesTableUI.storyboard */; };
+		1BFD319A271C455000901BCB /* TabBarUI.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BFD3199271C455000901BCB /* TabBarUI.storyboard */; };
 		E52CB61DD74036FC0BF1E519 /* Pods_RickAndMorty.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E63B0C1BE14E4B9E1DC808 /* Pods_RickAndMorty.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,8 +61,7 @@
 		1B21F4D626E27480008F0470 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		1BEB420026E806E9002B1574 /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		1BEB420226E8A7F2002B1574 /* LabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelViewController.swift; sourceTree = "<group>"; };
-		1BEB420426EF93C4002B1574 /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
-		1BEB420D26F8A5BD002B1574 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		1BEB420D26F8A5BD002B1574 /* RequestServiceProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestServiceProtocols.swift; sourceTree = "<group>"; };
 		1BF7B6B926E66361006E610D /* CharactersTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersTableView.swift; sourceTree = "<group>"; };
 		1BF7B6BB26E66E68006E610D /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PreviewViewController.swift; path = RickAndMorty/View/PreviewControllers/PreviewViewController.swift; sourceTree = SOURCE_ROOT; };
 		1BFD31442703051400901BCB /* InfoDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoDTO.swift; sourceTree = "<group>"; };
@@ -75,10 +80,17 @@
 		1BFD316C270F792100901BCB /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		1BFD316E270F793C00901BCB /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
 		1BFD31772711D4C300901BCB /* LocationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewController.swift; sourceTree = "<group>"; };
-		1BFD31792711D4DF00901BCB /* EpisodesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesTableViewController.swift; sourceTree = "<group>"; };
+		1BFD31792711D4DF00901BCB /* EpisodesTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesTableView.swift; sourceTree = "<group>"; };
 		1BFD317B2711DEF000901BCB /* CharacterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterTableViewCell.swift; sourceTree = "<group>"; };
 		1BFD317F27158FE200901BCB /* EpisodesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesTableViewCell.swift; sourceTree = "<group>"; };
 		1BFD31822715A2BF00901BCB /* LocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
+		1BFD31852717041F00901BCB /* InformatorProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformatorProtocols.swift; sourceTree = "<group>"; };
+		1BFD31882717045500901BCB /* UserCacheDataProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCacheDataProtocols.swift; sourceTree = "<group>"; };
+		1BFD318E2719945700901BCB /* CharacterCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCardViewController.swift; sourceTree = "<group>"; };
+		1BFD3192271C43A900901BCB /* CharactersTableUI.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CharactersTableUI.storyboard; sourceTree = "<group>"; };
+		1BFD3194271C442700901BCB /* LocationTableUI.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LocationTableUI.storyboard; sourceTree = "<group>"; };
+		1BFD3197271C44B800901BCB /* EpisodesTableUI.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EpisodesTableUI.storyboard; sourceTree = "<group>"; };
+		1BFD3199271C455000901BCB /* TabBarUI.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TabBarUI.storyboard; sourceTree = "<group>"; };
 		3BCD332416152DBE4E9CA4F9 /* Pods-RickAndMorty.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RickAndMorty.release.xcconfig"; path = "Target Support Files/Pods-RickAndMorty/Pods-RickAndMorty.release.xcconfig"; sourceTree = "<group>"; };
 		44FDD57C9690AC29581A8B17 /* Pods-RickAndMorty.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RickAndMorty.debug.xcconfig"; path = "Target Support Files/Pods-RickAndMorty/Pods-RickAndMorty.debug.xcconfig"; sourceTree = "<group>"; };
 		E7E63B0C1BE14E4B9E1DC808 /* Pods_RickAndMorty.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RickAndMorty.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,7 +129,7 @@
 		1B21F4B426E0D8E5008F0470 /* RickAndMorty */ = {
 			isa = PBXGroup;
 			children = (
-				1B21F4CF26E223E5008F0470 /* Presenter */,
+				1B21F4CF26E223E5008F0470 /* UI */,
 				1B21F4CE26E223E3008F0470 /* View */,
 				1B21F4CD26E223DF008F0470 /* Model */,
 				1B21F4B526E0D8E5008F0470 /* AppDelegate.swift */,
@@ -134,7 +146,6 @@
 				1BFD317D27145EB900901BCB /* DataObjects */,
 				1BFD3143270304B600901BCB /* Domain */,
 				1B21F4D426E2279B008F0470 /* KeyChainAccount.swift */,
-				1BEB420D26F8A5BD002B1574 /* Protocols.swift */,
 				1BFD3168270B318400901BCB /* RickAndMorty.xcdatamodeld */,
 			);
 			path = Model;
@@ -143,11 +154,10 @@
 		1B21F4CE26E223E3008F0470 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1BEB420426EF93C4002B1574 /* ContainerViewController.swift */,
-				1BEB420826EF94D9002B1574 /* CharacterControllers */,
+				1BEB420826EF94D9002B1574 /* Character */,
 				1BFD31742711D46700901BCB /* StatisticsControllers */,
-				1BFD31732711D46400901BCB /* LocationControllers */,
-				1BFD31722711D46100901BCB /* EpisodesControllers */,
+				1BFD31732711D46400901BCB /* Location */,
+				1BFD31722711D46100901BCB /* Episodes */,
 				1BFD316B270F790200901BCB /* TabBarControllers */,
 				1BEB420A26F36433002B1574 /* LoginViewController */,
 				1BEB420926F363B0002B1574 /* PreviewControllers */,
@@ -155,22 +165,24 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		1B21F4CF26E223E5008F0470 /* Presenter */ = {
+		1B21F4CF26E223E5008F0470 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				1B21F4C326E0D8E8008F0470 /* LaunchScreen.storyboard */,
 				1B21F4BB26E0D8E5008F0470 /* Main.storyboard */,
 			);
-			path = Presenter;
+			path = UI;
 			sourceTree = "<group>";
 		};
-		1BEB420826EF94D9002B1574 /* CharacterControllers */ = {
+		1BEB420826EF94D9002B1574 /* Character */ = {
 			isa = PBXGroup;
 			children = (
+				1BFD3192271C43A900901BCB /* CharactersTableUI.storyboard */,
 				1BF7B6B926E66361006E610D /* CharactersTableView.swift */,
+				1BFD318B271992F800901BCB /* CharacterCard */,
 				1BEB421126F8CD4E002B1574 /* Cells */,
 			);
-			path = CharacterControllers;
+			path = Character;
 			sourceTree = "<group>";
 		};
 		1BEB420926F363B0002B1574 /* PreviewControllers */ = {
@@ -250,28 +262,31 @@
 		1BFD316B270F790200901BCB /* TabBarControllers */ = {
 			isa = PBXGroup;
 			children = (
+				1BFD3199271C455000901BCB /* TabBarUI.storyboard */,
 				1BFD316C270F792100901BCB /* TabBarViewController.swift */,
 				1BFD316E270F793C00901BCB /* CustomTabBar.swift */,
 			);
 			path = TabBarControllers;
 			sourceTree = "<group>";
 		};
-		1BFD31722711D46100901BCB /* EpisodesControllers */ = {
+		1BFD31722711D46100901BCB /* Episodes */ = {
 			isa = PBXGroup;
 			children = (
-				1BFD31792711D4DF00901BCB /* EpisodesTableViewController.swift */,
+				1BFD3197271C44B800901BCB /* EpisodesTableUI.storyboard */,
+				1BFD31792711D4DF00901BCB /* EpisodesTableView.swift */,
 				1BFD317E27158FBC00901BCB /* Cells */,
 			);
-			path = EpisodesControllers;
+			path = Episodes;
 			sourceTree = "<group>";
 		};
-		1BFD31732711D46400901BCB /* LocationControllers */ = {
+		1BFD31732711D46400901BCB /* Location */ = {
 			isa = PBXGroup;
 			children = (
+				1BFD3194271C442700901BCB /* LocationTableUI.storyboard */,
 				1BFD31772711D4C300901BCB /* LocationTableViewController.swift */,
 				1BFD31812715A2AA00901BCB /* Cells */,
 			);
-			path = LocationControllers;
+			path = Location;
 			sourceTree = "<group>";
 		};
 		1BFD31742711D46700901BCB /* StatisticsControllers */ = {
@@ -284,9 +299,9 @@
 		1BFD317D27145EB900901BCB /* DataObjects */ = {
 			isa = PBXGroup;
 			children = (
-				1BFD31532705F64F00901BCB /* Informator.swift */,
-				1BFD31552705F7BB00901BCB /* UserCacheData.swift */,
-				1BFD3151270307D000901BCB /* RequestServiceAPI.swift */,
+				1BFD318A271704AD00901BCB /* RequestServiceGroup */,
+				1BFD31872717043600901BCB /* UserCacheDataGroup */,
+				1BFD3184271703F500901BCB /* InformatorGroup */,
 			);
 			path = DataObjects;
 			sourceTree = "<group>";
@@ -305,6 +320,41 @@
 				1BFD31822715A2BF00901BCB /* LocationTableViewCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		1BFD3184271703F500901BCB /* InformatorGroup */ = {
+			isa = PBXGroup;
+			children = (
+				1BFD31532705F64F00901BCB /* Informator.swift */,
+				1BFD31852717041F00901BCB /* InformatorProtocols.swift */,
+			);
+			path = InformatorGroup;
+			sourceTree = "<group>";
+		};
+		1BFD31872717043600901BCB /* UserCacheDataGroup */ = {
+			isa = PBXGroup;
+			children = (
+				1BFD31552705F7BB00901BCB /* UserCacheData.swift */,
+				1BFD31882717045500901BCB /* UserCacheDataProtocols.swift */,
+			);
+			path = UserCacheDataGroup;
+			sourceTree = "<group>";
+		};
+		1BFD318A271704AD00901BCB /* RequestServiceGroup */ = {
+			isa = PBXGroup;
+			children = (
+				1BFD3151270307D000901BCB /* RequestServiceAPI.swift */,
+				1BEB420D26F8A5BD002B1574 /* RequestServiceProtocols.swift */,
+			);
+			path = RequestServiceGroup;
+			sourceTree = "<group>";
+		};
+		1BFD318B271992F800901BCB /* CharacterCard */ = {
+			isa = PBXGroup;
+			children = (
+				1BFD318E2719945700901BCB /* CharacterCardViewController.swift */,
+			);
+			path = CharacterCard;
 			sourceTree = "<group>";
 		};
 		393B61C807F1E153C4BFF656 /* Pods */ = {
@@ -386,7 +436,11 @@
 			files = (
 				1B21F4C526E0D8E8008F0470 /* LaunchScreen.storyboard in Resources */,
 				1B21F4C226E0D8E8008F0470 /* Assets.xcassets in Resources */,
+				1BFD3198271C44B800901BCB /* EpisodesTableUI.storyboard in Resources */,
+				1BFD319A271C455000901BCB /* TabBarUI.storyboard in Resources */,
+				1BFD3193271C43A900901BCB /* CharactersTableUI.storyboard in Resources */,
 				1B21F4BD26E0D8E5008F0470 /* Main.storyboard in Resources */,
+				1BFD3195271C442700901BCB /* LocationTableUI.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,13 +513,13 @@
 			files = (
 				1B21F4D526E2279B008F0470 /* KeyChainAccount.swift in Sources */,
 				1BEB420326E8A7F2002B1574 /* LabelViewController.swift in Sources */,
-				1BEB420526EF93C4002B1574 /* ContainerViewController.swift in Sources */,
 				1BFD316A270B318400901BCB /* RickAndMorty.xcdatamodeld in Sources */,
-				1BEB420E26F8A5BD002B1574 /* Protocols.swift in Sources */,
+				1BEB420E26F8A5BD002B1574 /* RequestServiceProtocols.swift in Sources */,
 				1BFD3152270307D000901BCB /* RequestServiceAPI.swift in Sources */,
 				1BFD31832715A2BF00901BCB /* LocationTableViewCell.swift in Sources */,
 				1BF7B6BC26E66E68006E610D /* PreviewViewController.swift in Sources */,
 				1BFD31472703052F00901BCB /* CharacterResultDTO.swift in Sources */,
+				1BFD31892717045500901BCB /* UserCacheDataProtocols.swift in Sources */,
 				1BFD31562705F7BB00901BCB /* UserCacheData.swift in Sources */,
 				1B21F4D726E27480008F0470 /* LoginViewController.swift in Sources */,
 				1BF7B6BA26E66361006E610D /* CharactersTableView.swift in Sources */,
@@ -475,16 +529,18 @@
 				1BFD318027158FE200901BCB /* EpisodesTableViewCell.swift in Sources */,
 				1BFD315E270B276200901BCB /* LocationDTO.swift in Sources */,
 				1BFD317C2711DEF000901BCB /* CharacterTableViewCell.swift in Sources */,
+				1BFD31862717041F00901BCB /* InformatorProtocols.swift in Sources */,
 				1BFD314B2703064900901BCB /* OriginDTO.swift in Sources */,
 				1BFD31492703057800901BCB /* LocationArrayDTO.swift in Sources */,
 				1BFD316D270F792100901BCB /* TabBarViewController.swift in Sources */,
 				1B21F4B826E0D8E5008F0470 /* SceneDelegate.swift in Sources */,
+				1BFD318F2719945700901BCB /* CharacterCardViewController.swift in Sources */,
 				1BFD3160270B27CB00901BCB /* LocationResultDTO.swift in Sources */,
 				1BEB420126E806E9002B1574 /* PageViewController.swift in Sources */,
 				1BFD3164270B28FE00901BCB /* EpisodesResultDTO.swift in Sources */,
 				1BFD316F270F793C00901BCB /* CustomTabBar.swift in Sources */,
 				1BFD3162270B28D000901BCB /* EpisodesDTO.swift in Sources */,
-				1BFD317A2711D4DF00901BCB /* EpisodesTableViewController.swift in Sources */,
+				1BFD317A2711D4DF00901BCB /* EpisodesTableView.swift in Sources */,
 				1BFD31542705F65000901BCB /* Informator.swift in Sources */,
 				1BFD31452703051400901BCB /* InfoDTO.swift in Sources */,
 			);

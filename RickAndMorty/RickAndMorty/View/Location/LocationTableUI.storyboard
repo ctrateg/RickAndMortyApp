@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--LocationTableView-->
+        <scene sceneID="Dlc-hw-RSf">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fSV-jO-wuz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tableViewController storyboardIdentifier="LocationsTableView" id="zQ6-MT-l63" userLabel="LocationTableView" customClass="LocationTableViewController" customModule="RickAndMorty" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="woG-ZQ-Mk1">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationCell" rowHeight="80" id="nUj-Xe-FeZ" userLabel="LocationCell" customClass="LocationTableViewCell" customModule="RickAndMorty" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44.5" width="414" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nUj-Xe-FeZ" id="KHz-Kc-Aow">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7lV-dc-tnY" userLabel="FavoriteButton">
+                                            <rect key="frame" x="335" y="19" width="24" height="42"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="24" id="5BA-8S-CZp"/>
+                                            </constraints>
+                                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" image="LikeButton"/>
+                                            <connections>
+                                                <action selector="favoriteButton:" destination="nUj-Xe-FeZ" eventType="touchUpInside" id="BuS-HW-CrN"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vGx-8b-NYQ" userLabel="SequeButton">
+                                            <rect key="frame" x="374" y="20" width="8" height="40"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="8" id="v8z-Ji-C7n"/>
+                                            </constraints>
+                                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" image="SequeButton"/>
+                                            <connections>
+                                                <action selector="sequeButton:" destination="nUj-Xe-FeZ" eventType="touchUpInside" id="W0i-Jc-d8B"/>
+                                            </connections>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="39u-vw-dqh" userLabel="LocationLabel">
+                                            <rect key="frame" x="16" y="19" width="280" height="42"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="vGx-8b-NYQ" secondAttribute="bottom" constant="20" id="N3P-It-60I"/>
+                                        <constraint firstItem="7lV-dc-tnY" firstAttribute="leading" secondItem="39u-vw-dqh" secondAttribute="trailing" constant="39" id="Rw3-5z-EVx"/>
+                                        <constraint firstItem="7lV-dc-tnY" firstAttribute="top" secondItem="KHz-Kc-Aow" secondAttribute="top" constant="19" id="Vgi-KT-P01"/>
+                                        <constraint firstItem="vGx-8b-NYQ" firstAttribute="leading" secondItem="7lV-dc-tnY" secondAttribute="trailing" constant="15" id="YnQ-wy-U6p"/>
+                                        <constraint firstAttribute="trailing" secondItem="vGx-8b-NYQ" secondAttribute="trailing" constant="32" id="bpI-0b-97D"/>
+                                        <constraint firstAttribute="bottom" secondItem="39u-vw-dqh" secondAttribute="bottom" constant="19" id="hMT-s3-vrn"/>
+                                        <constraint firstItem="vGx-8b-NYQ" firstAttribute="top" secondItem="KHz-Kc-Aow" secondAttribute="top" constant="20" id="jmo-iu-bfO"/>
+                                        <constraint firstItem="39u-vw-dqh" firstAttribute="top" secondItem="KHz-Kc-Aow" secondAttribute="top" constant="19" id="l2r-vT-bm2"/>
+                                        <constraint firstAttribute="bottom" secondItem="7lV-dc-tnY" secondAttribute="bottom" constant="19" id="lxB-tU-fsh"/>
+                                        <constraint firstItem="39u-vw-dqh" firstAttribute="leading" secondItem="KHz-Kc-Aow" secondAttribute="leading" constant="16" id="sxj-lc-8yJ"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="locationName" destination="39u-vw-dqh" id="Z9m-ek-tY9"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="zQ6-MT-l63" id="Zbv-00-V9B"/>
+                            <outlet property="delegate" destination="zQ6-MT-l63" id="Jc4-0D-07d"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="al9-cW-kWF"/>
+                </tableViewController>
+            </objects>
+            <point key="canvasLocation" x="1823.1884057971015" y="844.41964285714278"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="WKK-BB-o1P">
+            <objects>
+                <navigationController storyboardIdentifier="LocationNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="ZrO-Zj-yIr" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4va-35-2k5">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="zQ6-MT-l63" kind="relationship" relationship="rootViewController" id="IUq-wy-OiM"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FdW-1R-3au" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="913.04347826086962" y="844.41964285714278"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="LikeButton" width="24" height="23"/>
+        <image name="SequeButton" width="8" height="12"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

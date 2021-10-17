@@ -1,7 +1,12 @@
 import Alamofire
 import Foundation
 
-class RequestServiceAPI: RequestServiceDelegate {
+class RequestServiceAPI: RequestServiceDelegate, RequestSerivceSearchDelegate {
+  static var shared: RequestServiceAPI = {
+    let instance = RequestServiceAPI()
+    return instance
+  }()
+  private init() {}
   private let jsonDecoder = JSONDecoder()
   private let rickAndMortyAPI = "https://rickandmortyapi.com/api"
   func characterRequestAPI(page: String = "1", completion: @escaping (CharacterDTO) -> Void) {

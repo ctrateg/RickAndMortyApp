@@ -1,7 +1,6 @@
 import UIKit
 
 class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
-  let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
   private let middleButtonDiameter: CGFloat = 58
   private lazy var middleButton: UIButton = {
     let middleButton = UIButton(type: .custom)
@@ -21,23 +20,27 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
     delegate = self
   }
   private func viewControllersConfiguration() {
-    let charactersVC = mainStoryboard.instantiateViewController(withIdentifier: "NavigationController")
+    let charactersVC = UIStoryboard(name: "CharactersTableUI", bundle: nil)
+      .instantiateViewController(withIdentifier: "CharacterNavigationController")
     charactersVC.tabBarItem.title = "characters"
     charactersVC.tabBarItem.image = UIImage(named: "CharacterImage")
 
-    let locationsVC = mainStoryboard.instantiateViewController(withIdentifier: "NavigationController")
+    let locationsVC = UIStoryboard(name: "LocationTableUI", bundle: nil)
+      .instantiateViewController(withIdentifier: "LocationNavigationController")
     locationsVC.tabBarItem.title = "locations"
     locationsVC.tabBarItem.image = UIImage(named: "LocationImage")
     locationsVC.tabBarItem.badgeColor = .white
 
-    let favoritesVC = mainStoryboard.instantiateViewController(withIdentifier: "NavigationController")
+    let favoritesVC = UIStoryboard(name: "CharactersTableUI", bundle: nil)
+      .instantiateViewController(withIdentifier: "CharacterNavigationController")
     favoritesVC.tabBarItem.title = ""
-
-    let statisticsVC = mainStoryboard.instantiateViewController(withIdentifier: "NavigationController")
+    let statisticsVC = UIStoryboard(name: "CharactersTableUI", bundle: nil)
+      .instantiateViewController(withIdentifier: "CharacterNavigationController")
     statisticsVC.tabBarItem.title = "statistics"
     statisticsVC.tabBarItem.image = UIImage(named: "StatisticImage")
 
-    let episodesVC = mainStoryboard.instantiateViewController(withIdentifier: "NavigationController")
+    let episodesVC = UIStoryboard(name: "EpisodesTableUI", bundle: nil)
+      .instantiateViewController(withIdentifier: "EpisodesNavigationController")
     episodesVC.tabBarItem.title = "episodes"
     episodesVC.tabBarItem.image = UIImage(named: "EpisodeImage")
 

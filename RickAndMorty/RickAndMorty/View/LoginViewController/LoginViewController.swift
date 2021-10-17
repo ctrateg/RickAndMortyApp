@@ -77,7 +77,7 @@ class LoginViewController: UIViewController {
   @IBAction func loginButton(_ sender: Any) {
     let dictLogin = Locksmith.loadDataForUserAccount(userAccount: loginField.text ?? "", inService: "KeyChainAccount")
     if passwordField.text == dictLogin?["password"] as? String {
-      let storyboard = UIStoryboard(name: "Main", bundle: nil)
+      let storyboard = UIStoryboard(name: "TabBarUI", bundle: nil)
       let mainTVC = storyboard.instantiateViewController(identifier: "TabBarViewController")
       mainTVC.loadViewIfNeeded()
       mainTVC.modalPresentationStyle = .fullScreen
