@@ -6,10 +6,13 @@ class LoginViewController: UIViewController {
   @IBOutlet weak var passwordField: UITextField!
   @IBOutlet weak var loginButtonOutlet: UIButton!
   @IBOutlet weak var errorMessage: UILabel!
+
   private let showPasswordButton = UIButton(type: .custom)
   private let eyeImage = UIImage(systemName: "eye.fill")
-  private let account = KeyChainAccount(username: "admin", password: "admin1")
+  private let account = KeyChainAccount(username: "Rick", password: "Morty")
+
   private var gesture = UITapGestureRecognizer()
+
   override func viewDidLoad() {
     super.viewDidLoad()
     self.modalPresentationStyle = .fullScreen
@@ -29,6 +32,7 @@ class LoginViewController: UIViewController {
     gesture.numberOfTapsRequired = 1
     self.view.addGestureRecognizer(gesture)
   }
+
   @objc func keyboardClose(_ sender: UITapGestureRecognizer) {
     loginField.resignFirstResponder()
     passwordField.resignFirstResponder()
@@ -58,30 +62,34 @@ class LoginViewController: UIViewController {
     textField.layer.addSublayer(bottomLine)
     textField.layer.masksToBounds = true
   }
+
   @IBAction func didEndEditingLogin(_ sender: UITextField) {
     moveAnimtating(textFeild: loginField, distance: -85, goUp: false)
   }
   @IBAction func didEndEdditingPassword(_ sender: UITextField) {
     moveAnimtating(textFeild: passwordField, distance: -125, goUp: false)
   }
+
   @IBAction func loginClearField(_ sender: Any) {
     loginField.text = ""
     loginField.textColor = .black
     moveAnimtating(textFeild: loginField, distance: -85, goUp: true)
   }
+
   @IBAction func passwordClearField(_ sender: Any) {
     passwordField.text = ""
     passwordField.textColor = .black
     moveAnimtating(textFeild: passwordField, distance: -125, goUp: true)
   }
+
   @IBAction func loginButton(_ sender: Any) {
     let dictLogin = Locksmith.loadDataForUserAccount(userAccount: loginField.text ?? "", inService: "KeyChainAccount")
     if passwordField.text == dictLogin?["password"] as? String {
-      let storyboard = UIStoryboard(name: "Main", bundle: nil)
-      let mainTVC = storyboard.instantiateViewController(identifier: "ContainerViewController")
+      let storyboard = UIStoryboard(name: "TabBarUI", bundle: nil)
+      let mainTVC = storyboard.instantiateViewController(identifier: "TabBarViewController")
       mainTVC.loadViewIfNeeded()
       mainTVC.modalPresentationStyle = .fullScreen
-      present(mainTVC, animated: true)
+      show(mainTVC, sender: nil)
     } else {
       let alert = UIAlertController(title: "Error", message: "This login or password not found", preferredStyle: .alert)
       alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -91,12 +99,14 @@ class LoginViewController: UIViewController {
       passwordField.textColor = .red
     }
   }
+
   @IBAction func doneButtonLoginTF(_ sender: UITextField) {
     sender.resignFirstResponder()
   }
   @IBAction func doneButtonPasswordTF(_ sender: UITextField) {
     sender.resignFirstResponder()
   }
+
   @objc func showPassword() {
     passwordField.isSecureTextEntry.toggle()
   }

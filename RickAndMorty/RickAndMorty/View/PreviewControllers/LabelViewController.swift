@@ -3,6 +3,7 @@ import UIKit
 class LabelViewController: UIViewController {
   @IBOutlet weak var titleText: UITextView!
   @IBOutlet weak var textView: UITextView!
+
   var index: Int = 0
   override func viewDidLoad() {
   super.viewDidLoad()
@@ -58,7 +59,6 @@ class LabelViewController: UIViewController {
         All the data is formatted in json and the API is hosted on Digital Ocean and Netlify.
       """
       textView.attributedText = linkedText(text: text, textInput: textInput, link: url)
-
     case 5:
       titleText.text = "Copyright?"
       url = ["https://www.adultswim.com/"]
@@ -86,7 +86,6 @@ class LabelViewController: UIViewController {
   /// - Returns: NSMutableAttributedString
   private func linkedText(text: String, textInput: [String], link: [String]) -> NSMutableAttributedString {
     let attributedText = NSMutableAttributedString(string: text)
-
     for i in 0..<link.count {
       let startPosition: Int = text.distance(
         from: text.startIndex,
@@ -99,6 +98,10 @@ class LabelViewController: UIViewController {
         [.link: unwarpedLink],
         range: NSRange(location: startPosition, length: (lenght - startPosition)))
     }
+    attributedText.addAttribute(
+      .font,
+      value: UIFont.systemFont(ofSize: 17),
+      range: NSRange(location: 0, length: text.count))
     return attributedText
   }
 }
