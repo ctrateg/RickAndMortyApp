@@ -2,6 +2,7 @@ import UIKit
 
 class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
   private let middleButtonDiameter: CGFloat = 58
+
   private lazy var middleButton: UIButton = {
     let middleButton = UIButton(type: .custom)
     middleButton.layer.cornerRadius = middleButtonDiameter / 2
@@ -19,27 +20,28 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
     viewControllersConfiguration()
     delegate = self
   }
+
   private func viewControllersConfiguration() {
-    let charactersVC = UIStoryboard(name: "CharactersTableUI", bundle: nil)
+    let charactersVC = UIStoryboard(name: "CharactersUI", bundle: nil)
       .instantiateViewController(withIdentifier: "CharacterNavigationController")
     charactersVC.tabBarItem.title = "characters"
     charactersVC.tabBarItem.image = UIImage(named: "CharacterImage")
 
-    let locationsVC = UIStoryboard(name: "LocationTableUI", bundle: nil)
+    let locationsVC = UIStoryboard(name: "LocationUI", bundle: nil)
       .instantiateViewController(withIdentifier: "LocationNavigationController")
     locationsVC.tabBarItem.title = "locations"
     locationsVC.tabBarItem.image = UIImage(named: "LocationImage")
     locationsVC.tabBarItem.badgeColor = .white
 
-    let favoritesVC = UIStoryboard(name: "CharactersTableUI", bundle: nil)
-      .instantiateViewController(withIdentifier: "CharacterNavigationController")
+    let favoritesVC = UIStoryboard(name: "FavoriteUI", bundle: nil)
+      .instantiateViewController(withIdentifier: "FavoriteNavigationController")
     favoritesVC.tabBarItem.title = ""
-    let statisticsVC = UIStoryboard(name: "CharactersTableUI", bundle: nil)
-      .instantiateViewController(withIdentifier: "CharacterNavigationController")
+    let statisticsVC = UIStoryboard(name: "StatisticsUI", bundle: nil)
+      .instantiateViewController(withIdentifier: "StatisticsNavigationController")
     statisticsVC.tabBarItem.title = "statistics"
     statisticsVC.tabBarItem.image = UIImage(named: "StatisticImage")
 
-    let episodesVC = UIStoryboard(name: "EpisodesTableUI", bundle: nil)
+    let episodesVC = UIStoryboard(name: "EpisodesUI", bundle: nil)
       .instantiateViewController(withIdentifier: "EpisodesNavigationController")
     episodesVC.tabBarItem.title = "episodes"
     episodesVC.tabBarItem.image = UIImage(named: "EpisodeImage")
@@ -54,6 +56,7 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
     selectedIndex = 2
     middleButton.setImage(UIImage(named: "FavoriteImage")?.withTintColor(.yellow), for: .normal)
   }
+
   private func makeUI() {
     tabBar.addSubview(middleButton)
     NSLayoutConstraint.activate([

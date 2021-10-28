@@ -8,5 +8,5 @@ target 'RickAndMorty' do
   pod 'SwiftLint'
   pod 'Locksmith'
   # Pods for RickAndMorty
-
+  pod 'GoogleMaps'
 end

@@ -14,3 +14,15 @@ protocol UserCacheLoadDelegate: AnyObject {
 protocol UserCacheClearDelegate: AnyObject {
   func clearData()
 }
+
+protocol UserCacheFavoriteDelage: AnyObject {
+  func saveInFavorites(data: AnyObject)
+}
+protocol GetImageDelegate: AnyObject {
+  func getImage(urlInput: String) -> Data?
+}
+
+protocol UserLocationDelegate: AnyObject {
+  func saveLocation(latitude: Double, longitude: Double)
+  func loadItems(completion: @escaping ([UserLocation]) -> Void)
+}

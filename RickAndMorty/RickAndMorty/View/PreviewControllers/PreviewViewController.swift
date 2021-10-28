@@ -3,7 +3,9 @@ import UIKit
 class PreviewViewController: UIViewController {
   @IBOutlet weak var pageControl: UIPageControl!
   @IBOutlet weak var contentView: UIView!
+
   private var currentVCIndex = 0
+
   override func viewDidLoad() {
     super.viewDidLoad()
     configurePageViewController()
@@ -64,6 +66,7 @@ extension PreviewViewController: UIPageViewControllerDelegate, UIPageViewControl
     currentIndex -= 1
     return detailViewControllerAt(index: currentIndex)
   }
+
   func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
     if currentVCIndex >= 6 { return nil }
     let imageViewController = viewController as? LabelViewController
@@ -72,6 +75,7 @@ extension PreviewViewController: UIPageViewControllerDelegate, UIPageViewControl
     currentIndex += 1
     return detailViewControllerAt(index: currentIndex)
   }
+
   func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
     guard let pageCurrent = pageViewController.viewControllers?.first else { return }
     let nextLabelVC = pageViewController.dataSource?.pageViewController(

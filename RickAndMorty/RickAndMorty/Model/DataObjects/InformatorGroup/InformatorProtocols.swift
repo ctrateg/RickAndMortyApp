@@ -1,5 +1,5 @@
 import Foundation
 
 protocol InformatorDelegate: AnyObject {
-  func takeInCache(tag: String, page: String)
+  func takeInCache(tag: TagName, page: String)
 }
