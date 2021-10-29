@@ -8,7 +8,6 @@ class LocationTableViewController: UITableViewController {
 
   private var loadMoreStatus = false
   private var page = 1
-  private var locationCache: [LocationCache] = []
 
   private weak var informatorDelegate: InformatorDelegate?
   private weak var userCacheLoadDelegate: UserCacheLoadDelegate?
@@ -29,7 +28,7 @@ class LocationTableViewController: UITableViewController {
   }
 
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return locationCache.count
+    return UserCacheData.locationCache.count
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -38,7 +37,7 @@ class LocationTableViewController: UITableViewController {
       for: indexPath) as? LocationTableViewCell else {
         return UITableViewCell()
     }
-    let data = locationCache[indexPath.row]
+    let data = UserCacheData.locationCache[indexPath.row]
     cell.locationName.text = data.name ?? ""
     return cell
   }
@@ -56,7 +55,6 @@ class LocationTableViewController: UITableViewController {
     self.loadMoreStatus = true
     self.setLoadingScreen()
     loadMoreBegin {(_: Int) -> Void in
-      self.tableView.reloadData()
       self.loadMoreStatus = false
       self.removeLoadingScreen()
     }
@@ -67,8 +65,8 @@ class LocationTableViewController: UITableViewController {
     DispatchQueue.global(qos: .default).async {
       self.page += 1
       self.informatorDelegate?.takeInCache(tag: .location, page: String(self.page))
-      self.userCacheLoadDelegate?.loadItems { [weak self] responce in
-        self?.locationCache = responce
+      self.userCacheLoadDelegate?.loadItems {  responce in
+        UserCacheData.locationCache = responce
       }
       DispatchQueue.main.async {
       loadMoreEnd(0)
@@ -115,7 +113,7 @@ class LocationTableViewController: UITableViewController {
     guard let presentVC = cardStoryboard.instantiateViewController(
       withIdentifier: "LocationCardTVC") as? LocationCardTVC
     else { return }
-    presentVC.locationCache = self.locationCache[indexPath?.row ?? 0]
+    presentVC.locationCache = UserCacheData.locationCache[indexPath?.row ?? 0]
     show(presentVC, sender: sender)
   }
 }

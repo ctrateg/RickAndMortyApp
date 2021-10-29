@@ -214,6 +214,22 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
+		1BB0642F272C433500348E44 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				1BFD319D271EB4F300901BCB /* StatisticsViewController.swift */,
+			);
+			path = Statistics;
+			sourceTree = "<group>";
+		};
+		1BB06430272C434400348E44 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				1BFD31B92728225500901BCB /* GoogleMapViewController.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		1BEB420826EF94D9002B1574 /* Character */ = {
 			isa = PBXGroup;
 			children = (
@@ -331,10 +347,10 @@
 		1BFD31742711D46700901BCB /* Statistics */ = {
 			isa = PBXGroup;
 			children = (
+				1BB06430272C434400348E44 /* Map */,
+				1BB0642F272C433500348E44 /* Statistics */,
 				1BFD319F271EB52B00901BCB /* StatisticsUI.storyboard */,
-				1BFD319D271EB4F300901BCB /* StatisticsViewController.swift */,
 				1BFD31B7272820D100901BCB /* ContainerViewController.swift */,
-				1BFD31B92728225500901BCB /* GoogleMapViewController.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";

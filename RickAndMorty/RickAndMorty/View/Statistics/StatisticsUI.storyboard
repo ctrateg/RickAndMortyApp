@@ -40,10 +40,18 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="91.5" id="Alt-Sn-wB6"/>
+                                    <constraint firstAttribute="height" constant="286" id="Jhq-iR-ztk"/>
+                                </constraints>
                                 <variation key="heightClass=compact" axis="horizontal"/>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UBd-Qw-pAG">
-                                <rect key="frame" x="161.5" y="432" width="91" height="32"/>
+                                <rect key="frame" x="161.5" y="360" width="91" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="91" id="DxY-iw-VE8"/>
+                                    <constraint firstAttribute="height" constant="32" id="yYt-rP-j2P"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title=" Reset Time">
@@ -57,10 +65,11 @@
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="vra-Ga-kVe" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="Gah-bl-dMv"/>
-                            <constraint firstItem="UBd-Qw-pAG" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="UbB-Jz-xnB"/>
-                            <constraint firstItem="UBd-Qw-pAG" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="l5A-GN-jHo"/>
+                            <constraint firstItem="vra-Ga-kVe" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="Ogb-Et-6Np"/>
+                            <constraint firstItem="vra-Ga-kVe" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="10" id="Pfc-5v-Nvv"/>
+                            <constraint firstItem="UBd-Qw-pAG" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="cmI-bm-pi3"/>
                             <constraint firstItem="vra-Ga-kVe" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="10" id="qT9-yw-lFp"/>
+                            <constraint firstItem="UBd-Qw-pAG" firstAttribute="top" secondItem="vra-Ga-kVe" secondAttribute="bottom" constant="20" id="uBL-Ke-cA4"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="5tf-kS-bYU"/>

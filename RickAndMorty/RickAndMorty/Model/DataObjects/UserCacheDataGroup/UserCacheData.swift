@@ -6,6 +6,9 @@ class UserCacheData: UserCacheSaveDelegate,
   UserCacheClearDelegate,
   UserCacheFavoriteDelage,
   GetImageDelegate {
+  static var characterCache: [CharacterCache] = []
+  static var locationCache: [LocationCache] = []
+  static var episodesCache: [EpisodesCache] = []
   static var shared: UserCacheData = {
     let instance = UserCacheData()
     return instance
@@ -16,6 +19,7 @@ class UserCacheData: UserCacheSaveDelegate,
     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
     let context = appDelegate.persistentContainer.viewContext
     let entity = CharacterCache(context: context)
+    entity.id = Int64(data.results[index].id)
     entity.name = data.results[index].name
     entity.gender = data.results[index].gender
     entity.created = data.results[index].created
@@ -35,6 +39,7 @@ class UserCacheData: UserCacheSaveDelegate,
     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
     let context = appDelegate.persistentContainer.viewContext
     let entity = LocationCache(context: context)
+    entity.id = Int64(data.results[index].id)
     entity.name = data.results[index].name
     entity.type = data.results[index].type
     entity.date = data.results[index].created
@@ -51,7 +56,7 @@ class UserCacheData: UserCacheSaveDelegate,
     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
     let context = appDelegate.persistentContainer.viewContext
     let entity = EpisodesCache(context: context)
-    entity.id = Int16(data.results[index].id)
+    entity.id = Int64(data.results[index].id)
     entity.name = data.results[index].name
     entity.created = data.results[index].created
     entity.episodes = data.results[index].episode

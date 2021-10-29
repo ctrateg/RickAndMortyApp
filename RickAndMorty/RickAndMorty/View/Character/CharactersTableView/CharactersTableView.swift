@@ -6,7 +6,6 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
   private weak var searchDelegate: RequestSerivceSearchDelegate?
   private weak var getImageDelegate: GetImageDelegate?
 
-  private var characterCache: [CharacterCache] = []
   private var characterSearchArray: [CharacterCache] = []
   private var searchRequestResult: CharacterDTO?
   private var loadMoreStatus = false
@@ -20,8 +19,8 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
   private let indicator = UIActivityIndicatorView()
   private let appearance = UINavigationBarAppearance()
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
     self.searchBarController.searchBar.delegate = self
     let requestObj = RequestServiceAPI.shared
     userCacheLoadDelegate = UserCacheData.shared
@@ -45,7 +44,7 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     if searching == true {
       return searchRequestResult?.results.count ?? characterSearchArray.count
     }
-    return characterCache.count
+    return UserCacheData.characterCache.count
   }
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(
@@ -54,17 +53,15 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
         return UITableViewCell()
     }
     cell.indexPathRow = indexPath.row
-    if searching == true {
-      if (characterSearchArray.count) > indexPath.row {
-        let data = characterSearchArray[indexPath.row]
-        return cellInputData(cell: cell, data: data)
-      } else {
-        return cellInputDataSearch(
-          cell: cell,
-          data: (searchRequestResult?.results[indexPath.row]))
-      }
+    if (characterSearchArray.count) > indexPath.row && searching == true {
+      let data = characterSearchArray[indexPath.row]
+      return cellInputData(cell: cell, data: data)
+    } else if searching == true {
+      return cellInputDataSearch(
+        cell: cell,
+        data: (searchRequestResult?.results[indexPath.row]))
     }
-    let data = characterCache[indexPath.row]
+    let data = UserCacheData.characterCache[indexPath.row]
     return cellInputData(cell: cell, data: data)
   }
 
@@ -119,7 +116,6 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     self.loadMoreStatus = true
     self.setLoadingScreen()
     loadMoreBegin {(_: Int) -> Void in
-      self.tableView.reloadData()
       self.loadMoreStatus = false
       self.removeLoadingScreen()
     }
@@ -127,11 +123,11 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
   }
 
   private func loadMoreBegin(loadMoreEnd: @escaping(Int) -> Void) {
-    DispatchQueue.global(qos: .default).async {
+    DispatchQueue.global(qos: .background).async {
       self.page += 1
       self.informatorDelegate?.takeInCache(tag: .character, page: String(self.page))
-      self.userCacheLoadDelegate?.loadItems { [weak self] responce in
-        self?.characterCache = responce
+      self.userCacheLoadDelegate?.loadItems { responce in
+        UserCacheData.characterCache = responce
       }
       DispatchQueue.main.async {
       loadMoreEnd(0)
@@ -163,9 +159,9 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     self.searchTimer?.invalidate()
     searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
       DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-        self?.characterSearchArray = self?.characterCache.filter { item in
+        self?.characterSearchArray = UserCacheData.characterCache.filter { item in
           item.name?.localizedCaseInsensitiveContains(searchText) ?? false
-        } ?? []
+        }
         self?.searchDelegate?.characterSearch(tag: searchText) { [weak self] searchResponce in
           self?.searchRequestResult = searchResponce
         }
@@ -203,7 +199,7 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     guard let presentVC = cardStoryboard.instantiateViewController(
       withIdentifier: "CharacterTableViewCard") as? CharacterTableViewCard
     else { return }
-    presentVC.characterCache = self.characterCache[indexPath?.row ?? 0]
+    presentVC.characterCache = UserCacheData.characterCache[indexPath?.row ?? 0]
     show(presentVC, sender: sender)
   }
 }

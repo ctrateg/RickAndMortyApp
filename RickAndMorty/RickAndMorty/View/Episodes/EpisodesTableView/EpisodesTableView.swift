@@ -8,7 +8,6 @@ class EpisodesTableViewController: UITableViewController {
 
   private var loadMoreStatus = false
   private var page = 1
-  private var episodesCache: [EpisodesCache] = []
 
   private weak var informatorDelegate: InformatorDelegate?
   private weak var userCacheLoadDelegate: UserCacheLoadDelegate?
@@ -29,7 +28,7 @@ class EpisodesTableViewController: UITableViewController {
   }
 
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return episodesCache.count
+    return UserCacheData.episodesCache.count
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -38,7 +37,7 @@ class EpisodesTableViewController: UITableViewController {
       for: indexPath) as? EpisodesTableViewCell else {
         return UITableViewCell()
     }
-    let data = episodesCache[indexPath.row]
+    let data = UserCacheData.episodesCache[indexPath.row]
     let strArray = { () -> [Character] in
       var array: [Character] = []
       guard let episodes = data.episodes else { return [] }
@@ -66,7 +65,6 @@ class EpisodesTableViewController: UITableViewController {
     self.loadMoreStatus = true
     self.setLoadingScreen()
     loadMoreBegin {(_: Int) -> Void in
-      self.tableView.reloadData()
       self.loadMoreStatus = false
       self.removeLoadingScreen()
     }
@@ -77,8 +75,8 @@ class EpisodesTableViewController: UITableViewController {
     DispatchQueue.global(qos: .default).async {
       self.page += 1
       self.informatorDelegate?.takeInCache(tag: .episodes, page: String(self.page))
-      self.userCacheLoadDelegate?.loadItems { [weak self] responce in
-        self?.episodesCache = responce
+      self.userCacheLoadDelegate?.loadItems { responce in
+        UserCacheData.episodesCache = responce
       }
       DispatchQueue.main.async {
       loadMoreEnd(0)
@@ -124,7 +122,7 @@ class EpisodesTableViewController: UITableViewController {
     guard let presentVC = cardStoryboard.instantiateViewController(
       withIdentifier: "EpisodesCardTVC") as? EpisodesCardTVC
     else { return }
-    presentVC.episodesCache = self.episodesCache[indexPath?.row ?? 0]
+    presentVC.episodesCache = UserCacheData.episodesCache[indexPath?.row ?? 0]
     show(presentVC, sender: sender)
   }
 }

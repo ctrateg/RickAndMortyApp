@@ -33,9 +33,10 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MNW-Dt-WVV" userLabel="NameCharacter">
-                                            <rect key="frame" x="72.5" y="10" width="0.0" height="20"/>
+                                            <rect key="frame" x="72.5" y="10" width="200" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20" id="5fw-dG-hl7"/>
+                                                <constraint firstAttribute="width" constant="200" id="MRg-0N-Dn7"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -111,7 +112,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="34L-kY-kJk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1746" y="100"/>
+            <point key="canvasLocation" x="1744.9275362318842" y="99.776785714285708"/>
         </scene>
         <!--Character Card-->
         <scene sceneID="jKm-j8-fmG">
@@ -164,7 +165,10 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LocationName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2a-m3-y3e">
-                                            <rect key="frame" x="15" y="19.5" width="289" height="21"/>
+                                            <rect key="frame" x="15" y="19.5" width="270" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="270" id="MUm-3B-Lnc"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -197,7 +201,6 @@
                                         <constraint firstAttribute="trailing" secondItem="HLL-gf-87c" secondAttribute="trailing" constant="70" id="HSs-FL-jsU"/>
                                         <constraint firstItem="HLL-gf-87c" firstAttribute="centerY" secondItem="lX8-xY-tMB" secondAttribute="centerY" id="N7Z-pG-UbN"/>
                                         <constraint firstItem="K2a-m3-y3e" firstAttribute="centerY" secondItem="lX8-xY-tMB" secondAttribute="centerY" id="PpD-Hb-ghM"/>
-                                        <constraint firstItem="K2a-m3-y3e" firstAttribute="width" secondItem="lX8-xY-tMB" secondAttribute="width" multiplier="0.101449" constant="247.000114" id="WWE-EX-way"/>
                                         <constraint firstAttribute="trailing" secondItem="4SW-7F-Yca" secondAttribute="trailing" constant="32" id="XnZ-sm-Jzu"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -214,7 +217,10 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EpisodesName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5LJ-eC-rDf">
-                                            <rect key="frame" x="15" y="9" width="288" height="21"/>
+                                            <rect key="frame" x="15" y="9" width="276" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="276" id="xYR-Td-Hrd"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -257,7 +263,6 @@
                                         <constraint firstItem="EUF-vF-aHe" firstAttribute="leading" secondItem="2ng-a3-Jme" secondAttribute="leading" constant="15" id="eln-mN-D7p"/>
                                         <constraint firstItem="b68-gA-1bZ" firstAttribute="centerY" secondItem="2ng-a3-Jme" secondAttribute="centerY" id="gTM-cF-yXf"/>
                                         <constraint firstItem="EUF-vF-aHe" firstAttribute="top" secondItem="2ng-a3-Jme" secondAttribute="top" constant="30" id="joh-Mb-LEk"/>
-                                        <constraint firstItem="5LJ-eC-rDf" firstAttribute="width" secondItem="2ng-a3-Jme" secondAttribute="width" multiplier="0.101449" constant="246.000114" id="lts-Tz-FFb"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

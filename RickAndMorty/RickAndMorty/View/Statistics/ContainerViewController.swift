@@ -4,18 +4,20 @@ class ContainerViewController: UIViewController {
   @IBOutlet weak var segmenController: UISegmentedControl!
   @IBOutlet weak var presentView: UIView!
   @IBOutlet weak var subNavigationBarOutlet: UINavigationItem!
+
+  private weak var userLocationDelegate: UserLocationDelegate?
+  private var userLocationCache: [UserLocation]?
   private var tag = 0
 
   private let appearance = UINavigationBarAppearance()
   private let storyboardName = UIStoryboard(name: "StatisticsUI", bundle: nil)
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    presentViewConfig(tag: 0)
-  }
   override func viewDidLoad() {
     super.viewDidLoad()
+    userLocationDelegate = UserCacheData.shared
+    takeLocation()
     configurationNavgiationC()
     segmenController.tintColor = .white
+    presentViewConfig(tag: 0)
   }
 
   @IBAction func segmentControllerAction(_ sender: UISegmentedControl) {
@@ -29,12 +31,15 @@ class ContainerViewController: UIViewController {
         .instantiateViewController(withIdentifier: "GoogleMapViewController") as? GoogleMapViewController else {
           return
         }
+      statisticVC.userLocationCache = userLocationCache
+      self.navigationItem.title = "Map"
       presentView.addSubview(statisticVC.view)
     default:
       guard let statisticVC = storyboardName
         .instantiateViewController(withIdentifier: "StatisticsViewController") as? StatisticsViewController else {
           return
         }
+      self.navigationItem.title = "In App Time"
       presentView.addSubview(statisticVC.view)
     }
   }
@@ -46,9 +51,14 @@ class ContainerViewController: UIViewController {
     appearance.titleTextAttributes = [
       NSAttributedString.Key.foregroundColor: UIColor.white
     ]
-    self.navigationItem.title = "Statistics"
+    self.navigationItem.title = "In App Time"
     subNavigationBarOutlet.standardAppearance = appearance
     navigationBar?.standardAppearance = appearance
     navigationBar?.scrollEdgeAppearance = navigationBar?.standardAppearance
+  }
+  private func takeLocation() {
+    self.userLocationDelegate?.loadItems { responce in
+      self.userLocationCache = responce
+    }
   }
 }
