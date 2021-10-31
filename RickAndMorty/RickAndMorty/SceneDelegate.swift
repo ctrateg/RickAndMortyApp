@@ -10,8 +10,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CLLocationManagerDelega
 
   private var rootVC: UIViewController?
 
-  private weak var informatorDelegate: InformatorDelegate?
-  private weak var userCacheClearDelegate: UserCacheClearDelegate?
   private weak var userLocationDelegate: UserLocationDelegate?
 
   static var timeInApp: Int = 0
@@ -29,19 +27,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CLLocationManagerDelega
       rootVC = storyboard.instantiateViewController(withIdentifier: "PreviewViewController") as? PreviewViewController
       self.window?.rootViewController = rootVC
     }
-    self.informatorDelegate = Informator.shared
-    DispatchQueue.global(qos: .background).async {
-      self.informatorDelegate?.takeInCache(tag: .character, page: "1")
-      self.informatorDelegate?.takeInCache(tag: .location, page: "1")
-      self.informatorDelegate?.takeInCache(tag: .episodes, page: "1")
-    }
     Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
       SceneDelegate.timeInApp += 1
     }
   }
 
   func sceneDidDisconnect(_ scene: UIScene) {
-    userCacheData.clearData()
     let userDefaultDate = UserDefaults.standard.integer(forKey: UserDefaultKeys.firstOpenTime.rawValue)
     let saveDate = userDefaultDate + SceneDelegate.timeInApp
     UserDefaults.standard.set(saveDate, forKey: UserDefaultKeys.firstOpenTime.rawValue)

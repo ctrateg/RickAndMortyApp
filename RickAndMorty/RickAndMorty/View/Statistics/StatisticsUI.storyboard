@@ -41,7 +41,6 @@
                                     </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="91.5" id="Alt-Sn-wB6"/>
                                     <constraint firstAttribute="height" constant="286" id="Jhq-iR-ztk"/>
                                 </constraints>
                                 <variation key="heightClass=compact" axis="horizontal"/>

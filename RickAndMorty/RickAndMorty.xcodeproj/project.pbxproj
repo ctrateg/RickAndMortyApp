@@ -25,7 +25,6 @@
 		1BFD314B2703064900901BCB /* OriginDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD314A2703064900901BCB /* OriginDTO.swift */; };
 		1BFD314F2703075200901BCB /* CharacterDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD314E2703075200901BCB /* CharacterDTO.swift */; };
 		1BFD3152270307D000901BCB /* RequestServiceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD3151270307D000901BCB /* RequestServiceAPI.swift */; };
-		1BFD31542705F65000901BCB /* Informator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31532705F64F00901BCB /* Informator.swift */; };
 		1BFD31562705F7BB00901BCB /* UserCacheData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31552705F7BB00901BCB /* UserCacheData.swift */; };
 		1BFD315E270B276200901BCB /* LocationDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD315D270B276200901BCB /* LocationDTO.swift */; };
 		1BFD3160270B27CB00901BCB /* LocationResultDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD315F270B27CB00901BCB /* LocationResultDTO.swift */; };
@@ -39,7 +38,6 @@
 		1BFD317C2711DEF000901BCB /* CharacterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD317B2711DEF000901BCB /* CharacterTableViewCell.swift */; };
 		1BFD318027158FE200901BCB /* EpisodesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD317F27158FE200901BCB /* EpisodesTableViewCell.swift */; };
 		1BFD31832715A2BF00901BCB /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31822715A2BF00901BCB /* LocationTableViewCell.swift */; };
-		1BFD31862717041F00901BCB /* InformatorProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31852717041F00901BCB /* InformatorProtocols.swift */; };
 		1BFD31892717045500901BCB /* UserCacheDataProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD31882717045500901BCB /* UserCacheDataProtocols.swift */; };
 		1BFD318F2719945700901BCB /* CharacterTableViewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFD318E2719945700901BCB /* CharacterTableViewCard.swift */; };
 		1BFD3193271C43A900901BCB /* CharactersUI.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1BFD3192271C43A900901BCB /* CharactersUI.storyboard */; };
@@ -89,7 +87,6 @@
 		1BFD314A2703064900901BCB /* OriginDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OriginDTO.swift; sourceTree = "<group>"; };
 		1BFD314E2703075200901BCB /* CharacterDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDTO.swift; sourceTree = "<group>"; };
 		1BFD3151270307D000901BCB /* RequestServiceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestServiceAPI.swift; sourceTree = "<group>"; };
-		1BFD31532705F64F00901BCB /* Informator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Informator.swift; sourceTree = "<group>"; };
 		1BFD31552705F7BB00901BCB /* UserCacheData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCacheData.swift; sourceTree = "<group>"; };
 		1BFD315D270B276200901BCB /* LocationDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDTO.swift; sourceTree = "<group>"; };
 		1BFD315F270B27CB00901BCB /* LocationResultDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationResultDTO.swift; sourceTree = "<group>"; };
@@ -103,7 +100,6 @@
 		1BFD317B2711DEF000901BCB /* CharacterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterTableViewCell.swift; sourceTree = "<group>"; };
 		1BFD317F27158FE200901BCB /* EpisodesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesTableViewCell.swift; sourceTree = "<group>"; };
 		1BFD31822715A2BF00901BCB /* LocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
-		1BFD31852717041F00901BCB /* InformatorProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformatorProtocols.swift; sourceTree = "<group>"; };
 		1BFD31882717045500901BCB /* UserCacheDataProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCacheDataProtocols.swift; sourceTree = "<group>"; };
 		1BFD318E2719945700901BCB /* CharacterTableViewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterTableViewCard.swift; sourceTree = "<group>"; };
 		1BFD3192271C43A900901BCB /* CharactersUI.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CharactersUI.storyboard; sourceTree = "<group>"; };
@@ -360,7 +356,6 @@
 			children = (
 				1BFD318A271704AD00901BCB /* RequestServiceGroup */,
 				1BFD31872717043600901BCB /* UserCacheDataGroup */,
-				1BFD3184271703F500901BCB /* InformatorGroup */,
 			);
 			path = DataObjects;
 			sourceTree = "<group>";
@@ -381,21 +376,12 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		1BFD3184271703F500901BCB /* InformatorGroup */ = {
-			isa = PBXGroup;
-			children = (
-				1BFD31532705F64F00901BCB /* Informator.swift */,
-				1BFD31852717041F00901BCB /* InformatorProtocols.swift */,
-			);
-			path = InformatorGroup;
-			sourceTree = "<group>";
-		};
 		1BFD31872717043600901BCB /* UserCacheDataGroup */ = {
 			isa = PBXGroup;
 			children = (
 				1BFD31552705F7BB00901BCB /* UserCacheData.swift */,
-				1BFD31882717045500901BCB /* UserCacheDataProtocols.swift */,
 				1BFD31D5272AE25D00901BCB /* +UserCacheData.swift */,
+				1BFD31882717045500901BCB /* UserCacheDataProtocols.swift */,
 			);
 			path = UserCacheDataGroup;
 			sourceTree = "<group>";
@@ -711,7 +697,6 @@
 				1BFD31D6272AE25E00901BCB /* +UserCacheData.swift in Sources */,
 				1BFD315E270B276200901BCB /* LocationDTO.swift in Sources */,
 				1BFD317C2711DEF000901BCB /* CharacterTableViewCell.swift in Sources */,
-				1BFD31862717041F00901BCB /* InformatorProtocols.swift in Sources */,
 				1BFD314B2703064900901BCB /* OriginDTO.swift in Sources */,
 				1BFD31492703057800901BCB /* LocationArrayDTO.swift in Sources */,
 				1BFD316D270F792100901BCB /* TabBarViewController.swift in Sources */,
@@ -731,7 +716,6 @@
 				1BFD31A72721900700901BCB /* CharacterEpisodesCell.swift in Sources */,
 				1BFD3162270B28D000901BCB /* EpisodesDTO.swift in Sources */,
 				1BFD317A2711D4DF00901BCB /* EpisodesTableView.swift in Sources */,
-				1BFD31542705F65000901BCB /* Informator.swift in Sources */,
 				1BFD31452703051400901BCB /* InfoDTO.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

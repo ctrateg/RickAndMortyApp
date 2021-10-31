@@ -8,14 +8,14 @@ class EpisodesTableViewController: UITableViewController {
 
   private var loadMoreStatus = false
   private var page = 1
-
-  private weak var informatorDelegate: InformatorDelegate?
+  private var episodesRequestResult: [EpisodesResultDTO] = []
   private weak var userCacheLoadDelegate: UserCacheLoadDelegate?
+  private weak var requestEpisdesApi: RequestServiceDelegate?
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     userCacheLoadDelegate = UserCacheData.shared
-    informatorDelegate = Informator.shared
+    requestEpisdesApi = RequestServiceAPI.shared
     configurationNavgiationC()
   }
 
@@ -26,9 +26,20 @@ class EpisodesTableViewController: UITableViewController {
   override func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
+  private func request(page: String = "1") {
+    setLoadingScreen()
 
+    self.requestEpisdesApi?.episodesRequestAPI(page: String(self.page)) { responce in
+      self.episodesRequestResult = responce
+      DispatchQueue.main.async {
+        self.tableView.reloadData()
+      }
+    }
+    self.page = 0
+    removeLoadingScreen()
+  }
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return UserCacheData.episodesCache.count
+    return episodesRequestResult.count
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -37,18 +48,21 @@ class EpisodesTableViewController: UITableViewController {
       for: indexPath) as? EpisodesTableViewCell else {
         return UITableViewCell()
     }
-    let data = UserCacheData.episodesCache[indexPath.row]
-    let strArray = { () -> [Character] in
-      var array: [Character] = []
-      guard let episodes = data.episodes else { return [] }
-      for str in episodes {
-        array.append(str)
-      }
-      return array
-    }
+    let data = episodesRequestResult[indexPath.row]
+    let episodes = data.episode
     cell.episodesTitle.text = data.name
-    cell.episodesNumber.text = "Season " + strArray()[2..<3] + ", " + "Episode " + strArray()[4...5]
+    cell.episodesNumber.text = "Season " + episodesSubTitleFix(line: episodes, tag: "S")
+    + ", " + "Episode " + episodesSubTitleFix(line: episodes, tag: "E")
     return cell
+  }
+  private func episodesSubTitleFix(line: String, tag: String) -> String {
+    guard let eRange = line.range(of: "E") else { return "" }
+    guard let sEange = line.range(of: "S")?.upperBound else { return "" }
+    switch tag {
+    case "S": return String(line[sEange..<eRange.lowerBound])
+    case "E": return String(line[eRange.upperBound...])
+    default: return ""
+    }
   }
 
   override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -74,9 +88,8 @@ class EpisodesTableViewController: UITableViewController {
   func loadMoreBegin(loadMoreEnd: @escaping(Int) -> Void) {
     DispatchQueue.global(qos: .default).async {
       self.page += 1
-      self.informatorDelegate?.takeInCache(tag: .episodes, page: String(self.page))
-      self.userCacheLoadDelegate?.loadItems { responce in
-        UserCacheData.episodesCache = responce
+      self.requestEpisdesApi?.episodesRequestAPI(page: String(self.page)) { responce in
+        self.episodesRequestResult.append(contentsOf: responce)
       }
       DispatchQueue.main.async {
       loadMoreEnd(0)
@@ -122,7 +135,7 @@ class EpisodesTableViewController: UITableViewController {
     guard let presentVC = cardStoryboard.instantiateViewController(
       withIdentifier: "EpisodesCardTVC") as? EpisodesCardTVC
     else { return }
-    presentVC.episodesCache = UserCacheData.episodesCache[indexPath?.row ?? 0]
+    presentVC.episodesRequestResult = episodesRequestResult[indexPath?.row ?? 0]
     show(presentVC, sender: sender)
   }
 }

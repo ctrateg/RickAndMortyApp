@@ -161,9 +161,13 @@
                                         <constraint firstItem="VMX-J1-CjT" firstAttribute="centerY" secondItem="mY6-7E-USV" secondAttribute="centerY" id="CAD-i8-V10"/>
                                         <constraint firstAttribute="trailing" secondItem="VMX-J1-CjT" secondAttribute="trailing" constant="15" id="gRs-3P-ANg"/>
                                         <constraint firstItem="TxP-Yj-bfq" firstAttribute="leading" secondItem="mY6-7E-USV" secondAttribute="leading" constant="15" id="tzp-4J-gcB"/>
-                                        <constraint firstItem="VMX-J1-CjT" firstAttribute="width" secondItem="mY6-7E-USV" secondAttribute="width" multiplier="0.101449" id="u2A-Xc-AVd"/>
+                                        <constraint firstItem="VMX-J1-CjT" firstAttribute="width" relation="greaterThanOrEqual" secondItem="mY6-7E-USV" secondAttribute="width" multiplier="0.101449" id="u2A-Xc-AVd"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="detailLabel" destination="VMX-J1-CjT" id="zIU-Cs-ATg"/>
+                                    <outlet property="titleLabel" destination="TxP-Yj-bfq" id="mZP-Gh-eD8"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="EpisodesCharactersCell" rowHeight="60" id="ApA-nB-KgE" userLabel="LocationCharacterCell" customClass="EpisodesCharactersCell" customModule="RickAndMorty" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="109.5" width="414" height="60"/>
@@ -188,7 +192,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AGT-se-by5" userLabel="LikeButton">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AGT-se-by5" userLabel="FavoriteButton">
                                             <rect key="frame" x="320" y="19" width="24" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="22" id="Fnc-Vg-IiJ"/>
@@ -201,7 +205,7 @@
                                                 <imageReference key="image" image="LikeButton" symbolScale="large"/>
                                             </state>
                                             <connections>
-                                                <action selector="likeButton:" destination="ApA-nB-KgE" eventType="touchUpInside" id="rSN-pC-VyU"/>
+                                                <action selector="favoriteButtonAction:" destination="ApA-nB-KgE" eventType="touchUpInside" id="Wma-7k-kV3"/>
                                             </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fvO-2C-T8Q" userLabel="Status">
@@ -222,6 +226,9 @@
                                             <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                             <state key="normal" image="SequeButton"/>
+                                            <connections>
+                                                <action selector="segueButton:" destination="6x3-5q-dXn" eventType="touchUpInside" id="5Wl-1R-SUN"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
@@ -239,10 +246,10 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="characterIcon" destination="tiD-DZ-QC5" id="eNV-3D-dsE"/>
-                                    <outlet property="characterName" destination="yfQ-rZ-6Y3" id="Vex-K9-wvs"/>
-                                    <outlet property="charactetrStatus" destination="fvO-2C-T8Q" id="vIh-XO-h6W"/>
-                                    <outlet property="favoritIconOutlet" destination="AGT-se-by5" id="c6E-Vz-iQS"/>
+                                    <outlet property="characterImage" destination="tiD-DZ-QC5" id="t86-Zs-Ygv"/>
+                                    <outlet property="characterName" destination="yfQ-rZ-6Y3" id="cp2-SL-uh1"/>
+                                    <outlet property="characterStatus" destination="fvO-2C-T8Q" id="h5g-4L-QC4"/>
+                                    <outlet property="favoriteButton" destination="AGT-se-by5" id="akU-TD-4oa"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

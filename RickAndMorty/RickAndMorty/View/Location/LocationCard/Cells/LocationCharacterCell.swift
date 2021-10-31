@@ -1,6 +1,10 @@
 import UIKit
 
 class LocationCharacterCell: UITableViewCell {
+  @IBOutlet weak var characterImage: UIImageView!
+  @IBOutlet weak var characterName: UILabel!
+  @IBOutlet weak var characterStatus: UILabel!
+  @IBOutlet weak var favoriteButton: UIButton!
   override func awakeFromNib() {
     super.awakeFromNib()
     // Initialization code
@@ -8,5 +12,7 @@ class LocationCharacterCell: UITableViewCell {
 
   override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
+  }
+  @IBAction func favoriteButtonAction(_ sender: Any) {
   }
 }

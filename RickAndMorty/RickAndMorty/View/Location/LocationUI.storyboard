@@ -123,15 +123,19 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="sqT-XO-jcy" firstAttribute="centerY" secondItem="M3W-c3-TyJ" secondAttribute="centerY" id="Dox-Hj-GGG"/>
-                                        <constraint firstItem="fUN-bo-aNS" firstAttribute="width" secondItem="M3W-c3-TyJ" secondAttribute="width" multiplier="0.101449" id="KwX-GY-IIv"/>
+                                        <constraint firstItem="fUN-bo-aNS" firstAttribute="width" relation="greaterThanOrEqual" secondItem="M3W-c3-TyJ" secondAttribute="width" multiplier="0.101449" id="KwX-GY-IIv"/>
                                         <constraint firstItem="sqT-XO-jcy" firstAttribute="width" relation="greaterThanOrEqual" secondItem="M3W-c3-TyJ" secondAttribute="width" multiplier="0.100242" id="MH9-uT-fa7"/>
                                         <constraint firstAttribute="trailing" secondItem="fUN-bo-aNS" secondAttribute="trailing" constant="15" id="ctF-qn-97f"/>
                                         <constraint firstItem="fUN-bo-aNS" firstAttribute="centerY" secondItem="M3W-c3-TyJ" secondAttribute="centerY" id="xAt-fl-lzI"/>
                                         <constraint firstItem="sqT-XO-jcy" firstAttribute="leading" secondItem="M3W-c3-TyJ" secondAttribute="leading" constant="15" id="yhi-rw-oeN"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="detailLabel" destination="fUN-bo-aNS" id="HrE-Vu-j8d"/>
+                                    <outlet property="titleLabel" destination="sqT-XO-jcy" id="r0H-Ud-dsP"/>
+                                </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationCharacterCell" rowHeight="60" id="kRq-NF-SmV" userLabel="LocationCharacterCell" customClass="LocationCharacterCell" customModule="RickAndMorty" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="LocationCharacterCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LocationCharacterCell" rowHeight="60" id="kRq-NF-SmV" userLabel="LocationCharacterCell" customClass="LocationCharacterCell" customModule="RickAndMorty" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="109.5" width="414" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kRq-NF-SmV" id="Pq8-r6-DjP">
@@ -154,7 +158,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T0o-P7-FRx" userLabel="LikeButton">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T0o-P7-FRx" userLabel="FavoriteButton">
                                             <rect key="frame" x="320" y="19" width="24" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="22" id="UK8-b5-790"/>
@@ -167,7 +171,7 @@
                                                 <imageReference key="image" image="LikeButton" symbolScale="large"/>
                                             </state>
                                             <connections>
-                                                <action selector="likeButton:" destination="kRq-NF-SmV" eventType="touchUpInside" id="Wpy-1N-EqU"/>
+                                                <action selector="favoriteButtonAction:" destination="kRq-NF-SmV" eventType="touchUpInside" id="UX1-Ta-zNw"/>
                                             </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ql8-RT-S1h" userLabel="Status">
@@ -205,10 +209,10 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="characterIcon" destination="qYj-da-2yE" id="s5d-Eb-5wD"/>
-                                    <outlet property="characterName" destination="hAw-2S-Ylc" id="7ey-3Z-lh6"/>
-                                    <outlet property="charactetrStatus" destination="ql8-RT-S1h" id="UBL-Vt-I2Q"/>
-                                    <outlet property="favoritIconOutlet" destination="T0o-P7-FRx" id="kuL-K2-DCe"/>
+                                    <outlet property="characterImage" destination="qYj-da-2yE" id="YWc-T7-GCN"/>
+                                    <outlet property="characterName" destination="hAw-2S-Ylc" id="dTF-lg-V7M"/>
+                                    <outlet property="characterStatus" destination="ql8-RT-S1h" id="zdK-Ea-y3A"/>
+                                    <outlet property="favoriteButton" destination="T0o-P7-FRx" id="XNh-Ql-sQD"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

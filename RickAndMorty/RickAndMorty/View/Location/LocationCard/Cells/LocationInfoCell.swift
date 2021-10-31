@@ -1,6 +1,9 @@
 import UIKit
 
 class LocationInfoCell: UITableViewCell {
+  @IBOutlet weak var titleLabel: UILabel!
+  @IBOutlet weak var detailLabel: UILabel!
+
   override func awakeFromNib() {
     super.awakeFromNib()
     // Initialization code

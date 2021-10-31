@@ -3,12 +3,7 @@ import UIKit
 
 class UserCacheData: UserCacheSaveDelegate,
   UserCacheLoadDelegate,
-  UserCacheClearDelegate,
-  UserCacheFavoriteDelage,
   GetImageDelegate {
-  static var characterCache: [CharacterCache] = []
-  static var locationCache: [LocationCache] = []
-  static var episodesCache: [EpisodesCache] = []
   static var shared: UserCacheData = {
     let instance = UserCacheData()
     return instance
@@ -45,6 +40,7 @@ class UserCacheData: UserCacheSaveDelegate,
     entity.date = data.results[index].created
     entity.dimension = data.results[index].dimension
     entity.residents = data.results[index].residents
+    entity.created = data.results[index].created
     do {
     try context.save()
     } catch let error as NSError {
@@ -62,23 +58,6 @@ class UserCacheData: UserCacheSaveDelegate,
     entity.episodes = data.results[index].episode
     entity.airDate = data.results[index].airDate
     entity.characters = data.results[index].characters
-    do {
-      try context.save()
-    } catch let error as NSError {
-      print("Ошибка при сохранении: \(error), \(error.userInfo)")
-    }
-  }
-  func saveInFavorites(data: AnyObject) {
-    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-    let context = appDelegate.persistentContainer.viewContext
-    let enitity = FavoriteCache(context: context)
-    switch data {
-    case is CharacterCache: enitity.character = data as? CharacterCache
-    case is LocationCache: enitity.location = data as? LocationCache
-    case is EpisodesCache: enitity.episodes = data as? EpisodesCache
-    default:
-      break
-    }
     do {
       try context.save()
     } catch let error as NSError {
@@ -121,25 +100,6 @@ class UserCacheData: UserCacheSaveDelegate,
       } catch let error as NSError {
         print("Ошибка при загрузке данных: \(error), \(error.userInfo)")
       }
-    }
-  }
-  func clearData() {
-    guard let delegate = UIApplication.shared.delegate as? AppDelegate else { return }
-    let context = delegate.persistentContainer.viewContext
-    let characterFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "CharacterCache")
-    let characterRequest = NSBatchDeleteRequest(fetchRequest: characterFetch)
-    let episodesFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "EpisodesCache")
-    let episodesRequest = NSBatchDeleteRequest(fetchRequest: episodesFetch)
-    let locationFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "LocationCache")
-    let locationRequest = NSBatchDeleteRequest(fetchRequest: locationFetch)
-
-    do {
-      try context.execute(characterRequest)
-      try context.execute(episodesRequest)
-      try context.execute(locationRequest)
-      try context.save()
-    } catch {
-      print("There was an error")
     }
   }
   func getImage(urlInput: String) -> Data? {

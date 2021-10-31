@@ -8,19 +8,34 @@ class LocationTableViewController: UITableViewController {
 
   private var loadMoreStatus = false
   private var page = 1
+  private var locationRequestResults: [LocationResultDTO] = []
 
-  private weak var informatorDelegate: InformatorDelegate?
+  private weak var requestLocationApi: RequestServiceDelegate?
   private weak var userCacheLoadDelegate: UserCacheLoadDelegate?
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    requestLocationApi = RequestServiceAPI.shared
     userCacheLoadDelegate = UserCacheData.shared
-    informatorDelegate = Informator.shared
+    requestLocationApi = RequestServiceAPI.shared
     configurationNavgiationC()
+    request()
   }
 
   override func viewDidLoad() {
     super.viewDidLoad()
+  }
+  private func request(page: String = "1") {
+    setLoadingScreen()
+
+    self.requestLocationApi?.locationRequestAPI(page: String(self.page)) { responce in
+      self.locationRequestResults = responce
+      DispatchQueue.main.async {
+        self.tableView.reloadData()
+      }
+    }
+    self.page = 0
+    removeLoadingScreen()
   }
 
   override func numberOfSections(in tableView: UITableView) -> Int {
@@ -28,7 +43,7 @@ class LocationTableViewController: UITableViewController {
   }
 
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return UserCacheData.locationCache.count
+    return self.locationRequestResults.count
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -37,8 +52,8 @@ class LocationTableViewController: UITableViewController {
       for: indexPath) as? LocationTableViewCell else {
         return UITableViewCell()
     }
-    let data = UserCacheData.locationCache[indexPath.row]
-    cell.locationName.text = data.name ?? ""
+    let data = self.locationRequestResults[indexPath.row]
+    cell.locationName.text = data.name
     return cell
   }
 
@@ -64,9 +79,8 @@ class LocationTableViewController: UITableViewController {
   func loadMoreBegin(loadMoreEnd: @escaping(Int) -> Void) {
     DispatchQueue.global(qos: .default).async {
       self.page += 1
-      self.informatorDelegate?.takeInCache(tag: .location, page: String(self.page))
-      self.userCacheLoadDelegate?.loadItems {  responce in
-        UserCacheData.locationCache = responce
+      self.requestLocationApi?.locationRequestAPI(page: String(self.page)) {  responce in
+        self.locationRequestResults.append(contentsOf: responce)
       }
       DispatchQueue.main.async {
       loadMoreEnd(0)
@@ -113,7 +127,7 @@ class LocationTableViewController: UITableViewController {
     guard let presentVC = cardStoryboard.instantiateViewController(
       withIdentifier: "LocationCardTVC") as? LocationCardTVC
     else { return }
-    presentVC.locationCache = UserCacheData.locationCache[indexPath?.row ?? 0]
+    presentVC.locationRequestResult = self.locationRequestResults[indexPath?.row ?? 0]
     show(presentVC, sender: sender)
   }
 }

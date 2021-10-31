@@ -2,11 +2,11 @@ import UIKit
 
 class CharactersTableView: UITableViewController, UISearchBarDelegate {
   private weak var userCacheLoadDelegate: UserCacheLoadDelegate?
-  private weak var informatorDelegate: InformatorDelegate?
   private weak var searchDelegate: RequestSerivceSearchDelegate?
+  private weak var requestCharApi: RequestServiceDelegate?
   private weak var getImageDelegate: GetImageDelegate?
 
-  private var characterSearchArray: [CharacterCache] = []
+  private var characterRequestResult: [CharacterResultDTO] = []
   private var searchRequestResult: CharacterDTO?
   private var loadMoreStatus = false
   private var searching = false
@@ -25,16 +25,29 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     let requestObj = RequestServiceAPI.shared
     userCacheLoadDelegate = UserCacheData.shared
     getImageDelegate = UserCacheData.shared
+    requestCharApi = requestObj
     searchDelegate = requestObj
-    informatorDelegate = Informator.shared
+    request()
     searchBarConfiguration()
     configurationNavgiationC()
   }
+  private func request(page: String = "1") {
+    setLoadingScreen()
 
+    self.requestCharApi?.characterRequestAPI(page: String(self.page)) { responce in
+      self.characterRequestResult = responce
+      DispatchQueue.main.async {
+        self.tableView.reloadData()
+      }
+    }
+    self.page = 0
+    removeLoadingScreen()
+  }
   private func searchBarConfiguration() {
     navigationItem.searchController = searchBarController
     searchBarController.searchBar.searchTextField.backgroundColor = .white
     searchBarController.searchBar.searchTextField.textColor = .black
+    searchBarController.searchBar.searchTextField.tintColor = .systemGray
   }
 
   override func numberOfSections(in tableView: UITableView) -> Int {
@@ -42,9 +55,9 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
   }
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     if searching == true {
-      return searchRequestResult?.results.count ?? characterSearchArray.count
+      return searchRequestResult?.results.count ?? 0
     }
-    return UserCacheData.characterCache.count
+    return characterRequestResult.count
   }
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(
@@ -52,20 +65,15 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
       for: indexPath) as? CharacterTableViewCell else {
         return UITableViewCell()
     }
-    cell.indexPathRow = indexPath.row
-    if (characterSearchArray.count) > indexPath.row && searching == true {
-      let data = characterSearchArray[indexPath.row]
-      return cellInputData(cell: cell, data: data)
-    } else if searching == true {
-      return cellInputDataSearch(
-        cell: cell,
-        data: (searchRequestResult?.results[indexPath.row]))
+    if searching == true {
+      let data = searchRequestResult?.results[indexPath.row]
+      return cellConfiguration(cell: cell, data: data)
     }
-    let data = UserCacheData.characterCache[indexPath.row]
-    return cellInputData(cell: cell, data: data)
+    let data = characterRequestResult[indexPath.row]
+    return cellConfiguration(cell: cell, data: data)
   }
 
-  private func cellInputDataSearch(cell: CharacterTableViewCell, data: CharacterResultDTO?) -> UITableViewCell {
+  private func cellConfiguration(cell: CharacterTableViewCell, data: CharacterResultDTO?) -> UITableViewCell {
     cell.characterName.text = data?.name
     guard let dataImage = getImageDelegate?.getImage(urlInput: data?.image ?? "") else { return UITableViewCell() }
     cell.characterIcon.image = UIImage(data: dataImage)
@@ -77,25 +85,6 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     case "Dead":
       cell.charactetrStatus.textColor = .red
       cell.charactetrStatus.text = "\u{2022}" + (data?.status ?? "")
-      cell.favoritIconOutlet.isHidden = true
-    default:
-      cell.charactetrStatus.text = ""
-    }
-    return cell
-  }
-
-  private func cellInputData(cell: CharacterTableViewCell, data: CharacterCache) -> UITableViewCell {
-    cell.characterName.text = data.name
-    guard let dataImage = data.image else { return UITableViewCell() }
-    cell.characterIcon.image = UIImage(data: dataImage)
-    switch data.status {
-    case "Alive":
-      cell.charactetrStatus.textColor = .green
-      cell.charactetrStatus.text = "\u{2022}" + (data.status ?? "")
-      cell.favoritIconOutlet.isHidden = false
-    case "Dead":
-      cell.charactetrStatus.textColor = .red
-      cell.charactetrStatus.text = "\u{2022}" + (data.status ?? "")
       cell.favoritIconOutlet.isHidden = true
     default:
       cell.charactetrStatus.text = ""
@@ -116,6 +105,7 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     self.loadMoreStatus = true
     self.setLoadingScreen()
     loadMoreBegin {(_: Int) -> Void in
+      self.tableView.reloadData()
       self.loadMoreStatus = false
       self.removeLoadingScreen()
     }
@@ -125,9 +115,8 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
   private func loadMoreBegin(loadMoreEnd: @escaping(Int) -> Void) {
     DispatchQueue.global(qos: .background).async {
       self.page += 1
-      self.informatorDelegate?.takeInCache(tag: .character, page: String(self.page))
-      self.userCacheLoadDelegate?.loadItems { responce in
-        UserCacheData.characterCache = responce
+      self.requestCharApi?.characterRequestAPI(page: String(self.page)) { responce in
+        self.characterRequestResult.append(contentsOf: responce)
       }
       DispatchQueue.main.async {
       loadMoreEnd(0)
@@ -159,9 +148,6 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     self.searchTimer?.invalidate()
     searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
       DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-        self?.characterSearchArray = UserCacheData.characterCache.filter { item in
-          item.name?.localizedCaseInsensitiveContains(searchText) ?? false
-        }
         self?.searchDelegate?.characterSearch(tag: searchText) { [weak self] searchResponce in
           self?.searchRequestResult = searchResponce
         }
@@ -172,11 +158,9 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
       }
     }
   }
-
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     searching = false
     searchBar.text = ""
-    characterSearchArray = []
     searchRequestResult = nil
     tableView.reloadData()
   }
@@ -199,7 +183,11 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     guard let presentVC = cardStoryboard.instantiateViewController(
       withIdentifier: "CharacterTableViewCard") as? CharacterTableViewCard
     else { return }
-    presentVC.characterCache = UserCacheData.characterCache[indexPath?.row ?? 0]
+    if searching == true {
+      presentVC.characterResult = self.searchRequestResult?.results[indexPath?.row ?? 0]
+    } else {
+      presentVC.characterResult = self.characterRequestResult[indexPath?.row ?? 0]
+    }
     show(presentVC, sender: sender)
   }
 }

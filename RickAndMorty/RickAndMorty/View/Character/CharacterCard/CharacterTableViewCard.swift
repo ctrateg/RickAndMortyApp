@@ -5,8 +5,7 @@ class CharacterTableViewCard: UITableViewController {
   private weak var searchDellegate: RequestSerivceSearchDelegate?
   private weak var getImageDelegate: GetImageDelegate?
 
-  var characterCache: CharacterCache?
-  var characterDTO: CharacterResultDTO?
+  var characterResult: CharacterResultDTO?
 
   private var cardArray: [String]?
   private var titles: [String]?
@@ -28,14 +27,14 @@ class CharacterTableViewCard: UITableViewController {
     getImageDelegate = UserCacheData.shared
     self.tableView.backgroundColor = .systemGray6
     cardArray = [
-      characterCache?.status ?? "",
-      characterCache?.type ?? "",
-      characterCache?.gender ?? "",
+      characterResult?.status ?? "",
+      characterResult?.type ?? "",
+      characterResult?.gender ?? "",
       dateFormatterConfiguration()
     ]
     titles = ["Status", "Type", "Gender", "Date"]
-    episodesRequest(urlArray: characterCache?.episodes ?? [])
-    similarCharacters(tag: characterCache?.name ?? "")
+    episodesRequest(urlArray: characterResult?.episode ?? [])
+    similarCharacters(tag: characterResult?.name ?? "")
   }
 
   private func similarCharacters(tag: String) {
@@ -71,7 +70,7 @@ class CharacterTableViewCard: UITableViewController {
   private func dateFormatterConfiguration() -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-    guard let date = dateFormatter.date(from: characterCache?.created ?? "") else { return "" }
+    guard let date = dateFormatter.date(from: characterResult?.created ?? "") else { return "" }
     dateFormatter.dateFormat = "dd-MM-yyyy"
     return dateFormatter.string(from: date)
   }
@@ -93,7 +92,7 @@ class CharacterTableViewCard: UITableViewController {
     case 1:
       return 1
     case 2:
-      return characterCache?.episodes?.count ?? 0
+      return characterResult?.episode?.count ?? 0
     default:
       return 0
     }
@@ -116,7 +115,7 @@ class CharacterTableViewCard: UITableViewController {
       guard let cellLocation = tableView.dequeueReusableCell(
         withIdentifier: "CharacterLocationCell",
         for: indexPath) as? CharacterLocationCell else { return UITableViewCell() }
-      cellLocation.name.text = characterCache?.location
+      cellLocation.name.text = characterResult?.location?.name
       return cellLocation
     case 2:
       guard let cellEpisode = tableView.dequeueReusableCell(
@@ -125,13 +124,22 @@ class CharacterTableViewCard: UITableViewController {
       let nameEpisodes = episodeRequestResult?[indexPathRow].name
       let descition = episodeRequestResult?[indexPathRow].episode
       cellEpisode.name.text = nameEpisodes
-      cellEpisode.desciption.text = descition
+      cellEpisode.desciption.text = "Season " + episodesSubTitleFix(line: descition ?? "", tag: "S") + ", " +
+      "Episode " + episodesSubTitleFix(line: descition ?? "", tag: "E")
       return cellEpisode
     default:
       return UITableViewCell()
     }
   }
-
+  private func episodesSubTitleFix(line: String, tag: String) -> String {
+    guard let eRange = line.range(of: "E") else { return "" }
+    guard let sEange = line.range(of: "S")?.upperBound else { return "" }
+    switch tag {
+    case "S": return String(line[sEange..<eRange.lowerBound])
+    case "E": return String(line[eRange.upperBound...])
+    default: return ""
+    }
+  }
   private func episodesSubtitle(inputString: String) -> String {
     let strArray = { () -> [Character] in
       var array: [Character] = []
@@ -201,12 +209,13 @@ class CharacterTableViewCard: UITableViewController {
     let favoriteButton = UIButton(frame: CGRect(x: 122, y: 75, width: 160, height: 24))
     let imageCard = UIImageView(frame: CGRect(x: 16, y: 16, width: 92, height: 92))
     headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 124))
-    imageCard.image = UIImage(data: characterCache?.image ?? Data())
+    let image = getImageDelegate?.getImage(urlInput: characterResult?.image ?? "")
+    imageCard.image = UIImage(data: image ?? Data())
     imageCard.layer.cornerRadius = 45
     imageCard.clipsToBounds = true
 
     infoLabel = UILabel(frame: CGRect(x: 120, y: 32, width: 226, height: 25))
-    infoLabel?.text = characterCache?.name
+    infoLabel?.text = characterResult?.name
     infoLabel?.font = .systemFont(ofSize: 24)
     infoLabel?.textColor = .black
 

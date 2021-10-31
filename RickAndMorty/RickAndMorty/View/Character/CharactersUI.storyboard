@@ -33,10 +33,10 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MNW-Dt-WVV" userLabel="NameCharacter">
-                                            <rect key="frame" x="72.5" y="10" width="200" height="20"/>
+                                            <rect key="frame" x="72.5" y="10" width="0.0" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="20" id="5fw-dG-hl7"/>
-                                                <constraint firstAttribute="width" constant="200" id="MRg-0N-Dn7"/>
+                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="MRg-0N-Dn7"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -165,9 +165,9 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LocationName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2a-m3-y3e">
-                                            <rect key="frame" x="15" y="19.5" width="270" height="21"/>
+                                            <rect key="frame" x="15" y="19.5" width="110" height="21"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="270" id="MUm-3B-Lnc"/>
+                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="205" id="MUm-3B-Lnc"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -217,9 +217,9 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EpisodesName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5LJ-eC-rDf">
-                                            <rect key="frame" x="15" y="9" width="276" height="21"/>
+                                            <rect key="frame" x="15" y="9" width="114.5" height="21"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="276" id="xYR-Td-Hrd"/>
+                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="205" id="xYR-Td-Hrd"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
