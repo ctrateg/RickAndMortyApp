@@ -27,9 +27,9 @@ class LocationTableViewController: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
   }
+
   private func request(page: String = "1") {
     setLoadingScreen()
-
     self.requestLocationApi?.locationRequestAPI(page: String(self.page)) { responce in
       self.locationRequestResults = responce.results
       self.endOfScroll = responce.info.pages
@@ -80,7 +80,7 @@ class LocationTableViewController: UITableViewController {
   }
 
   func loadMoreBegin(loadMoreEnd: @escaping(Int) -> Void) {
-    DispatchQueue.global(qos: .default).async {
+    DispatchQueue.global(qos: .userInteractive).async {
       self.page += 1
       self.requestLocationApi?.locationRequestAPI(page: String(self.page)) {  responce in
         self.locationRequestResults.append(contentsOf: responce.results)

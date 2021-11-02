@@ -11,7 +11,8 @@ class GoogleMapViewController: UIViewController {
     mapConfiguration()
   }
   private func mapConfiguration() {
-    let count = (userLocationCache?.count ?? 1) - 1
+    let count = (userLocationCache?.count ?? 0) - 1
+    print(count)
     let camera = GMSCameraPosition.camera(
       withLatitude: userLocationCache?[count].latitude ?? 0,
       longitude: userLocationCache?[count].longitude ?? 0,

@@ -2,7 +2,7 @@ import UIKit
 import Kingfisher
 
 class EpisodesCardTVC: UITableViewController {
-  private let characterStoryboard = UIStoryboard(name: "EpisodesUI", bundle: nil)
+  private let characterStoryboard = UIStoryboard(name: "CharactersUI", bundle: nil)
   private let loadView = UIView()
   private let indicator = UIActivityIndicatorView()
 
@@ -19,17 +19,34 @@ class EpisodesCardTVC: UITableViewController {
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     singleRequestDelegate = RequestServiceAPI.shared
-    characterRequest(urlArray: episodesURL)
+    episodesRequest(urlArray: episodesURL)
   }
   override func viewDidLoad() {
     super.viewDidLoad()
     self.tableView.backgroundColor = .systemGray6
     self.navigationItem.title = "Episode Card"
-    titles = [
-      "Date",
-      "Code"
-    ]
+    titles = [ "Date", "Code" ]
   }
+  private func episodesRequest(urlArray: [String]) {
+    DispatchQueue.global(qos: .userInteractive).sync {
+      self.singleRequestDelegate?.requestForEpisodes(urlArray: urlArray) { [weak self] responce in
+        self?.episodesRequestResult = responce
+        self?.requestCharacters(urlArray: responce[0].characters)
+        sleep(1)
+        DispatchQueue.main.async {
+          self?.tableView.reloadData()
+        }
+      }
+    }
+  }
+
+  private func requestCharacters(urlArray: [String]) {
+    self.singleRequestDelegate?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
+      self?.characterRequestResult = responce
+      self?.tableView.reloadData()
+    }
+  }
+
   func dateFormatterConfiguration() -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -37,23 +54,7 @@ class EpisodesCardTVC: UITableViewController {
     dateFormatter.dateFormat = "dd.MM.yyyy"
     return dateFormatter.string(from: date)
   }
-  private func characterRequest(urlArray: [String]) {
-    DispatchQueue.global(qos: .userInteractive).sync {
-      self.singleRequestDelegate?.requestForEpisodes(urlArray: urlArray) { [weak self] responce in
-        self?.episodesRequestResult = responce
-        self?.requestCharacters(urlArray: responce[0].characters)
-        DispatchQueue.main.async {
-          self?.tableView.reloadData()
-        }
-      }
-    }
-  }
-  func requestCharacters(urlArray: [String]) {
-    self.singleRequestDelegate?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
-      self?.characterRequestResult = responce
-      self?.tableView.reloadData()
-    }
-  }
+
   override func numberOfSections(in tableView: UITableView) -> Int {
     return 2
   }
@@ -147,9 +148,13 @@ class EpisodesCardTVC: UITableViewController {
     return headerView
   }
   @IBAction func segueButton(_ sender: UIButton) {
-    guard let characters = characterStoryboard.instantiateViewController(
-      withIdentifier: "CharacterTableViewCard") as? CharacterTableViewCard else { return }
-    show(characters, sender: sender)
+    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
+    let indexPath = tableView.indexPathForRow(at: buttonPosition)
+    guard let presentVC = characterStoryboard.instantiateViewController(
+      withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
+    else { return }
+    presentVC.characterURL.append(self.characterRequestResult?[indexPath?.row ?? 0].url ?? "")
+    show(presentVC, sender: sender)
   }
   @objc func favoriteButtonTap(_ sender: UIButton) {
     if clickedTopButton {

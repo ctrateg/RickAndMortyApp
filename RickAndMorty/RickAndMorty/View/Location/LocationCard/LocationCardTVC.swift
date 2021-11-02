@@ -5,14 +5,13 @@ class LocationCardTVC: UITableViewController {
   private let characterStoryboard = UIStoryboard(name: "CharactersUI", bundle: nil)
   private weak var singleRequestDelegate: SingleRequestDelegate?
   var locationURL: [String] = []
+
   private var locationRequestResult: [LocationResultDTO]?
   private var charactersDTO: CharacterDTO?
   private var titles: [String]?
   private var headerView: UIView?
   private var infoLabel: UILabel?
   private var characterRequestResult: [CharacterResultDTO]?
-  private let loadView = UIView()
-  private let indicator = UIActivityIndicatorView()
   private var cardArray: [String]?
   private var imageCharacters: [UIImage] = []
   private var clickedTopButton = false
@@ -25,11 +24,7 @@ class LocationCardTVC: UITableViewController {
     super.viewDidLoad()
     self.tableView.backgroundColor = .systemGray6
     self.navigationItem.title = "Location Card"
-    titles = [
-      "Type",
-      "Dimension",
-      "Date"
-    ]
+    titles = ["Type", "Dimension", "Date"]
   }
   func dateFormatterConfiguration() -> String {
     let dateFormatter = DateFormatter()
@@ -43,6 +38,7 @@ class LocationCardTVC: UITableViewController {
       self.singleRequestDelegate?.requestForLocation(urlArray: urlArray) { [weak self] responce in
         self?.locationRequestResult = responce
         self?.requestCharacters(urlArray: responce[0].residents)
+        sleep(1)
         DispatchQueue.main.async {
           self?.tableView.reloadData()
         }
@@ -149,30 +145,15 @@ class LocationCardTVC: UITableViewController {
     headerView?.addSubview(infoLabel ?? UILabel())
     return headerView
   }
-  // экран индикатора при подгрузках
-  func setLoadingScreen() {
-    let width: CGFloat = 50
-    let height: CGFloat = 30
-    let x = tableView.bounds.midX - (width / 2)
-    let y = tableView.bounds.midY - (height / 2)
-    loadView.frame = CGRect(x: x, y: y, width: width, height: height)
-    indicator.style = .large
-    indicator.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-    indicator.startAnimating()
-    loadView.addSubview(indicator)
-    tableView.addSubview(loadView)
-    tableView.isScrollEnabled = false
-  }
 
-  func removeLoadingScreen() {
-    indicator.stopAnimating()
-    indicator.isHidden = true
-    tableView.isScrollEnabled = true
-  }
   @IBAction func segueCharacter(_ sender: UIButton) {
-    guard let characters = characterStoryboard.instantiateViewController(
-      withIdentifier: "CharacterTableViewCard") as? CharacterTableViewCard else { return }
-    show(characters, sender: sender)
+    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
+    let indexPath = tableView.indexPathForRow(at: buttonPosition)
+    guard let presentVC = characterStoryboard.instantiateViewController(
+      withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
+    else { return }
+    presentVC.characterURL.append(self.characterRequestResult?[indexPath?.row ?? 0].url ?? "")
+    show(presentVC, sender: sender)
   }
   @objc func favoriteButtonTap(_ sender: UIButton) {
     if clickedTopButton {
@@ -182,7 +163,7 @@ class LocationCardTVC: UITableViewController {
       sender.setImage(
         UIImage(named: "LikeButtonFull"),
         for: .normal)
-      sender.tintColor = UIColor(named: "mainColor")
+      sender.tintColor = UIColor(named: "MainColor")
     }
     clickedTopButton.toggle()
   }

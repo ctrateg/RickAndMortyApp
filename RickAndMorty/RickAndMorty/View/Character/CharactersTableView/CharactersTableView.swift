@@ -185,7 +185,7 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
     let indexPath = tableView.indexPathForRow(at: buttonPosition)
     guard let presentVC = cardStoryboard.instantiateViewController(
-      withIdentifier: "CharacterTableViewCard") as? CharacterTableViewCard
+      withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
     else { return }
     if searching == true {
       presentVC.characterURL.append(self.searchRequestResult?.results[indexPath?.row ?? 0].url ?? "")

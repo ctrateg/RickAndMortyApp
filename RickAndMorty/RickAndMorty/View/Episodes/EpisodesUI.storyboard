@@ -124,7 +124,7 @@
         <scene sceneID="tVY-Ph-eg2">
             <objects>
                 <tableViewController storyboardIdentifier="EpisodesCardTVC" id="6x3-5q-dXn" customClass="EpisodesCardTVC" customModule="RickAndMorty" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="dJ8-Gt-nEw">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="dJ8-Gt-nEw">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -169,7 +169,7 @@
                                     <outlet property="titleLabel" destination="TxP-Yj-bfq" id="mZP-Gh-eD8"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="EpisodesCharactersCell" rowHeight="60" id="ApA-nB-KgE" userLabel="LocationCharacterCell" customClass="EpisodesCharactersCell" customModule="RickAndMorty" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="EpisodesCharactersCell" rowHeight="60" id="ApA-nB-KgE" customClass="EpisodesCharactersCell" customModule="RickAndMorty" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="109.5" width="414" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ApA-nB-KgE" id="HGr-0t-S8h">

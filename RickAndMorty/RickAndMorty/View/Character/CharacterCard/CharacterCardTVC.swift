@@ -1,11 +1,12 @@
 import UIKit
 import Kingfisher
 
-class CharacterTableViewCard: UITableViewController {
+class CharacterCardTVC: UITableViewController {
   private weak var singleRequestDelegate: SingleRequestDelegate?
   private weak var searchDellegate: RequestSerivceSearchDelegate?
 
   var characterURL: [String] = []
+  private var clickedTopButton = false
   private var cardArray: [String]?
   private var titles: [String]?
   private var headerView: UIView?
@@ -57,8 +58,8 @@ class CharacterTableViewCard: UITableViewController {
       searchItem.removeSubrange(spaceRange.lowerBound..<searchItem.endIndex)
     }
     self.searchDellegate?.characterSearch(tag: searchItem) { [weak self] responce in
-      self?.characterSearchResult = responce
-      self?.tableView.reloadData()
+    self?.characterSearchResult = responce
+    self?.tableView.reloadData()
     }
   }
 
@@ -214,6 +215,7 @@ class CharacterTableViewCard: UITableViewController {
     favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
     favoriteButton.setTitle(" Add to Favorites", for: .normal)
     favoriteButton.setTitleColor(.black, for: .normal)
+    favoriteButton.addTarget(self, action: #selector(favoriteButtonTap(_:)), for: .touchUpInside)
 
     headerView?.addSubview(favoriteButton)
     headerView?.addSubview(imageCard)
@@ -258,9 +260,41 @@ class CharacterTableViewCard: UITableViewController {
 
     tableView.isScrollEnabled = true
   }
+
+  @objc func favoriteButtonTap(_ sender: UIButton) {
+    if clickedTopButton {
+      sender.setImage(UIImage(named: "LikeButton"), for: .normal)
+      sender.tintColor = .black
+    } else {
+      sender.setImage(
+        UIImage(named: "LikeButtonFull"),
+        for: .normal)
+      sender.tintColor = UIColor(named: "MainColor")
+    }
+    clickedTopButton.toggle()
+  }
+
+  @IBAction func locationSegue(_ sender: UIButton) {
+    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
+    let indexPath = tableView.indexPathForRow(at: buttonPosition)
+    guard let presentVC = UIStoryboard(name: "LocationUI", bundle: nil).instantiateViewController(
+      withIdentifier: "LocationCardTVC") as? LocationCardTVC
+    else { return }
+    presentVC.locationURL.append(self.characterResult?[indexPath?.row ?? 0].location?.url ?? "")
+    show(presentVC, sender: sender)
+  }
+  @IBAction func episodesSegue(_ sender: UIButton) {
+    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
+    let indexPath = tableView.indexPathForRow(at: buttonPosition)
+    guard let presentVC = UIStoryboard(name: "EpisodesUI", bundle: nil).instantiateViewController(
+      withIdentifier: "EpisodesCardTVC") as? EpisodesCardTVC
+    else { return }
+    presentVC.episodesURL.append(self.episodeRequestResult?[indexPath?.row ?? 0].url ?? "")
+    show(presentVC, sender: sender)
+  }
 }
 
-extension CharacterTableViewCard: UICollectionViewDelegate, UICollectionViewDataSource {
+extension CharacterCardTVC: UICollectionViewDelegate, UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return (characterSearchResult?.results.count ?? 0) - 1
   }
