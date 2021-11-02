@@ -6,8 +6,9 @@ class LocationTableViewController: UITableViewController {
   private let appearance = UINavigationBarAppearance()
   private let cardStoryboard = UIStoryboard(name: "LocationUI", bundle: nil)
 
+  private var endOfScroll: Int?
   private var loadMoreStatus = false
-  private var page = 1
+  private var page = 0
   private var locationRequestResults: [LocationResultDTO] = []
 
   private weak var requestLocationApi: RequestServiceDelegate?
@@ -15,6 +16,7 @@ class LocationTableViewController: UITableViewController {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    page = 0
     requestLocationApi = RequestServiceAPI.shared
     userCacheLoadDelegate = UserCacheData.shared
     requestLocationApi = RequestServiceAPI.shared
@@ -29,12 +31,13 @@ class LocationTableViewController: UITableViewController {
     setLoadingScreen()
 
     self.requestLocationApi?.locationRequestAPI(page: String(self.page)) { responce in
-      self.locationRequestResults = responce
+      self.locationRequestResults = responce.results
+      self.endOfScroll = responce.info.pages
       DispatchQueue.main.async {
         self.tableView.reloadData()
       }
     }
-    self.page = 0
+    self.page = 1
     removeLoadingScreen()
   }
 
@@ -61,7 +64,7 @@ class LocationTableViewController: UITableViewController {
     let currentOffset = scrollView.contentOffset.y
     let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
     let deltaOffset = maximumOffset - currentOffset
-    if deltaOffset <= 0 {
+    if deltaOffset <= 0 && (page != endOfScroll) {
       loadMore()
     }
   }
@@ -80,7 +83,7 @@ class LocationTableViewController: UITableViewController {
     DispatchQueue.global(qos: .default).async {
       self.page += 1
       self.requestLocationApi?.locationRequestAPI(page: String(self.page)) {  responce in
-        self.locationRequestResults.append(contentsOf: responce)
+        self.locationRequestResults.append(contentsOf: responce.results)
       }
       DispatchQueue.main.async {
       loadMoreEnd(0)
@@ -127,7 +130,7 @@ class LocationTableViewController: UITableViewController {
     guard let presentVC = cardStoryboard.instantiateViewController(
       withIdentifier: "LocationCardTVC") as? LocationCardTVC
     else { return }
-    presentVC.locationRequestResult = self.locationRequestResults[indexPath?.row ?? 0]
+    presentVC.locationURL.append(self.locationRequestResults[indexPath?.row ?? 0].url)
     show(presentVC, sender: sender)
   }
 }

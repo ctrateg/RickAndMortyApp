@@ -1,7 +1,7 @@
 import Foundation
 
 protocol UserCacheSaveDelegate: AnyObject {
-  func saveData(data: CharacterDTO, index: Int)
+  func saveData(data: CharacterResultDTO)
   func saveData(data: LocationDTO, index: Int)
   func saveData(data: EpisodesDTO, index: Int)
 }

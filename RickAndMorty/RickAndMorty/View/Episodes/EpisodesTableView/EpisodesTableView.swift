@@ -6,17 +6,18 @@ class EpisodesTableViewController: UITableViewController {
   private let appearance = UINavigationBarAppearance()
   private let cardStoryboard = UIStoryboard(name: "EpisodesUI", bundle: nil)
 
+  private var endOfScroll: Int?
   private var loadMoreStatus = false
-  private var page = 1
+  private var page = 0
   private var episodesRequestResult: [EpisodesResultDTO] = []
-  private weak var userCacheLoadDelegate: UserCacheLoadDelegate?
   private weak var requestEpisdesApi: RequestServiceDelegate?
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    userCacheLoadDelegate = UserCacheData.shared
+    page = 0
     requestEpisdesApi = RequestServiceAPI.shared
     configurationNavgiationC()
+    request()
   }
 
   override func viewDidLoad() {
@@ -29,10 +30,11 @@ class EpisodesTableViewController: UITableViewController {
   private func request(page: String = "1") {
     setLoadingScreen()
 
-    self.requestEpisdesApi?.episodesRequestAPI(page: String(self.page)) { responce in
-      self.episodesRequestResult = responce
+    self.requestEpisdesApi?.episodesRequestAPI(page: String(self.page)) { [weak self] responce in
+      self?.episodesRequestResult = responce.results
+      self?.endOfScroll = responce.info.pages
       DispatchQueue.main.async {
-        self.tableView.reloadData()
+        self?.tableView.reloadData()
       }
     }
     self.page = 0
@@ -69,7 +71,7 @@ class EpisodesTableViewController: UITableViewController {
     let currentOffset = scrollView.contentOffset.y
     let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
     let deltaOffset = maximumOffset - currentOffset
-    if deltaOffset <= 0 {
+    if (deltaOffset <= 0) && (page != endOfScroll) {
       loadMore()
     }
   }
@@ -89,7 +91,7 @@ class EpisodesTableViewController: UITableViewController {
     DispatchQueue.global(qos: .default).async {
       self.page += 1
       self.requestEpisdesApi?.episodesRequestAPI(page: String(self.page)) { responce in
-        self.episodesRequestResult.append(contentsOf: responce)
+        self.episodesRequestResult.append(contentsOf: responce.results)
       }
       DispatchQueue.main.async {
       loadMoreEnd(0)
@@ -135,7 +137,8 @@ class EpisodesTableViewController: UITableViewController {
     guard let presentVC = cardStoryboard.instantiateViewController(
       withIdentifier: "EpisodesCardTVC") as? EpisodesCardTVC
     else { return }
-    presentVC.episodesRequestResult = episodesRequestResult[indexPath?.row ?? 0]
+    presentVC.episodesURL.append(self.episodesRequestResult[indexPath?.row ?? 0].url)
+    self.page = 0
     show(presentVC, sender: sender)
   }
 }

@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -40,13 +41,86 @@
                             </items>
                         </navigationBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCharacterCells" id="mnA-xv-YFO">
-                                <rect key="frame" x="0.0" y="88.5" width="414" height="43.5"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CharactersFavoriteCell" rowHeight="60" id="gVd-gb-cHM" customClass="CharactersFavoriteCell" customModule="RickAndMorty" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="88.5" width="414" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mnA-xv-YFO" id="3Eo-rn-GhJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gVd-gb-cHM" id="LcG-uS-frl">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2eB-Qi-64C" userLabel="IconCharacter">
+                                            <rect key="frame" x="15" y="5" width="50" height="50"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="50" id="3WY-o7-jxH"/>
+                                                <constraint firstAttribute="height" constant="50" id="w26-3e-RQ1"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CqT-wj-3hv" userLabel="NameCharacter">
+                                            <rect key="frame" x="72.5" y="10" width="0.0" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="150" id="7d7-0P-v4s"/>
+                                                <constraint firstAttribute="height" constant="20" id="BZL-Ws-Qet"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fiY-S5-vBa" userLabel="LikeButton">
+                                            <rect key="frame" x="320" y="19" width="24" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="22" id="8T4-lD-PAQ"/>
+                                                <constraint firstAttribute="width" constant="24" id="sCB-TR-Xy6"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal">
+                                                <imageReference key="image" image="LikeButton" symbolScale="large"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="favoriteButtonAction:" destination="gVd-gb-cHM" eventType="touchUpInside" id="0Fg-Bo-M6n"/>
+                                            </connections>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="khr-1U-2AT" userLabel="Status">
+                                            <rect key="frame" x="72.5" y="30" width="0.0" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="20" id="qOv-Hc-yZ9"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NNA-Ak-e5r" userLabel="SegueButton">
+                                            <rect key="frame" x="375" y="24" width="7" height="12"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="7" id="B4G-Uw-h8W"/>
+                                                <constraint firstAttribute="height" constant="12" id="C0q-vi-MG4"/>
+                                            </constraints>
+                                            <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" image="SequeButton"/>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="2eB-Qi-64C" firstAttribute="centerY" secondItem="LcG-uS-frl" secondAttribute="centerY" id="2cg-rq-fDI"/>
+                                        <constraint firstItem="CqT-wj-3hv" firstAttribute="leading" secondItem="2eB-Qi-64C" secondAttribute="trailing" constant="7.5" id="5NL-A4-H9N"/>
+                                        <constraint firstItem="khr-1U-2AT" firstAttribute="top" secondItem="CqT-wj-3hv" secondAttribute="bottom" id="7Np-97-JRJ"/>
+                                        <constraint firstItem="2eB-Qi-64C" firstAttribute="leading" secondItem="LcG-uS-frl" secondAttribute="leading" constant="15" id="7oW-Da-R3u"/>
+                                        <constraint firstItem="NNA-Ak-e5r" firstAttribute="centerY" secondItem="LcG-uS-frl" secondAttribute="centerY" id="JMO-bh-nSi"/>
+                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="khr-1U-2AT" secondAttribute="bottom" constant="10" id="KTR-Qh-4kX"/>
+                                        <constraint firstItem="CqT-wj-3hv" firstAttribute="top" relation="greaterThanOrEqual" secondItem="LcG-uS-frl" secondAttribute="top" constant="10" id="XR3-dH-3mv"/>
+                                        <constraint firstAttribute="trailing" secondItem="fiY-S5-vBa" secondAttribute="trailing" constant="70" id="cTf-uN-QfO"/>
+                                        <constraint firstItem="khr-1U-2AT" firstAttribute="leading" secondItem="2eB-Qi-64C" secondAttribute="trailing" constant="7.5" id="ezK-jA-tuJ"/>
+                                        <constraint firstAttribute="trailing" secondItem="NNA-Ak-e5r" secondAttribute="trailing" constant="32" id="hDh-ms-j7r"/>
+                                        <constraint firstItem="fiY-S5-vBa" firstAttribute="centerY" secondItem="LcG-uS-frl" secondAttribute="centerY" id="z6B-2b-pZj"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="characterIcon" destination="2eB-Qi-64C" id="UeV-p6-6sa"/>
+                                    <outlet property="characterName" destination="CqT-wj-3hv" id="pBq-we-dpc"/>
+                                    <outlet property="characterStatus" destination="khr-1U-2AT" id="1KG-p9-clO"/>
+                                    <outlet property="favoriteButtonOutlet" destination="fiY-S5-vBa" id="NFi-lA-INU"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -55,6 +129,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="R3p-jY-eqQ"/>
+                    <connections>
+                        <outlet property="subNavigationBar" destination="gjY-gP-HUl" id="Utr-ck-SSh"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hvp-5D-1uc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -80,6 +157,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="LikeButton" width="24" height="23"/>
+        <image name="SequeButton" width="8" height="12"/>
         <namedColor name="LaunchColor">
             <color red="0.99599999189376831" green="0.99599999189376831" blue="0.19900000095367432" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

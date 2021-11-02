@@ -1,16 +1,17 @@
 import UIKit
+import Kingfisher
 
 class CharactersTableView: UITableViewController, UISearchBarDelegate {
   private weak var userCacheLoadDelegate: UserCacheLoadDelegate?
   private weak var searchDelegate: RequestSerivceSearchDelegate?
   private weak var requestCharApi: RequestServiceDelegate?
-  private weak var getImageDelegate: GetImageDelegate?
 
+  private var endOfScrolls: Int?
   private var characterRequestResult: [CharacterResultDTO] = []
   private var searchRequestResult: CharacterDTO?
   private var loadMoreStatus = false
   private var searching = false
-  private var page = 1
+  private var page = 0
   private var searchTimer: Timer?
 
   private let cardStoryboard = UIStoryboard(name: "CharactersUI", bundle: nil)
@@ -21,10 +22,10 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    page = 0
     self.searchBarController.searchBar.delegate = self
     let requestObj = RequestServiceAPI.shared
     userCacheLoadDelegate = UserCacheData.shared
-    getImageDelegate = UserCacheData.shared
     requestCharApi = requestObj
     searchDelegate = requestObj
     request()
@@ -35,12 +36,13 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     setLoadingScreen()
 
     self.requestCharApi?.characterRequestAPI(page: String(self.page)) { responce in
-      self.characterRequestResult = responce
+      self.characterRequestResult = responce.results
+      self.endOfScrolls = responce.info.pages
       DispatchQueue.main.async {
         self.tableView.reloadData()
       }
     }
-    self.page = 0
+    self.page = 1
     removeLoadingScreen()
   }
   private func searchBarConfiguration() {
@@ -67,16 +69,16 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     }
     if searching == true {
       let data = searchRequestResult?.results[indexPath.row]
-      return cellConfiguration(cell: cell, data: data)
+      return cellConfiguration(cell: cell, data: data, index: indexPath.row)
     }
     let data = characterRequestResult[indexPath.row]
-    return cellConfiguration(cell: cell, data: data)
+    return cellConfiguration(cell: cell, data: data, index: indexPath.row)
   }
 
-  private func cellConfiguration(cell: CharacterTableViewCell, data: CharacterResultDTO?) -> UITableViewCell {
+  private func cellConfiguration(cell: CharacterTableViewCell, data: CharacterResultDTO?, index: Int) -> UITableViewCell {
+    let imageURL = URL(string: data?.image ?? "")
     cell.characterName.text = data?.name
-    guard let dataImage = getImageDelegate?.getImage(urlInput: data?.image ?? "") else { return UITableViewCell() }
-    cell.characterIcon.image = UIImage(data: dataImage)
+    cell.characterIcon.kf.setImage(with: imageURL)
     switch data?.status {
     case "Alive":
       cell.charactetrStatus.textColor = .green
@@ -89,6 +91,8 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     default:
       cell.charactetrStatus.text = ""
     }
+    cell.dataCellRequest = data
+    cell.indexPathRow = index
     return cell
   }
 
@@ -96,7 +100,7 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     let currentOffset = scrollView.contentOffset.y
     let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
     let deltaOffset = maximumOffset - currentOffset
-    if deltaOffset <= 20 && searching == false {
+    if (deltaOffset <= 0) && (searching == false) && (page != endOfScrolls) {
       loadMore()
     }
   }
@@ -116,7 +120,7 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     DispatchQueue.global(qos: .background).async {
       self.page += 1
       self.requestCharApi?.characterRequestAPI(page: String(self.page)) { responce in
-        self.characterRequestResult.append(contentsOf: responce)
+        self.characterRequestResult.append(contentsOf: responce.results)
       }
       DispatchQueue.main.async {
       loadMoreEnd(0)
@@ -184,9 +188,9 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
       withIdentifier: "CharacterTableViewCard") as? CharacterTableViewCard
     else { return }
     if searching == true {
-      presentVC.characterResult = self.searchRequestResult?.results[indexPath?.row ?? 0]
+      presentVC.characterURL.append(self.searchRequestResult?.results[indexPath?.row ?? 0].url ?? "")
     } else {
-      presentVC.characterResult = self.characterRequestResult[indexPath?.row ?? 0]
+      presentVC.characterURL.append(self.characterRequestResult[indexPath?.row ?? 0].url)
     }
     show(presentVC, sender: sender)
   }

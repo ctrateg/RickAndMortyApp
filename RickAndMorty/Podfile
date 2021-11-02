@@ -7,6 +7,6 @@ target 'RickAndMorty' do
   pod 'Alamofire'
   pod 'SwiftLint'
   pod 'Locksmith'
-  # Pods for RickAndMorty
   pod 'GoogleMaps'
+  pod 'Kingfisher', '~> 7.0'
 end

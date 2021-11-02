@@ -10,12 +10,14 @@ class CharacterTableViewCell: UITableViewCell {
 
   private weak var saveInCacheDelegate: UserCacheSaveDelegate?
   private weak var loadDataDelegate: UserCacheLoadDelegate?
-
-  var dataCellRequest: CharacterDTO?
+  var indexPathRow: Int?
+  var dataCellRequest: CharacterResultDTO?
   @IBAction func likeButton(_ sender: Any) {
     if clicked {
+      guard let saveData = dataCellRequest else { return }
       favoritIconOutlet.setImage(UIImage(named: "LikeButton"), for: .normal)
       favoritIconOutlet.tintColor = .darkGray
+      saveInCacheDelegate?.saveData(data: saveData)
     } else {
       favoritIconOutlet.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
       favoritIconOutlet.tintColor = UIColor(named: "MainColor")

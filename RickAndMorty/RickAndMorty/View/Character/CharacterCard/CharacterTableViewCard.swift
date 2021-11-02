@@ -1,16 +1,16 @@
 import UIKit
+import Kingfisher
 
 class CharacterTableViewCard: UITableViewController {
   private weak var singleRequestDelegate: SingleRequestDelegate?
   private weak var searchDellegate: RequestSerivceSearchDelegate?
-  private weak var getImageDelegate: GetImageDelegate?
 
-  var characterResult: CharacterResultDTO?
-
+  var characterURL: [String] = []
   private var cardArray: [String]?
   private var titles: [String]?
   private var headerView: UIView?
   private var infoLabel: UILabel?
+  private var characterResult: [CharacterResultDTO]?
   private var episodeRequestResult: [EpisodesResultDTO]?
   private var characterSearchResult: CharacterDTO?
   private var collectionView: UICollectionView?
@@ -18,59 +18,54 @@ class CharacterTableViewCard: UITableViewController {
 
   private let loadView = UIView()
   private let indicator = UIActivityIndicatorView()
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
     let requestObject = RequestServiceAPI.shared
     searchDellegate = requestObject
     singleRequestDelegate = requestObject
-    getImageDelegate = UserCacheData.shared
+    characterRequest(urlArray: characterURL)
+  }
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
     self.tableView.backgroundColor = .systemGray6
-    cardArray = [
-      characterResult?.status ?? "",
-      characterResult?.type ?? "",
-      characterResult?.gender ?? "",
-      dateFormatterConfiguration()
-    ]
     titles = ["Status", "Type", "Gender", "Date"]
-    episodesRequest(urlArray: characterResult?.episode ?? [])
-    similarCharacters(tag: characterResult?.name ?? "")
+  }
+
+  private func characterRequest(urlArray: [String]) {
+    DispatchQueue.global(qos: .userInteractive).sync {
+      self.singleRequestDelegate?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
+        self?.characterResult = responce
+        self?.episodesRequest(urlArray: responce[0].episode ?? [])
+        self?.similarCharacters(tag: responce[0].name)
+        DispatchQueue.main.async {
+          self?.tableView.reloadData()
+        }
+      }
+    }
+  }
+
+  private func episodesRequest(urlArray: [String]) {
+    self.singleRequestDelegate?.requestForEpisodes(urlArray: urlArray) { [weak self] responce in
+      self?.episodeRequestResult = responce
+    }
   }
 
   private func similarCharacters(tag: String) {
-    setLoadingScreen()
     var searchItem = tag
     if let spaceRange = tag.range(of: " ") {
       searchItem.removeSubrange(spaceRange.lowerBound..<searchItem.endIndex)
     }
-    DispatchQueue.global(qos: .background).sync {
-      self.searchDellegate?.characterSearch(tag: searchItem) { [weak self] responce in
-        self?.characterSearchResult = responce
-      }
-      DispatchQueue.main.async {
-        self.collectionView?.reloadData()
-      }
+    self.searchDellegate?.characterSearch(tag: searchItem) { [weak self] responce in
+      self?.characterSearchResult = responce
+      self?.tableView.reloadData()
     }
-    removeLoadingScreen()
-  }
-
-  private func episodesRequest(urlArray: [String]) {
-    setLoadingScreen()
-    DispatchQueue.global(qos: .background).sync {
-      self.singleRequestDelegate?.requestForEpisodes(urlArray: urlArray) { [weak self] responce in
-        self?.episodeRequestResult = responce
-      }
-      DispatchQueue.main.async {
-        self.tableView.reloadData()
-      }
-    }
-    removeLoadingScreen()
   }
 
   private func dateFormatterConfiguration() -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-    guard let date = dateFormatter.date(from: characterResult?.created ?? "") else { return "" }
+    guard let date = dateFormatter.date(from: characterResult?[0].created ?? "") else { return "" }
     dateFormatter.dateFormat = "dd-MM-yyyy"
     return dateFormatter.string(from: date)
   }
@@ -92,13 +87,19 @@ class CharacterTableViewCard: UITableViewController {
     case 1:
       return 1
     case 2:
-      return characterResult?.episode?.count ?? 0
+      return characterResult?[0].episode?.count ?? 0
     default:
       return 0
     }
   }
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let indexPathRow = indexPath.row
+    cardArray = [
+      characterResult?[0].status ?? "",
+      characterResult?[0].type ?? "",
+      characterResult?[0].gender ?? "",
+      dateFormatterConfiguration()
+    ]
     switch indexPath.section {
     case 0:
       guard let cellInfo = tableView.dequeueReusableCell(
@@ -115,7 +116,7 @@ class CharacterTableViewCard: UITableViewController {
       guard let cellLocation = tableView.dequeueReusableCell(
         withIdentifier: "CharacterLocationCell",
         for: indexPath) as? CharacterLocationCell else { return UITableViewCell() }
-      cellLocation.name.text = characterResult?.location?.name
+      cellLocation.name.text = characterResult?[0].location?.name
       return cellLocation
     case 2:
       guard let cellEpisode = tableView.dequeueReusableCell(
@@ -139,17 +140,6 @@ class CharacterTableViewCard: UITableViewController {
     case "E": return String(line[eRange.upperBound...])
     default: return ""
     }
-  }
-  private func episodesSubtitle(inputString: String) -> String {
-    let strArray = { () -> [Character] in
-      var array: [Character] = []
-      let episodes = inputString
-      for str in episodes {
-        array.append(str)
-      }
-      return array
-    }
-    return "Season " + strArray()[2..<3] + ", " + "Episode " + strArray()[4...5]
   }
 
   override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -184,10 +174,12 @@ class CharacterTableViewCard: UITableViewController {
     infoLabel?.text = "SIMILAR CHARACTERS"
     infoLabel?.textColor = .gray
     infoLabel?.font = .systemFont(ofSize: 14)
+
     flow = UICollectionViewFlowLayout()
     flow?.scrollDirection = .horizontal
     flow?.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
     flow?.itemSize = CGSize(width: 100, height: 150)
+
     collectionView = UICollectionView(
       frame: CGRect(x: 0, y: 40, width: tableView.frame.width, height: 155),
       collectionViewLayout: flow ?? UICollectionViewFlowLayout())
@@ -209,19 +201,20 @@ class CharacterTableViewCard: UITableViewController {
     let favoriteButton = UIButton(frame: CGRect(x: 122, y: 75, width: 160, height: 24))
     let imageCard = UIImageView(frame: CGRect(x: 16, y: 16, width: 92, height: 92))
     headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 124))
-    let image = getImageDelegate?.getImage(urlInput: characterResult?.image ?? "")
-    imageCard.image = UIImage(data: image ?? Data())
+    let imageURL = URL(string: characterResult?[0].image ?? "")
+    imageCard.kf.setImage(with: imageURL)
     imageCard.layer.cornerRadius = 45
     imageCard.clipsToBounds = true
 
     infoLabel = UILabel(frame: CGRect(x: 120, y: 32, width: 226, height: 25))
-    infoLabel?.text = characterResult?.name
+    infoLabel?.text = characterResult?[0].name
     infoLabel?.font = .systemFont(ofSize: 24)
     infoLabel?.textColor = .black
 
     favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
     favoriteButton.setTitle(" Add to Favorites", for: .normal)
     favoriteButton.setTitleColor(.black, for: .normal)
+
     headerView?.addSubview(favoriteButton)
     headerView?.addSubview(imageCard)
     headerView?.addSubview(infoLabel ?? UILabel())
@@ -276,9 +269,9 @@ extension CharacterTableViewCard: UICollectionViewDelegate, UICollectionViewData
     withReuseIdentifier: "collectionCell",
     for: indexPath) as? SimilarCollectionViewCell else { return UICollectionViewCell() }
     let data = characterSearchResult?.results[indexPath.row + 1]
-    let dataImage = getImageDelegate?.getImage(urlInput: data?.image ?? "")
+    let imageURL = URL(string: data?.image ?? "")
 
-    cell.imageCollectionCell.image = UIImage(data: dataImage ?? Data())
+    cell.imageCollectionCell.kf.setImage(with: imageURL)
     cell.nameCollectionCell.text = data?.name
 
     return cell

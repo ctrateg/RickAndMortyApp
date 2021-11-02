@@ -24,6 +24,7 @@ class GoogleMapViewController: UIViewController {
         latitude: userLocationCache?[i].latitude ?? 0,
         longitude: userLocationCache?[i].longitude ?? 0)
       marker.position = position
+      marker.iconView?.tag = i
       marker.map = mapView
     }
   }

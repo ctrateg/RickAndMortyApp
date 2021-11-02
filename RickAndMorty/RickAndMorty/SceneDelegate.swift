@@ -9,9 +9,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, CLLocationManagerDelega
   private let firstOpenTime = Int(Date().timeIntervalSince1970)
 
   private var rootVC: UIViewController?
-
   private weak var userLocationDelegate: UserLocationDelegate?
-
   static var timeInApp: Int = 0
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     guard let windowScene = (scene as? UIWindowScene) else { return }

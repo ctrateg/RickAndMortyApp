@@ -2,28 +2,27 @@ import CoreData
 import UIKit
 
 class UserCacheData: UserCacheSaveDelegate,
-  UserCacheLoadDelegate,
-  GetImageDelegate {
+  UserCacheLoadDelegate {
   static var shared: UserCacheData = {
     let instance = UserCacheData()
     return instance
   }()
   private init() {}
 
-  func saveData(data: CharacterDTO, index: Int) {
+  func saveData(data: CharacterResultDTO) {
     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
     let context = appDelegate.persistentContainer.viewContext
     let entity = CharacterCache(context: context)
-    entity.id = Int64(data.results[index].id)
-    entity.name = data.results[index].name
-    entity.gender = data.results[index].gender
-    entity.created = data.results[index].created
-    entity.image = getImage(urlInput: data.results[index].image)
-    entity.location = data.results[index].location?.name
-    entity.locationURL = data.results[index].location?.url
-    entity.status = data.results[index].status
-    entity.type = data.results[index].type
-    entity.episodes = data.results[index].episode
+    entity.id = Int64(data.id)
+    entity.name = data.name
+    entity.gender = data.gender
+    entity.created = data.created
+    entity.image = data.image
+    entity.location = data.location?.name
+    entity.locationURL = data.location?.url
+    entity.status = data.status
+    entity.type = data.type
+    entity.episodes = data.episode
     do {
     try context.save()
     } catch let error as NSError {
@@ -102,14 +101,16 @@ class UserCacheData: UserCacheSaveDelegate,
       }
     }
   }
-  func getImage(urlInput: String) -> Data? {
-    guard let url = URL(string: urlInput) else { return nil }
-    do {
-      let data = try Data(contentsOf: url)
-      return data
-    } catch _ as NSError {
-      print("Save image error")
-    }
-    return nil
-  }
+//  func deletItem() {
+//    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//    let context = appDelegate.persistentContainer.viewContext
+//    let entity = CharacterCache(context: context)
+//    context.delete(entity)
+//
+//    do {
+//      try context.save()
+//    } catch let error as NSError {
+//      print("Ошибка при сохранении: \(error), \(error.userInfo)")
+//    }
+//  }
 }

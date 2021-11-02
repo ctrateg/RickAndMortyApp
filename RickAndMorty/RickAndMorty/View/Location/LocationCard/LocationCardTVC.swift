@@ -1,10 +1,11 @@
 import UIKit
+import Kingfisher
 
 class LocationCardTVC: UITableViewController {
   private let characterStoryboard = UIStoryboard(name: "CharactersUI", bundle: nil)
-  private weak var requestForDelegate: SingleRequestDelegate?
-  private weak var getImageDelegate: GetImageDelegate?
-  var locationRequestResult: LocationResultDTO?
+  private weak var singleRequestDelegate: SingleRequestDelegate?
+  var locationURL: [String] = []
+  private var locationRequestResult: [LocationResultDTO]?
   private var charactersDTO: CharacterDTO?
   private var titles: [String]?
   private var headerView: UIView?
@@ -17,19 +18,13 @@ class LocationCardTVC: UITableViewController {
   private var clickedTopButton = false
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    requestCharacters(urlArray: locationRequestResult?.residents ?? [])
-    requestForDelegate = RequestServiceAPI.shared
-    getImageDelegate = UserCacheData.shared
+    singleRequestDelegate = RequestServiceAPI.shared
+    locationRequest(urlArray: locationURL)
   }
   override func viewDidLoad() {
     super.viewDidLoad()
     self.tableView.backgroundColor = .systemGray6
     self.navigationItem.title = "Location Card"
-    cardArray = [
-      locationRequestResult?.type ?? "",
-      locationRequestResult?.dimension ?? "",
-      dateFormatterConfiguration()
-    ]
     titles = [
       "Type",
       "Dimension",
@@ -39,30 +34,28 @@ class LocationCardTVC: UITableViewController {
   func dateFormatterConfiguration() -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-    guard let date = dateFormatter.date(from: locationRequestResult?.created ?? "") else { return "" }
+    guard let date = dateFormatter.date(from: locationRequestResult?[0].created ?? "") else { return "" }
     dateFormatter.dateFormat = "dd.MM.yyyy"
     return dateFormatter.string(from: date)
   }
+  private func locationRequest(urlArray: [String]) {
+    DispatchQueue.global(qos: .userInteractive).sync {
+      self.singleRequestDelegate?.requestForLocation(urlArray: urlArray) { [weak self] responce in
+        self?.locationRequestResult = responce
+        self?.requestCharacters(urlArray: responce[0].residents)
+        DispatchQueue.main.async {
+          self?.tableView.reloadData()
+        }
+      }
+    }
+  }
   func requestCharacters(urlArray: [String]) {
-    DispatchQueue.global(qos: .default).async {
-      self.requestForDelegate?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
-        self?.characterRequestResult = responce
-      }
-      self.dataToImage()
-      DispatchQueue.main.sync {
-        self.tableView.reloadData()
-      }
+    self.singleRequestDelegate?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
+      self?.characterRequestResult = responce
+      self?.tableView.reloadData()
     }
   }
-  func dataToImage() {
-    for i in 0..<(characterRequestResult?.count ?? 1) {
-      self.imageCharacters
-        .append(UIImage(
-          data: self.getImageDelegate?
-            .getImage(urlInput: characterRequestResult?[i].image ?? "") ?? Data()
-        ) ?? UIImage())
-    }
-  }
+
   override func numberOfSections(in tableView: UITableView) -> Int {
     return 2
   }
@@ -71,7 +64,7 @@ class LocationCardTVC: UITableViewController {
     case 0:
       return cardArray?.count ?? 0
     default:
-      return locationRequestResult?.residents.count ?? 0
+      return locationRequestResult?[0].residents.count ?? 0
     }
   }
   override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -94,6 +87,11 @@ class LocationCardTVC: UITableViewController {
     }
   }
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    cardArray = [
+      locationRequestResult?[0].type ?? "",
+      locationRequestResult?[0].dimension ?? "",
+      dateFormatterConfiguration()
+    ]
     switch indexPath.section {
     case 0:
       guard let cellInfo = tableView.dequeueReusableCell(
@@ -110,9 +108,10 @@ class LocationCardTVC: UITableViewController {
         withIdentifier: "LocationCharacterCell",
         for: indexPath) as? LocationCharacterCell else { return UITableViewCell() }
       let data = characterRequestResult?[indexPath.row]
+      let imageURL = URL(string: data?.image ?? "")
       cellCharacter.characterName.text = data?.name
       cellCharacter.characterStatus.text = data?.status
-      cellCharacter.characterImage.image = imageCharacters[0]
+      cellCharacter.characterImage.kf.setImage(with: imageURL)
 
       return cellCharacter
     }
@@ -129,7 +128,7 @@ class LocationCardTVC: UITableViewController {
     headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 124))
     infoLabel = UILabel(frame: CGRect(x: 16, y: 24, width: 343, height: 48))
     infoLabel?.numberOfLines = 2
-    infoLabel?.text = locationRequestResult?.name
+    infoLabel?.text = locationRequestResult?[0].name
     infoLabel?.font = .systemFont(ofSize: 24)
     infoLabel?.textColor = .black
     let favoriteButton = UIButton(frame: CGRect(x: 16, y: 88, width: 160, height: 24))
