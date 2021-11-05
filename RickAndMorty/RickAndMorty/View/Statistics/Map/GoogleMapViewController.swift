@@ -19,13 +19,11 @@ class GoogleMapViewController: UIViewController {
       zoom: 6.0)
     let mapView = GMSMapView.map(withFrame: self.view.frame, camera: camera)
     self.view.addSubview(mapView)
-    let marker = GMSMarker()
-    for i in 0...count {
+    for i in 0..<count {
       let position = CLLocationCoordinate2D(
         latitude: userLocationCache?[i].latitude ?? 0,
         longitude: userLocationCache?[i].longitude ?? 0)
-      marker.position = position
-      marker.iconView?.tag = i
+      let marker = GMSMarker(position: position)
       marker.map = mapView
     }
   }

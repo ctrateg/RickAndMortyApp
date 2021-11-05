@@ -5,7 +5,7 @@ class ContainerViewController: UIViewController {
   @IBOutlet weak var presentView: UIView!
   @IBOutlet weak var subNavigationBarOutlet: UINavigationItem!
 
-  private weak var userLocationDelegate: UserLocationDelegate?
+  private weak var userLocationDelegate: UserLocationProtocol?
   private var userLocationCache: [UserLocation]?
   private var tag = 0
 
@@ -13,7 +13,7 @@ class ContainerViewController: UIViewController {
   private let storyboardName = UIStoryboard(name: "StatisticsUI", bundle: nil)
   override func viewDidLoad() {
     super.viewDidLoad()
-    userLocationDelegate = UserCacheData.shared
+    userLocationDelegate = LocalDataManager.shared
     takeLocation()
     configurationNavgiationC()
     segmenController.tintColor = .white
@@ -57,7 +57,7 @@ class ContainerViewController: UIViewController {
     navigationBar?.scrollEdgeAppearance = navigationBar?.standardAppearance
   }
   private func takeLocation() {
-    self.userLocationDelegate?.loadItems { responce in
+    self.userLocationDelegate?.loadLocations { responce in
       self.userLocationCache = responce
     }
   }

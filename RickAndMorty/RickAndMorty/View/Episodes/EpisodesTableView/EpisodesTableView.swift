@@ -10,7 +10,7 @@ class EpisodesTableViewController: UITableViewController {
   private var loadMoreStatus = false
   private var page = 0
   private var episodesRequestResult: [EpisodesResultDTO] = []
-  private weak var requestEpisdesApi: RequestServiceDelegate?
+  private weak var requestEpisdesApi: RequestServiceProtocol?
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
@@ -52,6 +52,18 @@ class EpisodesTableViewController: UITableViewController {
     }
     let data = episodesRequestResult[indexPath.row]
     let episodes = data.episode
+    if LocalDataManager.favoriteEpisodes.contains(where: { $0.id == (data.id) }) {
+      cell.favoriteIconOutlet.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+      cell.favoriteIconOutlet.tintColor = UIColor(named: "MainColor")
+      cell.deletObject = LocalDataManager.favoriteEpisodes.first { $0.id == (data.id) }
+      cell.clicked = true
+    } else {
+      cell.favoriteIconOutlet.setImage(UIImage(named: "LikeButton"), for: .normal)
+      cell.favoriteIconOutlet.tintColor = .darkGray
+      cell.clicked = false
+    }
+    cell.dataCellRequest = data
+    cell.indexPathRow = indexPath.row
     cell.episodesTitle.text = data.name
     cell.episodesNumber.text = "Season " + episodesSubTitleFix(line: episodes, tag: "S")
     + ", " + "Episode " + episodesSubTitleFix(line: episodes, tag: "E")

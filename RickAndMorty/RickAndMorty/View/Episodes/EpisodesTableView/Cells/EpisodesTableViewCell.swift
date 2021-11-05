@@ -1,17 +1,29 @@
 import UIKit
+import CoreData
 
 class EpisodesTableViewCell: UITableViewCell {
   @IBOutlet weak var episodesTitle: UILabel!
   @IBOutlet weak var episodesNumber: UILabel!
-  @IBOutlet weak var favoriteButtonOutlet: UIButton!
+  @IBOutlet weak var favoriteIconOutlet: UIButton!
+
+  private weak var deleteFromCache: UserCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
   var clicked = false
+  var deletObject: EpisodesCache?
+  var indexPathRow: Int?
+  var dataCellRequest: EpisodesResultDTO?
   @IBAction func favoriteButton(_ sender: UIButton) {
+    deleteFromCache = LocalDataManager.shared
+    saveInCacheProtocol = LocalDataManager.shared
     if clicked {
-      favoriteButtonOutlet.setImage(UIImage(named: "LikeButton"), for: .normal)
-      favoriteButtonOutlet.tintColor = .darkGray
+      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
+      favoriteIconOutlet.setImage(UIImage(named: "LikeButton"), for: .normal)
+      favoriteIconOutlet.tintColor = .darkGray
     } else {
-      favoriteButtonOutlet.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
-      favoriteButtonOutlet.tintColor = UIColor(named: "MainColor")
+      guard let saveData = dataCellRequest else { return }
+      saveInCacheProtocol?.saveData(data: saveData)
+      favoriteIconOutlet.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+      favoriteIconOutlet.tintColor = UIColor(named: "MainColor")
     }
     clicked.toggle()
   }

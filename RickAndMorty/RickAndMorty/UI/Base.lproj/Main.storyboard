@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -248,7 +248,7 @@
                                     <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="loginButton:" destination="dva-kH-KbF" eventType="touchUpInside" id="LN6-MH-Fkn"/>
+                                    <action selector="loginButton:" destination="dva-kH-KbF" eventType="touchUpInside" id="h4S-GH-MIQ"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QDy-Kr-fyZ">
@@ -436,7 +436,7 @@
                     </view>
                     <connections>
                         <outlet property="errorMessage" destination="QDy-Kr-fyZ" id="GFf-gM-TdU"/>
-                        <outlet property="loginButtonOutlet" destination="wuX-vb-OGz" id="b65-f0-BGC"/>
+                        <outlet property="loginButtonOutlet" destination="wuX-vb-OGz" id="Jb4-rm-Vts"/>
                         <outlet property="loginField" destination="tIp-Sm-3e7" id="tq0-hA-aEt"/>
                         <outlet property="passwordField" destination="yKH-U6-ex9" id="se2-3h-Yme"/>
                     </connections>

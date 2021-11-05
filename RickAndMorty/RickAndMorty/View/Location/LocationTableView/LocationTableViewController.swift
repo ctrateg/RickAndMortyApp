@@ -11,21 +11,26 @@ class LocationTableViewController: UITableViewController {
   private var page = 0
   private var locationRequestResults: [LocationResultDTO] = []
 
-  private weak var requestLocationApi: RequestServiceDelegate?
-  private weak var userCacheLoadDelegate: UserCacheLoadDelegate?
+  private weak var requestLocationApi: RequestServiceProtocol?
+  private weak var userCacheLoadDelegate: UserCacheLoadProtocol?
+
+  @IBAction func segueButton(_ sender: UIButton) {
+    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
+    let indexPath = tableView.indexPathForRow(at: buttonPosition)
+    guard let presentVC = cardStoryboard.instantiateViewController(
+      withIdentifier: "LocationCardTVC") as? LocationCardTVC
+    else { return }
+    presentVC.locationURL.append(self.locationRequestResults[indexPath?.row ?? 0].url)
+    show(presentVC, sender: sender)
+  }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     page = 0
     requestLocationApi = RequestServiceAPI.shared
-    userCacheLoadDelegate = UserCacheData.shared
-    requestLocationApi = RequestServiceAPI.shared
+    userCacheLoadDelegate = LocalDataManager.shared
     configurationNavgiationC()
     request()
-  }
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
   }
 
   private func request(page: String = "1") {
@@ -56,6 +61,18 @@ class LocationTableViewController: UITableViewController {
         return UITableViewCell()
     }
     let data = self.locationRequestResults[indexPath.row]
+    if LocalDataManager.favoriteLocation.contains(where: { $0.id == (data.id) }) {
+      cell.favoritIconOutlet.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+      cell.favoritIconOutlet.tintColor = UIColor(named: "MainColor")
+      cell.deletObject = LocalDataManager.favoriteLocation.first { $0.id == (data.id) }
+      cell.clicked = true
+    } else {
+      cell.favoritIconOutlet.setImage(UIImage(named: "LikeButton"), for: .normal)
+      cell.favoritIconOutlet.tintColor = .darkGray
+      cell.clicked = false
+    }
+    cell.indexPathRow = indexPath.row
+    cell.dataCellRequest = data
     cell.locationName.text = data.name
     return cell
   }
@@ -68,7 +85,8 @@ class LocationTableViewController: UITableViewController {
       loadMore()
     }
   }
-  func loadMore() {
+
+  private func loadMore() {
     if !loadMoreStatus {
     self.loadMoreStatus = true
     self.setLoadingScreen()
@@ -80,7 +98,7 @@ class LocationTableViewController: UITableViewController {
   }
 
   func loadMoreBegin(loadMoreEnd: @escaping(Int) -> Void) {
-    DispatchQueue.global(qos: .userInteractive).async {
+    DispatchQueue.global(qos: .default).async {
       self.page += 1
       self.requestLocationApi?.locationRequestAPI(page: String(self.page)) {  responce in
         self.locationRequestResults.append(contentsOf: responce.results)
@@ -92,7 +110,7 @@ class LocationTableViewController: UITableViewController {
   }
 
   // экран индикатора при подгрузках
-  func setLoadingScreen() {
+  private func setLoadingScreen() {
     let width: CGFloat = 50
     let height: CGFloat = 30
     let x = (tableView.frame.width / 2) - (width / 2)
@@ -104,14 +122,14 @@ class LocationTableViewController: UITableViewController {
     loadView.addSubview(indicator)
     tableView.addSubview(loadView)
     tableView.isScrollEnabled = false
-    sleep(2)
     }
 
-  func removeLoadingScreen() {
+  private func removeLoadingScreen() {
     indicator.stopAnimating()
     indicator.isHidden = true
     tableView.isScrollEnabled = true
   }
+
   private func configurationNavgiationC() {
     let navigationBar = self.navigationController?.navigationBar
     appearance.configureWithOpaqueBackground()
@@ -123,14 +141,5 @@ class LocationTableViewController: UITableViewController {
     navigationItem.backButtonTitle = "Back"
     navigationBar?.standardAppearance = appearance
     navigationBar?.scrollEdgeAppearance = navigationBar?.standardAppearance
-  }
-  @IBAction func segueButton(_ sender: UIButton) {
-    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
-    let indexPath = tableView.indexPathForRow(at: buttonPosition)
-    guard let presentVC = cardStoryboard.instantiateViewController(
-      withIdentifier: "LocationCardTVC") as? LocationCardTVC
-    else { return }
-    presentVC.locationURL.append(self.locationRequestResults[indexPath?.row ?? 0].url)
-    show(presentVC, sender: sender)
   }
 }

@@ -1,13 +1,18 @@
 import UIKit
 import Kingfisher
+import CoreData
 
 class EpisodesCardTVC: UITableViewController {
   private let characterStoryboard = UIStoryboard(name: "CharactersUI", bundle: nil)
   private let loadView = UIView()
   private let indicator = UIActivityIndicatorView()
 
-  private weak var singleRequestDelegate: SingleRequestDelegate?
+  private weak var deleteFromCache: UserCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
+  private weak var serviceRequest: SingleRequestProtocol?
+
   var episodesURL: [String] = []
+  private var deletObject: EpisodesCache?
   private var episodesRequestResult: [EpisodesResultDTO]?
   private var charactersDTO: CharacterDTO?
   private var titles: [String]?
@@ -18,19 +23,26 @@ class EpisodesCardTVC: UITableViewController {
   private var clickedTopButton = false
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    singleRequestDelegate = RequestServiceAPI.shared
-    episodesRequest(urlArray: episodesURL)
+    self.saveInCacheProtocol = LocalDataManager.shared
+    self.deleteFromCache = LocalDataManager.shared
+    self.serviceRequest = RequestServiceAPI.shared
+    self.episodesRequest(urlArray: episodesURL)
   }
   override func viewDidLoad() {
     super.viewDidLoad()
     self.tableView.backgroundColor = .systemGray6
     self.navigationItem.title = "Episode Card"
-    titles = [ "Date", "Code" ]
+    self.titles = [ "Date", "Code" ]
   }
+
   private func episodesRequest(urlArray: [String]) {
     DispatchQueue.global(qos: .userInteractive).sync {
-      self.singleRequestDelegate?.requestForEpisodes(urlArray: urlArray) { [weak self] responce in
+      self.serviceRequest?.requestForEpisodes(urlArray: urlArray) { [weak self] responce in
         self?.episodesRequestResult = responce
+        self?.cardArray = [
+          String(self?.dateFormatterConfiguration(data: responce[0].created) ?? ""),
+          responce[0].episode
+        ]
         self?.requestCharacters(urlArray: responce[0].characters)
         sleep(1)
         DispatchQueue.main.async {
@@ -41,16 +53,15 @@ class EpisodesCardTVC: UITableViewController {
   }
 
   private func requestCharacters(urlArray: [String]) {
-    self.singleRequestDelegate?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
+    self.serviceRequest?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
       self?.characterRequestResult = responce
-      self?.tableView.reloadData()
     }
   }
 
-  func dateFormatterConfiguration() -> String {
+  private func dateFormatterConfiguration(data: String) -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-    guard let date = dateFormatter.date(from: episodesRequestResult?[0].created ?? "") else { return "" }
+    guard let date = dateFormatter.date(from: data) else { return "" }
     dateFormatter.dateFormat = "dd.MM.yyyy"
     return dateFormatter.string(from: date)
   }
@@ -86,10 +97,6 @@ class EpisodesCardTVC: UITableViewController {
     }
   }
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    cardArray = [
-      dateFormatterConfiguration(),
-      episodesRequestResult?[0].episode ?? ""
-    ]
     switch indexPath.section {
     case 0:
       guard let cellInfo = tableView.dequeueReusableCell(
@@ -107,8 +114,30 @@ class EpisodesCardTVC: UITableViewController {
         for: indexPath) as? EpisodesCharactersCell else { return UITableViewCell() }
       let data = characterRequestResult?[indexPath.row]
       let imageURL = URL(string: data?.image ?? "")
+      if LocalDataManager.favoriteCharacters.contains(where: { $0.id == (data?.id ?? 0) }) {
+        cellCharacter.favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+        cellCharacter.favoriteButton.tintColor = UIColor(named: "MainColor")
+        cellCharacter.deletObject = LocalDataManager.favoriteCharacters.first { $0.id == (data?.id ?? 0) }
+        cellCharacter.clicked = true
+      } else {
+        cellCharacter.favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+        cellCharacter.favoriteButton.tintColor = .darkGray
+        cellCharacter.clicked = false
+      }
       cellCharacter.characterName.text = data?.name
-      cellCharacter.characterStatus.text = data?.status
+      switch data?.status {
+      case "Alive":
+        cellCharacter.characterStatus.textColor = .green
+        cellCharacter.characterStatus.text = "\u{2022}" + (data?.status ?? "")
+        cellCharacter.favoriteButton.isHidden = false
+      case "Dead":
+        cellCharacter.characterStatus.textColor = .red
+        cellCharacter.characterStatus.text = "\u{2022}" + (data?.status ?? "")
+        cellCharacter.favoriteButton.isHidden = true
+      default:
+        cellCharacter.characterStatus.text = ""
+      }
+      cellCharacter.dataCellRequest = data
       cellCharacter.characterImage.kf.setImage(with: imageURL)
 
       return cellCharacter
@@ -130,7 +159,16 @@ class EpisodesCardTVC: UITableViewController {
     infoLabel?.font = .systemFont(ofSize: 24)
     infoLabel?.textColor = .black
     let favoriteButton = UIButton(frame: CGRect(x: 16, y: 88, width: 160, height: 24))
-    favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+    if LocalDataManager.favoriteEpisodes.contains(where: { $0.id == (episodesRequestResult?[0].id ?? 0) }) {
+      favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+      favoriteButton.tintColor = UIColor(named: "MainColor")
+      self.deletObject = LocalDataManager.favoriteEpisodes.first { $0.id == (episodesRequestResult?[0].id ?? 0) }
+      self.clickedTopButton = true
+    } else {
+      favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+      favoriteButton.tintColor = .darkGray
+      self.clickedTopButton = false
+    }
     favoriteButton.setTitle(" Add to Favorites", for: .normal)
     favoriteButton.setTitleColor(.black, for: .normal)
     favoriteButton.addTarget(self, action: #selector(favoriteButtonTap(_:)), for: .touchUpInside)
@@ -158,9 +196,12 @@ class EpisodesCardTVC: UITableViewController {
   }
   @objc func favoriteButtonTap(_ sender: UIButton) {
     if clickedTopButton {
+      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
       sender.setImage(UIImage(named: "LikeButton"), for: .normal)
       sender.tintColor = .black
     } else {
+      guard let saveData = episodesRequestResult else { return }
+      saveInCacheProtocol?.saveData(data: saveData[0])
       sender.setImage(
         UIImage(named: "LikeButtonFull"),
         for: .normal)

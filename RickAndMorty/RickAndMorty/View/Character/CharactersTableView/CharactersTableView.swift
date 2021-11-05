@@ -1,10 +1,10 @@
 import UIKit
 import Kingfisher
 
-class CharactersTableView: UITableViewController, UISearchBarDelegate {
-  private weak var userCacheLoadDelegate: UserCacheLoadDelegate?
-  private weak var searchDelegate: RequestSerivceSearchDelegate?
-  private weak var requestCharApi: RequestServiceDelegate?
+class CharactersTableView: UITableViewController {
+  private weak var userCacheLoadDelegate: UserCacheLoadProtocol?
+  private weak var searchDelegate: RequestSerivceSearchProtocol?
+  private weak var requestCharApi: RequestServiceProtocol?
 
   private var endOfScrolls: Int?
   private var characterRequestResult: [CharacterResultDTO] = []
@@ -20,18 +20,34 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
   private let indicator = UIActivityIndicatorView()
   private let appearance = UINavigationBarAppearance()
 
+  @IBAction func segueButton(_ sender: UIButton) {
+    guard let presentVC = cardStoryboard.instantiateViewController(
+      withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
+    else { return }
+
+    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
+    let indexPath = tableView.indexPathForRow(at: buttonPosition)
+
+    if searching == true {
+      presentVC.characterURL.append(self.searchRequestResult?.results[indexPath?.row ?? 0].url ?? "")
+    } else {
+      presentVC.characterURL.append(self.characterRequestResult[indexPath?.row ?? 0].url)
+    }
+    show(presentVC, sender: sender)
+  }
+
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    page = 0
+    self.page = 0
     self.searchBarController.searchBar.delegate = self
-    let requestObj = RequestServiceAPI.shared
-    userCacheLoadDelegate = UserCacheData.shared
-    requestCharApi = requestObj
-    searchDelegate = requestObj
+    self.userCacheLoadDelegate = LocalDataManager.shared
+    self.requestCharApi = RequestServiceAPI.shared
+    self.searchDelegate = RequestServiceAPI.shared
     request()
     searchBarConfiguration()
     configurationNavgiationC()
   }
+
   private func request(page: String = "1") {
     setLoadingScreen()
 
@@ -43,8 +59,10 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
       }
     }
     self.page = 1
+
     removeLoadingScreen()
   }
+
   private func searchBarConfiguration() {
     navigationItem.searchController = searchBarController
     searchBarController.searchBar.searchTextField.backgroundColor = .white
@@ -55,12 +73,14 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
   override func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
+
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     if searching == true {
       return searchRequestResult?.results.count ?? 0
     }
     return characterRequestResult.count
   }
+
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(
       withIdentifier: "CharacterCell",
@@ -77,22 +97,31 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
 
   private func cellConfiguration(cell: CharacterTableViewCell, data: CharacterResultDTO?, index: Int) -> UITableViewCell {
     let imageURL = URL(string: data?.image ?? "")
+    if LocalDataManager.favoriteCharacters.contains(where: { $0.id == (data?.id ?? 0) }) {
+      cell.favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+      cell.favoriteButton.tintColor = UIColor(named: "MainColor")
+      cell.deletObject = LocalDataManager.favoriteCharacters.first { $0.id == (data?.id ?? 0) }
+      cell.clicked = true
+    } else {
+      cell.favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+      cell.favoriteButton.tintColor = .darkGray
+      cell.clicked = false
+    }
     cell.characterName.text = data?.name
     cell.characterIcon.kf.setImage(with: imageURL)
     switch data?.status {
     case "Alive":
-      cell.charactetrStatus.textColor = .green
-      cell.charactetrStatus.text = "\u{2022}" + (data?.status ?? "")
-      cell.favoritIconOutlet.isHidden = false
+      cell.characterStatus.textColor = .green
+      cell.characterStatus.text = "\u{2022}" + (data?.status ?? "")
+      cell.favoriteButton.isHidden = false
     case "Dead":
-      cell.charactetrStatus.textColor = .red
-      cell.charactetrStatus.text = "\u{2022}" + (data?.status ?? "")
-      cell.favoritIconOutlet.isHidden = true
+      cell.characterStatus.textColor = .red
+      cell.characterStatus.text = "\u{2022}" + (data?.status ?? "")
+      cell.favoriteButton.isHidden = true
     default:
-      cell.charactetrStatus.text = ""
+      cell.characterStatus.text = ""
     }
     cell.dataCellRequest = data
-    cell.indexPathRow = index
     return cell
   }
 
@@ -148,26 +177,6 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     indicator.isHidden = true
     tableView.isScrollEnabled = true
   }
-  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    self.searchTimer?.invalidate()
-    searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
-      DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-        self?.searchDelegate?.characterSearch(tag: searchText) { [weak self] searchResponce in
-          self?.searchRequestResult = searchResponce
-        }
-        DispatchQueue.main.async {
-          self?.searching = true
-          self?.tableView.reloadData()
-        }
-      }
-    }
-  }
-  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-    searching = false
-    searchBar.text = ""
-    searchRequestResult = nil
-    tableView.reloadData()
-  }
 
   private func configurationNavgiationC() {
     let navigationBar = self.navigationController?.navigationBar
@@ -181,17 +190,29 @@ class CharactersTableView: UITableViewController, UISearchBarDelegate {
     navigationBar?.standardAppearance = appearance
     navigationBar?.scrollEdgeAppearance = navigationBar?.standardAppearance
   }
-  @IBAction func segueButton(_ sender: UIButton) {
-    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
-    let indexPath = tableView.indexPathForRow(at: buttonPosition)
-    guard let presentVC = cardStoryboard.instantiateViewController(
-      withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
-    else { return }
-    if searching == true {
-      presentVC.characterURL.append(self.searchRequestResult?.results[indexPath?.row ?? 0].url ?? "")
-    } else {
-      presentVC.characterURL.append(self.characterRequestResult[indexPath?.row ?? 0].url)
+}
+
+extension CharactersTableView: UISearchBarDelegate {
+  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    self.searchTimer?.invalidate()
+
+    searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+      DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+        self?.searchDelegate?.characterSearch(tag: searchText) { [weak self] searchResponce in
+          self?.searchRequestResult = searchResponce
+        }
+        DispatchQueue.main.async {
+          self?.searching = true
+          self?.tableView.reloadData()
+        }
+      }
     }
-    show(presentVC, sender: sender)
+  }
+
+  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    searching = false
+    searchBar.text = ""
+    searchRequestResult = nil
+    tableView.reloadData()
   }
 }

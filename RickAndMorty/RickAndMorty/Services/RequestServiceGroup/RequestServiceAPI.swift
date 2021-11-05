@@ -1,7 +1,7 @@
 import Alamofire
 import Foundation
 
-class RequestServiceAPI: RequestServiceDelegate, RequestSerivceSearchDelegate, SingleRequestDelegate {
+class RequestServiceAPI: RequestServiceProtocol, RequestSerivceSearchProtocol, SingleRequestProtocol {
   static var shared: RequestServiceAPI = {
     let instance = RequestServiceAPI()
     return instance
@@ -26,6 +26,7 @@ class RequestServiceAPI: RequestServiceDelegate, RequestSerivceSearchDelegate, S
       }
     .resume()
   }
+
   func locationRequestAPI(page: String = "1", completion: @escaping (LocationDTO) -> Void) {
     jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
     guard let url = URL(string: "\(rickAndMortyAPI)/location?page=\(page)") else { return }
@@ -41,6 +42,7 @@ class RequestServiceAPI: RequestServiceDelegate, RequestSerivceSearchDelegate, S
       }
     .resume()
   }
+
   func episodesRequestAPI(page: String = "1", completion: @escaping (EpisodesDTO) -> Void) {
     jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
     guard let url = URL(string: "\(rickAndMortyAPI)/episode?page=\(page)") else { return }
@@ -56,6 +58,7 @@ class RequestServiceAPI: RequestServiceDelegate, RequestSerivceSearchDelegate, S
       }
     .resume()
   }
+
   func characterSearch(tag: String, completion: @escaping (CharacterDTO) -> Void) {
     jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
     guard let url = URL(string: "https://rickandmortyapi.com/api/character?name=\(tag)") else { return }
@@ -71,6 +74,7 @@ class RequestServiceAPI: RequestServiceDelegate, RequestSerivceSearchDelegate, S
       }
     .resume()
   }
+
   func requestForLocation(urlArray: [String], completion: @escaping ([LocationResultDTO]) -> Void) {
     jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
     var returnArray: [LocationResultDTO] = []
@@ -109,7 +113,6 @@ class RequestServiceAPI: RequestServiceDelegate, RequestSerivceSearchDelegate, S
         .resume()
     }
   }
-  // toDo: возвращает массив urlArray.count раз
   func requestForEpisodes(urlArray: [String], completion: @escaping ([EpisodesResultDTO]) -> Void) {
     jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
     var returnArray: [EpisodesResultDTO] = []

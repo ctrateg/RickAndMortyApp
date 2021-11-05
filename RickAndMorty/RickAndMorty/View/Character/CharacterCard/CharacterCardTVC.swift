@@ -1,10 +1,14 @@
 import UIKit
 import Kingfisher
+import CoreData
 
 class CharacterCardTVC: UITableViewController {
-  private weak var singleRequestDelegate: SingleRequestDelegate?
-  private weak var searchDellegate: RequestSerivceSearchDelegate?
+  private weak var serviceRequest: SingleRequestProtocol?
+  private weak var serviceSearchRequest: RequestSerivceSearchProtocol?
+  private weak var deleteFromCache: UserCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
 
+  private var deletObject: CharacterCache?
   var characterURL: [String] = []
   private var clickedTopButton = false
   private var cardArray: [String]?
@@ -21,33 +25,43 @@ class CharacterCardTVC: UITableViewController {
   private let indicator = UIActivityIndicatorView()
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    let requestObject = RequestServiceAPI.shared
-    searchDellegate = requestObject
-    singleRequestDelegate = requestObject
-    characterRequest(urlArray: characterURL)
+    self.saveInCacheProtocol = LocalDataManager.shared
+    self.deleteFromCache = LocalDataManager.shared
+    self.serviceSearchRequest = RequestServiceAPI.shared
+    self.serviceRequest = RequestServiceAPI.shared
+    self.characterRequest(urlArray: characterURL)
   }
 
   override func viewDidLoad() {
     super.viewDidLoad()
     self.tableView.backgroundColor = .systemGray6
-    titles = ["Status", "Type", "Gender", "Date"]
+    self.titles = ["Status", "Type", "Gender", "Date"]
   }
 
   private func characterRequest(urlArray: [String]) {
-    DispatchQueue.global(qos: .userInteractive).sync {
-      self.singleRequestDelegate?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
+    setLoadingScreen()
+    DispatchQueue.global(qos: .default).async {
+      self.serviceRequest?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
         self?.characterResult = responce
+        self?.cardArray = [
+          responce[0].status ?? "",
+          responce[0].type ?? "",
+          responce[0].gender ?? "",
+          String(self?.dateFormatterConfiguration(data: responce[0].created) ?? "")
+        ]
         self?.episodesRequest(urlArray: responce[0].episode ?? [])
         self?.similarCharacters(tag: responce[0].name)
+        sleep(1)
         DispatchQueue.main.async {
           self?.tableView.reloadData()
         }
       }
     }
+    removeLoadingScreen()
   }
 
   private func episodesRequest(urlArray: [String]) {
-    self.singleRequestDelegate?.requestForEpisodes(urlArray: urlArray) { [weak self] responce in
+    self.serviceRequest?.requestForEpisodes(urlArray: urlArray) { [weak self] responce in
       self?.episodeRequestResult = responce
     }
   }
@@ -57,19 +71,19 @@ class CharacterCardTVC: UITableViewController {
     if let spaceRange = tag.range(of: " ") {
       searchItem.removeSubrange(spaceRange.lowerBound..<searchItem.endIndex)
     }
-    self.searchDellegate?.characterSearch(tag: searchItem) { [weak self] responce in
+    self.serviceSearchRequest?.characterSearch(tag: searchItem) { [weak self] responce in
     self?.characterSearchResult = responce
-    self?.tableView.reloadData()
     }
   }
 
-  private func dateFormatterConfiguration() -> String {
+  private func dateFormatterConfiguration(data: String) -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-    guard let date = dateFormatter.date(from: characterResult?[0].created ?? "") else { return "" }
-    dateFormatter.dateFormat = "dd-MM-yyyy"
+    guard let date = dateFormatter.date(from: data) else { return "" }
+    dateFormatter.dateFormat = "dd.MM.yyyy"
     return dateFormatter.string(from: date)
   }
+
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     switch indexPath.section {
     case 0:
@@ -95,24 +109,18 @@ class CharacterCardTVC: UITableViewController {
   }
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let indexPathRow = indexPath.row
-    cardArray = [
-      characterResult?[0].status ?? "",
-      characterResult?[0].type ?? "",
-      characterResult?[0].gender ?? "",
-      dateFormatterConfiguration()
-    ]
     switch indexPath.section {
     case 0:
-      guard let cellInfo = tableView.dequeueReusableCell(
+      guard let cell = tableView.dequeueReusableCell(
         withIdentifier: "CharacterInfoCell",
         for: indexPath) as? CharacterInfoCell else { return UITableViewCell() }
-      cellInfo.detail.text = cardArray?[indexPathRow]
-      cellInfo.title.text = titles?[indexPathRow]
-      cellInfo.title.textColor = .gray
-      if cellInfo.detail.text?.isEmpty == true {
-        cellInfo.detail?.text = "unknown"
+      cell.detail.text = cardArray?[indexPathRow]
+      cell.title.text = titles?[indexPathRow]
+      cell.title.textColor = .gray
+      if cell.detail.text?.isEmpty == true {
+        cell.detail?.text = "unknown"
       }
-      return cellInfo
+      return cell
     case 1:
       guard let cellLocation = tableView.dequeueReusableCell(
         withIdentifier: "CharacterLocationCell",
@@ -212,7 +220,16 @@ class CharacterCardTVC: UITableViewController {
     infoLabel?.font = .systemFont(ofSize: 24)
     infoLabel?.textColor = .black
 
-    favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+    if LocalDataManager.favoriteCharacters.contains(where: { $0.id == (characterResult?[0].id ?? 0) }) {
+      favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+      favoriteButton.tintColor = UIColor(named: "MainColor")
+      self.deletObject = LocalDataManager.favoriteCharacters.first { $0.id == (characterResult?[0].id ?? 0) }
+      self.clickedTopButton = true
+    } else {
+      favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+      favoriteButton.tintColor = .darkGray
+      self.clickedTopButton = false
+    }
     favoriteButton.setTitle(" Add to Favorites", for: .normal)
     favoriteButton.setTitleColor(.black, for: .normal)
     favoriteButton.addTarget(self, action: #selector(favoriteButtonTap(_:)), for: .touchUpInside)
@@ -263,9 +280,12 @@ class CharacterCardTVC: UITableViewController {
 
   @objc func favoriteButtonTap(_ sender: UIButton) {
     if clickedTopButton {
+      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
       sender.setImage(UIImage(named: "LikeButton"), for: .normal)
       sender.tintColor = .black
     } else {
+      guard let saveData = characterResult else { return }
+      saveInCacheProtocol?.saveData(data: saveData[0])
       sender.setImage(
         UIImage(named: "LikeButtonFull"),
         for: .normal)
@@ -309,5 +329,12 @@ extension CharacterCardTVC: UICollectionViewDelegate, UICollectionViewDataSource
     cell.nameCollectionCell.text = data?.name
 
     return cell
+  }
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    guard let presentVC = UIStoryboard(name: "CharactersUI", bundle: nil).instantiateViewController(
+      withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
+    else { return }
+    presentVC.characterURL.append(self.characterSearchResult?.results[indexPath.row + 1].url ?? "")
+    show(presentVC, sender: nil)
   }
 }

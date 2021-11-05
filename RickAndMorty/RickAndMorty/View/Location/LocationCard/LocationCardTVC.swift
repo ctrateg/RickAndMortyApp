@@ -1,11 +1,15 @@
 import UIKit
 import Kingfisher
+import CoreData
 
 class LocationCardTVC: UITableViewController {
   private let characterStoryboard = UIStoryboard(name: "CharactersUI", bundle: nil)
-  private weak var singleRequestDelegate: SingleRequestDelegate?
+  private weak var singleRequestDelegate: SingleRequestProtocol?
+  private weak var deleteFromCache: UserCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
   var locationURL: [String] = []
 
+  private var deletObject: LocationCache?
   private var locationRequestResult: [LocationResultDTO]?
   private var charactersDTO: CharacterDTO?
   private var titles: [String]?
@@ -17,26 +21,37 @@ class LocationCardTVC: UITableViewController {
   private var clickedTopButton = false
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    singleRequestDelegate = RequestServiceAPI.shared
-    locationRequest(urlArray: locationURL)
+    self.saveInCacheProtocol = LocalDataManager.shared
+    self.deleteFromCache = LocalDataManager.shared
+    self.singleRequestDelegate = RequestServiceAPI.shared
+    self.locationRequest(urlArray: locationURL)
   }
+
   override func viewDidLoad() {
     super.viewDidLoad()
     self.tableView.backgroundColor = .systemGray6
     self.navigationItem.title = "Location Card"
     titles = ["Type", "Dimension", "Date"]
   }
-  func dateFormatterConfiguration() -> String {
+
+  private func dateFormatterConfiguration(data: String) -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-    guard let date = dateFormatter.date(from: locationRequestResult?[0].created ?? "") else { return "" }
+    guard let date = dateFormatter.date(from: data) else { return "" }
     dateFormatter.dateFormat = "dd.MM.yyyy"
     return dateFormatter.string(from: date)
   }
+
   private func locationRequest(urlArray: [String]) {
-    DispatchQueue.global(qos: .userInteractive).sync {
+    DispatchQueue.global(qos: .default).sync {
       self.singleRequestDelegate?.requestForLocation(urlArray: urlArray) { [weak self] responce in
         self?.locationRequestResult = responce
+        self?.cardArray = [
+          responce[0].type ,
+          responce[0].dimension ,
+          String(self?.dateFormatterConfiguration(data: responce[0].created) ?? "")
+        ]
+
         self?.requestCharacters(urlArray: responce[0].residents)
         sleep(1)
         DispatchQueue.main.async {
@@ -45,16 +60,17 @@ class LocationCardTVC: UITableViewController {
       }
     }
   }
-  func requestCharacters(urlArray: [String]) {
+
+  private func requestCharacters(urlArray: [String]) {
     self.singleRequestDelegate?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
       self?.characterRequestResult = responce
-      self?.tableView.reloadData()
     }
   }
 
   override func numberOfSections(in tableView: UITableView) -> Int {
     return 2
   }
+
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     switch section {
     case 0:
@@ -63,6 +79,7 @@ class LocationCardTVC: UITableViewController {
       return locationRequestResult?[0].residents.count ?? 0
     }
   }
+
   override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     switch section {
     case 0:
@@ -71,9 +88,11 @@ class LocationCardTVC: UITableViewController {
       return 38
     }
   }
+
   override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
     return 0
   }
+
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     switch indexPath.section {
     case 0:
@@ -82,12 +101,8 @@ class LocationCardTVC: UITableViewController {
       return 60
     }
   }
+
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    cardArray = [
-      locationRequestResult?[0].type ?? "",
-      locationRequestResult?[0].dimension ?? "",
-      dateFormatterConfiguration()
-    ]
     switch indexPath.section {
     case 0:
       guard let cellInfo = tableView.dequeueReusableCell(
@@ -105,13 +120,36 @@ class LocationCardTVC: UITableViewController {
         for: indexPath) as? LocationCharacterCell else { return UITableViewCell() }
       let data = characterRequestResult?[indexPath.row]
       let imageURL = URL(string: data?.image ?? "")
+      if LocalDataManager.favoriteCharacters.contains(where: { $0.id == (data?.id ?? 0) }) {
+        cellCharacter.favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+        cellCharacter.favoriteButton.tintColor = UIColor(named: "MainColor")
+        cellCharacter.deletObject = LocalDataManager.favoriteCharacters.first { $0.id == (data?.id ?? 0) }
+        cellCharacter.clicked = true
+      } else {
+        cellCharacter.favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+        cellCharacter.favoriteButton.tintColor = .darkGray
+        cellCharacter.clicked = false
+      }
       cellCharacter.characterName.text = data?.name
-      cellCharacter.characterStatus.text = data?.status
+      switch data?.status {
+      case "Alive":
+        cellCharacter.characterStatus.textColor = .green
+        cellCharacter.characterStatus.text = "\u{2022}" + (data?.status ?? "")
+        cellCharacter.favoriteButton.isHidden = false
+      case "Dead":
+        cellCharacter.characterStatus.textColor = .red
+        cellCharacter.characterStatus.text = "\u{2022}" + (data?.status ?? "")
+        cellCharacter.favoriteButton.isHidden = true
+      default:
+        cellCharacter.characterStatus.text = ""
+      }
+      cellCharacter.dataCellRequest = data
       cellCharacter.characterImage.kf.setImage(with: imageURL)
 
       return cellCharacter
     }
   }
+
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     switch section {
     case 0:
@@ -120,6 +158,7 @@ class LocationCardTVC: UITableViewController {
       return middleHeaderConfiguration(text: "CHARACTERS IN LOCATION")
     }
   }
+
   private func topHeaderConfiguration () -> UIView? {
     headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 124))
     infoLabel = UILabel(frame: CGRect(x: 16, y: 24, width: 343, height: 48))
@@ -128,7 +167,16 @@ class LocationCardTVC: UITableViewController {
     infoLabel?.font = .systemFont(ofSize: 24)
     infoLabel?.textColor = .black
     let favoriteButton = UIButton(frame: CGRect(x: 16, y: 88, width: 160, height: 24))
-    favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+    if LocalDataManager.favoriteLocation.contains(where: { $0.id == (locationRequestResult?[0].id ?? 0) }) {
+      favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+      favoriteButton.tintColor = UIColor(named: "MainColor")
+      self.deletObject = LocalDataManager.favoriteLocation.first { $0.id == (locationRequestResult?[0].id ?? 0) }
+      self.clickedTopButton = true
+    } else {
+      favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+      favoriteButton.tintColor = .darkGray
+      self.clickedTopButton = false
+    }
     favoriteButton.setTitle(" Add to Favorites", for: .normal)
     favoriteButton.setTitleColor(.black, for: .normal)
     favoriteButton.addTarget(self, action: #selector(favoriteButtonTap(_:)), for: .touchUpInside)
@@ -136,6 +184,7 @@ class LocationCardTVC: UITableViewController {
     headerView?.addSubview(infoLabel ?? UILabel())
     return headerView
   }
+
   private func middleHeaderConfiguration(text: String) -> UIView? {
     headerView = UIView(frame: CGRect.zero)
     infoLabel = UILabel(frame: CGRect(x: 16, y: 0, width: tableView.frame.width, height: 38))
@@ -157,9 +206,12 @@ class LocationCardTVC: UITableViewController {
   }
   @objc func favoriteButtonTap(_ sender: UIButton) {
     if clickedTopButton {
+      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
       sender.setImage(UIImage(named: "LikeButton"), for: .normal)
       sender.tintColor = .black
     } else {
+      guard let saveData = locationRequestResult else { return }
+      saveInCacheProtocol?.saveData(data: saveData[0])
       sender.setImage(
         UIImage(named: "LikeButtonFull"),
         for: .normal)
