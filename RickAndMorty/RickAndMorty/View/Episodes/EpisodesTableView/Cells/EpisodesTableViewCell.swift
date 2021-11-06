@@ -8,6 +8,7 @@ class EpisodesTableViewCell: UITableViewCell {
 
   private weak var deleteFromCache: UserCacheDeleteProtocol?
   private weak var saveInCacheProtocol: UserCacheSaveProtocol?
+
   var clicked = false
   var deletObject: EpisodesCache?
   var indexPathRow: Int?

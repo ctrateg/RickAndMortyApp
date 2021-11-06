@@ -1,5 +1,6 @@
 import UIKit
 import CoreLocation
+import UserNotifications
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   static var timeInApp: Int = 0
@@ -36,8 +37,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       SceneDelegate.timeInApp += 1
     }
   }
-
+  func sceneDidEnterBackground(_ scene: UIScene) {
+    NotificationCenter.shared.sendNotifications()
+  }
+  func sceneWillEnterForeground(_ scene: UIScene) {
+    UIApplication.shared.applicationIconBadgeNumber = 0
+  }
   func sceneDidDisconnect(_ scene: UIScene) {
+    NotificationCenter.shared.sendNotifications()
     let userDefaultDate = UserDefaults.standard.integer(forKey: UserDefaultKeys.firstOpenTime.rawValue)
     let saveDate = userDefaultDate + SceneDelegate.timeInApp
     UserDefaults.standard.set(saveDate, forKey: UserDefaultKeys.firstOpenTime.rawValue)

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -14,15 +12,15 @@
             <objects>
                 <tableViewController storyboardIdentifier="CharactersTableView" id="pOe-YT-5NV" userLabel="CharacterTableView" customClass="CharactersTableView" customModule="RickAndMorty" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="RMe-LH-eJq">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CharacterCell" rowHeight="60" id="vcO-oM-vYA" userLabel="CharacterCell" customClass="CharacterTableViewCell" customModule="RickAndMorty" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44.5" width="414" height="60"/>
+                                <rect key="frame" x="0.0" y="44.5" width="600" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vcO-oM-vYA" id="XFl-BI-NvJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NRm-l1-TeL" userLabel="IconCharacter">
@@ -43,7 +41,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nfn-gC-w4I" userLabel="LikeButton">
-                                            <rect key="frame" x="320" y="19" width="24" height="22"/>
+                                            <rect key="frame" x="506" y="19" width="24" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="22" id="V8z-7c-Pcl"/>
                                                 <constraint firstAttribute="width" constant="24" id="ViS-0m-rsd"/>
@@ -68,7 +66,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7aP-HW-wNL" userLabel="SegueButton">
-                                            <rect key="frame" x="375" y="24" width="7" height="12"/>
+                                            <rect key="frame" x="561" y="24" width="7" height="12"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="7" id="HVb-fL-rMK"/>
                                                 <constraint firstAttribute="height" constant="12" id="dRS-aa-YcQ"/>
@@ -119,25 +117,25 @@
             <objects>
                 <tableViewController storyboardIdentifier="CharacterCardTVC" id="vJ0-tN-HBv" customClass="CharacterCardTVC" customModule="RickAndMorty" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="T2o-60-CQj">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CharacterInfoCell" rowHeight="44" id="xsW-Kh-LKy" customClass="CharacterInfoCell" customModule="RickAndMorty" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="49.5" width="414" height="44"/>
+                                <rect key="frame" x="0.0" y="49.5" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xsW-Kh-LKy" id="iuf-mE-Cga">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aZq-Ja-sDl">
-                                            <rect key="frame" x="15" y="11.5" width="33" height="21"/>
+                                            <rect key="frame" x="15" y="11.5" width="48" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Detail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Et5-IQ-rI3">
-                                            <rect key="frame" x="355" y="11.5" width="44" height="21"/>
+                                            <rect key="frame" x="521" y="11.5" width="64" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -158,10 +156,10 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CharacterLocationCell" rowHeight="60" id="o7v-Sp-b2y" customClass="CharacterLocationCell" customModule="RickAndMorty" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="93.5" width="414" height="60"/>
+                                <rect key="frame" x="0.0" y="93.5" width="600" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="o7v-Sp-b2y" id="lX8-xY-tMB">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LocationName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K2a-m3-y3e">
@@ -174,7 +172,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HLL-gf-87c">
-                                            <rect key="frame" x="320" y="19" width="24" height="22"/>
+                                            <rect key="frame" x="506" y="19" width="24" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="22" id="fqN-QK-cLR"/>
                                                 <constraint firstAttribute="width" constant="24" id="pwh-Ka-cqs"/>
@@ -186,7 +184,7 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4SW-7F-Yca">
-                                            <rect key="frame" x="375" y="24" width="7" height="12"/>
+                                            <rect key="frame" x="561" y="24" width="7" height="12"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="7" id="VJo-vp-Jle"/>
                                                 <constraint firstAttribute="height" constant="12" id="iFu-Mx-sLs"/>
@@ -208,15 +206,15 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="likeButtonOutlet" destination="HLL-gf-87c" id="qXV-Fk-esJ"/>
+                                    <outlet property="favoriteButton" destination="HLL-gf-87c" id="qXV-Fk-esJ"/>
                                     <outlet property="name" destination="K2a-m3-y3e" id="U87-95-H34"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CharacterEpisodeCell" rowHeight="60" id="3f3-vg-253" customClass="CharacterEpisodesCell" customModule="RickAndMorty" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="153.5" width="414" height="60"/>
+                                <rect key="frame" x="0.0" y="153.5" width="600" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3f3-vg-253" id="2ng-a3-Jme">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EpisodesName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5LJ-eC-rDf">
@@ -235,7 +233,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oj4-Pn-OPh">
-                                            <rect key="frame" x="320" y="19" width="24" height="22"/>
+                                            <rect key="frame" x="506" y="19" width="24" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="22" id="SZ0-4h-kSl"/>
                                                 <constraint firstAttribute="width" constant="24" id="owM-sz-fta"/>
@@ -247,7 +245,7 @@
                                             </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b68-gA-1bZ">
-                                            <rect key="frame" x="375" y="24" width="7" height="12"/>
+                                            <rect key="frame" x="561" y="24" width="7" height="12"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="12" id="3mE-QH-r3Y"/>
                                                 <constraint firstAttribute="width" constant="7" id="vXw-0J-3yj"/>
@@ -273,7 +271,7 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="desciption" destination="EUF-vF-aHe" id="Bhc-nR-8Bs"/>
-                                    <outlet property="likeButtonOutlet" destination="Oj4-Pn-OPh" id="tQJ-8s-c1P"/>
+                                    <outlet property="favoriteButton" destination="Oj4-Pn-OPh" id="tQJ-8s-c1P"/>
                                     <outlet property="name" destination="5LJ-eC-rDf" id="J4H-TN-xZN"/>
                                 </connections>
                             </tableViewCell>

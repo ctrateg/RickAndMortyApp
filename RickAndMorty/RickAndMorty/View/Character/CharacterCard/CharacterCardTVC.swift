@@ -15,8 +15,9 @@ class CharacterCardTVC: UITableViewController {
   private var titles: [String]?
   private var headerView: UIView?
   private var infoLabel: UILabel?
-  private var characterResult: [CharacterResultDTO]?
+  private var characterRequestResult: [CharacterResultDTO]?
   private var episodeRequestResult: [EpisodesResultDTO]?
+  private var locationRequestResult: [LocationResultDTO]?
   private var characterSearchResult: CharacterDTO?
   private var collectionView: UICollectionView?
   private var flow: UICollectionViewFlowLayout?
@@ -42,7 +43,7 @@ class CharacterCardTVC: UITableViewController {
     setLoadingScreen()
     DispatchQueue.global(qos: .default).async {
       self.serviceRequest?.requestForCharacter(urlArray: urlArray) { [weak self] responce in
-        self?.characterResult = responce
+        self?.characterRequestResult = responce
         self?.cardArray = [
           responce[0].status ?? "",
           responce[0].type ?? "",
@@ -50,6 +51,7 @@ class CharacterCardTVC: UITableViewController {
           String(self?.dateFormatterConfiguration(data: responce[0].created) ?? "")
         ]
         self?.episodesRequest(urlArray: responce[0].episode ?? [])
+        self?.locationRequest(urlArray: responce[0].location?.url ?? "")
         self?.similarCharacters(tag: responce[0].name)
         sleep(1)
         DispatchQueue.main.async {
@@ -63,6 +65,12 @@ class CharacterCardTVC: UITableViewController {
   private func episodesRequest(urlArray: [String]) {
     self.serviceRequest?.requestForEpisodes(urlArray: urlArray) { [weak self] responce in
       self?.episodeRequestResult = responce
+    }
+  }
+
+  private func locationRequest(urlArray: String) {
+    self.serviceRequest?.requestForLocation(urlArray: [urlArray]) { [weak self] responce in
+      self?.locationRequestResult = responce
     }
   }
 
@@ -102,7 +110,7 @@ class CharacterCardTVC: UITableViewController {
     case 1:
       return 1
     case 2:
-      return characterResult?[0].episode?.count ?? 0
+      return characterRequestResult?[0].episode?.count ?? 0
     default:
       return 0
     }
@@ -125,7 +133,18 @@ class CharacterCardTVC: UITableViewController {
       guard let cellLocation = tableView.dequeueReusableCell(
         withIdentifier: "CharacterLocationCell",
         for: indexPath) as? CharacterLocationCell else { return UITableViewCell() }
-      cellLocation.name.text = characterResult?[0].location?.name
+      let data = locationRequestResult?[indexPathRow]
+      if LocalDataManager.favoriteLocation.contains(where: { $0.id == (data?.id ?? 0) }) {
+        cellLocation.favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+        cellLocation.favoriteButton.tintColor = UIColor(named: "MainColor")
+        cellLocation.deletObject = LocalDataManager.favoriteLocation.first { $0.id == (data?.id ?? 0) }
+        cellLocation.clicked = true
+      } else {
+        cellLocation.favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+        cellLocation.favoriteButton.tintColor = .darkGray
+        cellLocation.clicked = false
+      }
+      cellLocation.name.text = data?.name
       return cellLocation
     case 2:
       guard let cellEpisode = tableView.dequeueReusableCell(
@@ -133,6 +152,17 @@ class CharacterCardTVC: UITableViewController {
         for: indexPath) as? CharacterEpisodesCell else { return UITableViewCell() }
       let nameEpisodes = episodeRequestResult?[indexPathRow].name
       let descition = episodeRequestResult?[indexPathRow].episode
+      let data = episodeRequestResult?[indexPathRow]
+      if LocalDataManager.favoriteEpisodes.contains(where: { $0.id == (data?.id ?? 0) }) {
+        cellEpisode.favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+        cellEpisode.favoriteButton.tintColor = UIColor(named: "MainColor")
+        cellEpisode.deletObject = LocalDataManager.favoriteEpisodes.first { $0.id == (data?.id ?? 0) }
+        cellEpisode.clicked = true
+      } else {
+        cellEpisode.favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+        cellEpisode.favoriteButton.tintColor = .darkGray
+        cellEpisode.clicked = false
+      }
       cellEpisode.name.text = nameEpisodes
       cellEpisode.desciption.text = "Season " + episodesSubTitleFix(line: descition ?? "", tag: "S") + ", " +
       "Episode " + episodesSubTitleFix(line: descition ?? "", tag: "E")
@@ -210,20 +240,20 @@ class CharacterCardTVC: UITableViewController {
     let favoriteButton = UIButton(frame: CGRect(x: 122, y: 75, width: 160, height: 24))
     let imageCard = UIImageView(frame: CGRect(x: 16, y: 16, width: 92, height: 92))
     headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 124))
-    let imageURL = URL(string: characterResult?[0].image ?? "")
+    let imageURL = URL(string: characterRequestResult?[0].image ?? "")
     imageCard.kf.setImage(with: imageURL)
     imageCard.layer.cornerRadius = 45
     imageCard.clipsToBounds = true
 
     infoLabel = UILabel(frame: CGRect(x: 120, y: 32, width: 226, height: 25))
-    infoLabel?.text = characterResult?[0].name
+    infoLabel?.text = characterRequestResult?[0].name
     infoLabel?.font = .systemFont(ofSize: 24)
     infoLabel?.textColor = .black
 
-    if LocalDataManager.favoriteCharacters.contains(where: { $0.id == (characterResult?[0].id ?? 0) }) {
+    if LocalDataManager.favoriteCharacters.contains(where: { $0.id == (characterRequestResult?[0].id ?? 0) }) {
       favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
       favoriteButton.tintColor = UIColor(named: "MainColor")
-      self.deletObject = LocalDataManager.favoriteCharacters.first { $0.id == (characterResult?[0].id ?? 0) }
+      self.deletObject = LocalDataManager.favoriteCharacters.first { $0.id == (characterRequestResult?[0].id ?? 0) }
       self.clickedTopButton = true
     } else {
       favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
@@ -284,7 +314,7 @@ class CharacterCardTVC: UITableViewController {
       sender.setImage(UIImage(named: "LikeButton"), for: .normal)
       sender.tintColor = .black
     } else {
-      guard let saveData = characterResult else { return }
+      guard let saveData = characterRequestResult else { return }
       saveInCacheProtocol?.saveData(data: saveData[0])
       sender.setImage(
         UIImage(named: "LikeButtonFull"),
@@ -300,7 +330,7 @@ class CharacterCardTVC: UITableViewController {
     guard let presentVC = UIStoryboard(name: "LocationUI", bundle: nil).instantiateViewController(
       withIdentifier: "LocationCardTVC") as? LocationCardTVC
     else { return }
-    presentVC.locationURL.append(self.characterResult?[indexPath?.row ?? 0].location?.url ?? "")
+    presentVC.locationURL.append(self.characterRequestResult?[indexPath?.row ?? 0].location?.url ?? "")
     show(presentVC, sender: sender)
   }
   @IBAction func episodesSegue(_ sender: UIButton) {

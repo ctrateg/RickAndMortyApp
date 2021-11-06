@@ -1,20 +1,33 @@
 import UIKit
+import CoreData
 
 class CharacterEpisodesCell: UITableViewCell {
-  var clicked = false
-  @IBOutlet weak var likeButtonOutlet: UIButton!
+  @IBOutlet weak var favoriteButton: UIButton!
   @IBOutlet weak var name: UILabel!
   @IBOutlet weak var desciption: UILabel!
+
+  private weak var deleteFromCache: UserCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
+
+  var clicked = false
+  var deletObject: EpisodesCache?
+  var indexPathRow: Int?
+  var dataCellRequest: EpisodesResultDTO?
   override func awakeFromNib() {
     super.awakeFromNib()
   }
   @IBAction func likeButtonAction(_ sender: UIButton) {
+    deleteFromCache = LocalDataManager.shared
+    saveInCacheProtocol = LocalDataManager.shared
     if clicked {
-      likeButtonOutlet.setImage(UIImage(named: "LikeButton"), for: .normal)
-      likeButtonOutlet.tintColor = .darkGray
+      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
+      favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
+      favoriteButton.tintColor = .darkGray
     } else {
-      likeButtonOutlet.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
-      likeButtonOutlet.tintColor = UIColor(named: "MainColor")
+      guard let saveData = dataCellRequest else { return }
+      saveInCacheProtocol?.saveData(data: saveData)
+      favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
+      favoriteButton.tintColor = UIColor(named: "MainColor")
     }
     clicked.toggle()
   }

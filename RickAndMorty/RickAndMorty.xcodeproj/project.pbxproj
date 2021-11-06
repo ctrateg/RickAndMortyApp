@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B1C9AA72736A385005091AB /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1C9AA62736A385005091AB /* NotificationCenter.swift */; };
 		1B21F4B626E0D8E5008F0470 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B21F4B526E0D8E5008F0470 /* AppDelegate.swift */; };
 		1B21F4B826E0D8E5008F0470 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B21F4B726E0D8E5008F0470 /* SceneDelegate.swift */; };
 		1B21F4BD26E0D8E5008F0470 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B21F4BB26E0D8E5008F0470 /* Main.storyboard */; };
@@ -83,6 +84,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1B1C9AA62736A385005091AB /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		1B21F4B226E0D8E5008F0470 /* RickAndMorty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RickAndMorty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B21F4B526E0D8E5008F0470 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1B21F4B726E0D8E5008F0470 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -161,6 +163,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B1C9AA52736A367005091AB /* NotificationCenter */ = {
+			isa = PBXGroup;
+			children = (
+				1B1C9AA62736A385005091AB /* NotificationCenter.swift */,
+			);
+			path = NotificationCenter;
+			sourceTree = "<group>";
+		};
 		1B21F4A926E0D8E5008F0470 = {
 			isa = PBXGroup;
 			children = (
@@ -232,6 +242,7 @@
 		1B4C29DE27340EFB00FD8C81 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				1B1C9AA52736A367005091AB /* NotificationCenter */,
 				1BFD31872717043600901BCB /* LocalDataGroup */,
 				1BFD318A271704AD00901BCB /* RequestServiceGroup */,
 			);
@@ -574,7 +585,7 @@
 		1B21F4AA26E0D8E5008F0470 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1250;
 				TargetAttributes = {
 					1B21F4B126E0D8E5008F0470 = {
@@ -749,6 +760,7 @@
 				1BFD316F270F793C00901BCB /* CustomTabBar.swift in Sources */,
 				1BFD31A72721900700901BCB /* CharacterEpisodesCell.swift in Sources */,
 				1BFD3162270B28D000901BCB /* EpisodesDTO.swift in Sources */,
+				1B1C9AA72736A385005091AB /* NotificationCenter.swift in Sources */,
 				1BFD317A2711D4DF00901BCB /* EpisodesTableView.swift in Sources */,
 				1BFD31452703051400901BCB /* InfoDTO.swift in Sources */,
 			);
