@@ -6,13 +6,13 @@ class CharacterEpisodesCell: UITableViewCell {
   @IBOutlet weak var name: UILabel!
   @IBOutlet weak var desciption: UILabel!
 
-  private weak var deleteFromCache: UserCacheDeleteProtocol?
-  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
+  private weak var deleteFromCache: LocalCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: LocalCacheSaveProtocol?
 
   var clicked = false
   var deletObject: EpisodesCache?
   var indexPathRow: Int?
-  var dataCellRequest: EpisodesResultDTO?
+  var dataCellRequest: EpisodesResultsDTO?
   override func awakeFromNib() {
     super.awakeFromNib()
   }
@@ -20,7 +20,7 @@ class CharacterEpisodesCell: UITableViewCell {
     deleteFromCache = LocalDataManager.shared
     saveInCacheProtocol = LocalDataManager.shared
     if clicked {
-      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
+      deleteFromCache?.deleteItem(deleteData: deletObject ?? NSManagedObject())
       favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
       favoriteButton.tintColor = .darkGray
     } else {

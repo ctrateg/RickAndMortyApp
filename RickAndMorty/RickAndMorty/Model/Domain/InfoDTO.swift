@@ -1,5 +1,3 @@
-import Foundation
-
 struct InfoDTO: Codable {
   let count: Int
   let pages: Int

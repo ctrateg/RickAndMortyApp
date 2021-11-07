@@ -5,25 +5,24 @@ import CoreData
 class CharacterCardTVC: UITableViewController {
   private weak var serviceRequest: SingleRequestProtocol?
   private weak var serviceSearchRequest: RequestSerivceSearchProtocol?
-  private weak var deleteFromCache: UserCacheDeleteProtocol?
-  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
+  private weak var deleteFromCache: LocalCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: LocalCacheSaveProtocol?
 
-  private var deletObject: CharacterCache?
   var characterURL: [String] = []
+  private var deletObject: CharacterCache?
   private var clickedTopButton = false
   private var cardArray: [String]?
   private var titles: [String]?
+  private var characterRequestResult: [CharacterResultsDTO]?
+  private var episodeRequestResult: [EpisodesResultsDTO]?
+  private var locationRequestResult: [LocationResultsDTO]?
+  private var characterSearchResult: [CharacterResultsDTO]?
   private var headerView: UIView?
   private var infoLabel: UILabel?
-  private var characterRequestResult: [CharacterResultDTO]?
-  private var episodeRequestResult: [EpisodesResultDTO]?
-  private var locationRequestResult: [LocationResultDTO]?
-  private var characterSearchResult: CharacterDTO?
   private var collectionView: UICollectionView?
   private var flow: UICollectionViewFlowLayout?
-
-  private let loadView = UIView()
-  private let indicator = UIActivityIndicatorView()
+  private var loadView = UIView()
+  private var indicator = UIActivityIndicatorView()
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     self.saveInCacheProtocol = LocalDataManager.shared
@@ -35,6 +34,7 @@ class CharacterCardTVC: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.shareButtonConfig()
     self.tableView.backgroundColor = .systemGray6
     self.titles = ["Status", "Type", "Gender", "Date"]
   }
@@ -80,7 +80,7 @@ class CharacterCardTVC: UITableViewController {
       searchItem.removeSubrange(spaceRange.lowerBound..<searchItem.endIndex)
     }
     self.serviceSearchRequest?.characterSearch(tag: searchItem) { [weak self] responce in
-    self?.characterSearchResult = responce
+      self?.characterSearchResult = responce.filter { $0.id != self?.characterRequestResult?[0].id }
     }
   }
 
@@ -90,6 +90,17 @@ class CharacterCardTVC: UITableViewController {
     guard let date = dateFormatter.date(from: data) else { return "" }
     dateFormatter.dateFormat = "dd.MM.yyyy"
     return dateFormatter.string(from: date)
+  }
+
+  private func shareButtonConfig() {
+    let actionButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(activityAction))
+    self.navigationItem.rightBarButtonItem = actionButton
+  }
+
+  @objc private func activityAction() {
+    let returnValue = [characterRequestResult?[0].name, characterRequestResult?[0].image]
+    let shareController = UIActivityViewController(activityItems: returnValue as [Any], applicationActivities: nil)
+    present(shareController, animated: true)
   }
 
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -103,6 +114,7 @@ class CharacterCardTVC: UITableViewController {
   override func numberOfSections(in tableView: UITableView) -> Int {
     return 4
   }
+
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     switch section {
     case 0:
@@ -115,6 +127,7 @@ class CharacterCardTVC: UITableViewController {
       return 0
     }
   }
+
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let indexPathRow = indexPath.row
     switch indexPath.section {
@@ -144,6 +157,7 @@ class CharacterCardTVC: UITableViewController {
         cellLocation.favoriteButton.tintColor = .darkGray
         cellLocation.clicked = false
       }
+      cellLocation.dataCellRequest = locationRequestResult?[indexPathRow]
       cellLocation.name.text = data?.name
       return cellLocation
     case 2:
@@ -166,11 +180,13 @@ class CharacterCardTVC: UITableViewController {
       cellEpisode.name.text = nameEpisodes
       cellEpisode.desciption.text = "Season " + episodesSubTitleFix(line: descition ?? "", tag: "S") + ", " +
       "Episode " + episodesSubTitleFix(line: descition ?? "", tag: "E")
+      cellEpisode.dataCellRequest = episodeRequestResult?[indexPathRow]
       return cellEpisode
     default:
       return UITableViewCell()
     }
   }
+
   private func episodesSubTitleFix(line: String, tag: String) -> String {
     guard let eRange = line.range(of: "E") else { return "" }
     guard let sEange = line.range(of: "S")?.upperBound else { return "" }
@@ -191,9 +207,11 @@ class CharacterCardTVC: UITableViewController {
       return 38
     }
   }
+
   override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
     return 0
   }
+  
   override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     switch section {
     case 1:
@@ -267,8 +285,16 @@ class CharacterCardTVC: UITableViewController {
     headerView?.addSubview(favoriteButton)
     headerView?.addSubview(imageCard)
     headerView?.addSubview(infoLabel ?? UILabel())
-
+    favoriteButtonConfig(button: favoriteButton, status: characterRequestResult?[0].status ?? "")
     return headerView
+  }
+
+  private func favoriteButtonConfig(button: UIButton, status: String) {
+    switch status {
+    case "Alive": return
+    default:
+      button.isHidden = true
+    }
   }
 
   private func middleHeaderConfiguration(text: String) -> UIView? {
@@ -310,7 +336,7 @@ class CharacterCardTVC: UITableViewController {
 
   @objc func favoriteButtonTap(_ sender: UIButton) {
     if clickedTopButton {
-      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
+      deleteFromCache?.deleteItem(deleteData: deletObject ?? NSManagedObject())
       sender.setImage(UIImage(named: "LikeButton"), for: .normal)
       sender.tintColor = .black
     } else {
@@ -323,38 +349,35 @@ class CharacterCardTVC: UITableViewController {
     }
     clickedTopButton.toggle()
   }
-
-  @IBAction func locationSegue(_ sender: UIButton) {
-    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
-    let indexPath = tableView.indexPathForRow(at: buttonPosition)
-    guard let presentVC = UIStoryboard(name: "LocationUI", bundle: nil).instantiateViewController(
-      withIdentifier: "LocationCardTVC") as? LocationCardTVC
-    else { return }
-    presentVC.locationURL.append(self.characterRequestResult?[indexPath?.row ?? 0].location?.url ?? "")
-    show(presentVC, sender: sender)
-  }
-  @IBAction func episodesSegue(_ sender: UIButton) {
-    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
-    let indexPath = tableView.indexPathForRow(at: buttonPosition)
-    guard let presentVC = UIStoryboard(name: "EpisodesUI", bundle: nil).instantiateViewController(
-      withIdentifier: "EpisodesCardTVC") as? EpisodesCardTVC
-    else { return }
-    presentVC.episodesURL.append(self.episodeRequestResult?[indexPath?.row ?? 0].url ?? "")
-    show(presentVC, sender: sender)
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    switch indexPath.section {
+    case 1:
+      guard let presentVC = UIStoryboard(name: "LocationUI", bundle: nil).instantiateViewController(
+        withIdentifier: "LocationCardTVC") as? LocationCardTVC
+      else { return }
+      presentVC.locationURL.append(self.characterRequestResult?[indexPath.row].location?.url ?? "")
+      show(presentVC, sender: nil)
+    case 2:
+      guard let presentVC = UIStoryboard(name: "EpisodesUI", bundle: nil).instantiateViewController(
+        withIdentifier: "EpisodesCardTVC") as? EpisodesCardTVC
+      else { return }
+      presentVC.episodesURL.append(self.episodeRequestResult?[indexPath.row].url ?? "")
+      show(presentVC, sender: nil)
+    default: return
+    }
   }
 }
 
 extension CharacterCardTVC: UICollectionViewDelegate, UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return (characterSearchResult?.results.count ?? 0) - 1
+    return (characterSearchResult?.count ?? 0)
   }
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     guard let cell = self.collectionView?.dequeueReusableCell(
-    withReuseIdentifier: "collectionCell",
-    for: indexPath) as? SimilarCollectionViewCell else { return UICollectionViewCell() }
-    let data = characterSearchResult?.results[indexPath.row + 1]
+      withReuseIdentifier: "collectionCell",
+      for: indexPath) as? SimilarCollectionViewCell else { return UICollectionViewCell() }
+    let data = characterSearchResult?[indexPath.row]
     let imageURL = URL(string: data?.image ?? "")
-
     cell.imageCollectionCell.kf.setImage(with: imageURL)
     cell.nameCollectionCell.text = data?.name
 
@@ -364,7 +387,7 @@ extension CharacterCardTVC: UICollectionViewDelegate, UICollectionViewDataSource
     guard let presentVC = UIStoryboard(name: "CharactersUI", bundle: nil).instantiateViewController(
       withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
     else { return }
-    presentVC.characterURL.append(self.characterSearchResult?.results[indexPath.row + 1].url ?? "")
+    presentVC.characterURL.append(self.characterSearchResult?[indexPath.row + 1].url ?? "")
     show(presentVC, sender: nil)
   }
 }

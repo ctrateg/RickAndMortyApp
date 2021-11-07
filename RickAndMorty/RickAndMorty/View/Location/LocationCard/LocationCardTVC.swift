@@ -5,17 +5,17 @@ import CoreData
 class LocationCardTVC: UITableViewController {
   private let characterStoryboard = UIStoryboard(name: "CharactersUI", bundle: nil)
   private weak var singleRequestDelegate: SingleRequestProtocol?
-  private weak var deleteFromCache: UserCacheDeleteProtocol?
-  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
+  private weak var deleteFromCache: LocalCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: LocalCacheSaveProtocol?
   var locationURL: [String] = []
 
   private var deletObject: LocationCache?
-  private var locationRequestResult: [LocationResultDTO]?
+  private var locationRequestResult: [LocationResultsDTO]?
   private var charactersDTO: CharacterDTO?
   private var titles: [String]?
   private var headerView: UIView?
   private var infoLabel: UILabel?
-  private var characterRequestResult: [CharacterResultDTO]?
+  private var characterRequestResult: [CharacterResultsDTO]?
   private var cardArray: [String]?
   private var imageCharacters: [UIImage] = []
   private var clickedTopButton = false
@@ -31,7 +31,8 @@ class LocationCardTVC: UITableViewController {
     super.viewDidLoad()
     self.tableView.backgroundColor = .systemGray6
     self.navigationItem.title = "Location Card"
-    titles = ["Type", "Dimension", "Date"]
+    self.shareButtonConfig()
+    self.titles = ["Type", "Dimension", "Date"]
   }
 
   private func dateFormatterConfiguration(data: String) -> String {
@@ -101,7 +102,17 @@ class LocationCardTVC: UITableViewController {
       return 60
     }
   }
-
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    switch indexPath.section {
+    case 1:
+      guard let presentVC = characterStoryboard.instantiateViewController(
+        withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
+      else { return }
+      presentVC.characterURL.append(self.characterRequestResult?[indexPath.row].url ?? "")
+      show(presentVC, sender: nil)
+    default: return
+    }
+  }
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     switch indexPath.section {
     case 0:
@@ -166,7 +177,9 @@ class LocationCardTVC: UITableViewController {
     infoLabel?.text = locationRequestResult?[0].name
     infoLabel?.font = .systemFont(ofSize: 24)
     infoLabel?.textColor = .black
+
     let favoriteButton = UIButton(frame: CGRect(x: 16, y: 88, width: 160, height: 24))
+
     if LocalDataManager.favoriteLocation.contains(where: { $0.id == (locationRequestResult?[0].id ?? 0) }) {
       favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
       favoriteButton.tintColor = UIColor(named: "MainColor")
@@ -195,18 +208,20 @@ class LocationCardTVC: UITableViewController {
     return headerView
   }
 
-  @IBAction func segueCharacter(_ sender: UIButton) {
-    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
-    let indexPath = tableView.indexPathForRow(at: buttonPosition)
-    guard let presentVC = characterStoryboard.instantiateViewController(
-      withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
-    else { return }
-    presentVC.characterURL.append(self.characterRequestResult?[indexPath?.row ?? 0].url ?? "")
-    show(presentVC, sender: sender)
+  private func shareButtonConfig() {
+    let actionButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(activityAction))
+    self.navigationItem.rightBarButtonItem = actionButton
   }
+
+  @objc private func activityAction() {
+    let returnValue = [characterRequestResult?[0].name, characterRequestResult?[0].image]
+    let shareController = UIActivityViewController(activityItems: returnValue as [Any], applicationActivities: nil)
+    present(shareController, animated: true)
+  }
+
   @objc func favoriteButtonTap(_ sender: UIButton) {
     if clickedTopButton {
-      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
+      deleteFromCache?.deleteItem(deleteData: deletObject ?? NSManagedObject())
       sender.setImage(UIImage(named: "LikeButton"), for: .normal)
       sender.tintColor = .black
     } else {

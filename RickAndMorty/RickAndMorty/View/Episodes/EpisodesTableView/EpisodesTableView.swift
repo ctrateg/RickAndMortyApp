@@ -9,7 +9,7 @@ class EpisodesTableViewController: UITableViewController {
   private var endOfScroll: Int?
   private var loadMoreStatus = false
   private var page = 0
-  private var episodesRequestResult: [EpisodesResultDTO] = []
+  private var episodesRequestResult: [EpisodesResultsDTO] = []
   private weak var requestEpisdesApi: RequestServiceProtocol?
 
   override func viewWillAppear(_ animated: Bool) {
@@ -69,6 +69,15 @@ class EpisodesTableViewController: UITableViewController {
     + ", " + "Episode " + episodesSubTitleFix(line: episodes, tag: "E")
     return cell
   }
+
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    guard let presentVC = cardStoryboard.instantiateViewController(
+      withIdentifier: "EpisodesCardTVC") as? EpisodesCardTVC
+    else { return }
+    presentVC.episodesURL.append(self.episodesRequestResult[indexPath.row].url)
+    self.page = 0
+    show(presentVC, sender: nil)
+  }
   private func episodesSubTitleFix(line: String, tag: String) -> String {
     guard let eRange = line.range(of: "E") else { return "" }
     guard let sEange = line.range(of: "S")?.upperBound else { return "" }
@@ -83,7 +92,7 @@ class EpisodesTableViewController: UITableViewController {
     let currentOffset = scrollView.contentOffset.y
     let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
     let deltaOffset = maximumOffset - currentOffset
-    if (deltaOffset <= 0) && (page != endOfScroll) {
+    if (deltaOffset <= 0) && (page <= (endOfScroll ?? 0)) {
       loadMore()
     }
   }
@@ -142,15 +151,5 @@ class EpisodesTableViewController: UITableViewController {
     navigationItem.backButtonTitle = "Back"
     navigationBar?.standardAppearance = appearance
     navigationBar?.scrollEdgeAppearance = navigationBar?.standardAppearance
-  }
-  @IBAction func segueButtonn(_ sender: UIButton) {
-    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
-    let indexPath = tableView.indexPathForRow(at: buttonPosition)
-    guard let presentVC = cardStoryboard.instantiateViewController(
-      withIdentifier: "EpisodesCardTVC") as? EpisodesCardTVC
-    else { return }
-    presentVC.episodesURL.append(self.episodesRequestResult[indexPath?.row ?? 0].url)
-    self.page = 0
-    show(presentVC, sender: sender)
   }
 }

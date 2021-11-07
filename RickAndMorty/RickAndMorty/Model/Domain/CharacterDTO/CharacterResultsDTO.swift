@@ -1,6 +1,4 @@
-import Foundation
-
-struct CharacterResultDTO: Codable {
+struct CharacterResultsDTO: Codable {
   let id: Int
   let name: String
   let status: String?

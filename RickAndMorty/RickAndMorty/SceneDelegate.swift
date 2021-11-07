@@ -13,8 +13,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   private let firstOpenTime = Int(Date().timeIntervalSince1970)
 
   private var rootVC: UIViewController?
-  private weak var userLocationDelegate: UserLocationProtocol?
-  private weak var loadDataDelegate: UserCacheLoadProtocol?
+  private weak var userLocationDelegate: LocationProtocol?
+  private weak var loadDataDelegate: LocalCacheLoadProtocol?
 
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     getLocation()
@@ -38,13 +38,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
   }
   func sceneDidEnterBackground(_ scene: UIScene) {
-    NotificationCenter.shared.sendNotifications()
+    NotificationCenter.shared.sendNotifications(interval: 10)
   }
   func sceneWillEnterForeground(_ scene: UIScene) {
     UIApplication.shared.applicationIconBadgeNumber = 0
   }
   func sceneDidDisconnect(_ scene: UIScene) {
-    NotificationCenter.shared.sendNotifications()
+    NotificationCenter.shared.sendNotifications(interval: 5)
     let userDefaultDate = UserDefaults.standard.integer(forKey: UserDefaultKeys.firstOpenTime.rawValue)
     let saveDate = userDefaultDate + SceneDelegate.timeInApp
     UserDefaults.standard.set(saveDate, forKey: UserDefaultKeys.firstOpenTime.rawValue)

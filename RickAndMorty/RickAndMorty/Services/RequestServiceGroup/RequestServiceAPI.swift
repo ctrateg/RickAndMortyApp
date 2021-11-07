@@ -1,7 +1,6 @@
 import Alamofire
-import Foundation
 
-class RequestServiceAPI: RequestServiceProtocol, RequestSerivceSearchProtocol, SingleRequestProtocol {
+class RequestServiceAPI: RequestServiceProtocol {
   static var shared: RequestServiceAPI = {
     let instance = RequestServiceAPI()
     return instance
@@ -58,8 +57,72 @@ class RequestServiceAPI: RequestServiceProtocol, RequestSerivceSearchProtocol, S
       }
     .resume()
   }
+}
 
-  func characterSearch(tag: String, completion: @escaping (CharacterDTO) -> Void) {
+extension RequestServiceAPI: SingleRequestProtocol {
+  func requestForLocation(urlArray: [String], completion: @escaping ([LocationResultsDTO]) -> Void) {
+    jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+    var returnArray: [LocationResultsDTO] = []
+    urlArray.forEach { url in
+      guard let url = URL(string: url) else { return }
+      AF.request(url)
+        .responseJSON { response in
+          guard let data = response.data else { return }
+          do {
+            let returnData = try self.jsonDecoder.decode(LocationResultsDTO.self, from: data)
+            returnArray.append(returnData)
+            completion(returnArray)
+          } catch let error as NSError {
+            print("\(error), \(error.userInfo)")
+          }
+        }
+        .resume()
+    }
+  }
+
+  func requestForCharacter(urlArray: [String], completion: @escaping ([CharacterResultsDTO]) -> Void) {
+    jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+    var returnArray: [CharacterResultsDTO] = []
+    urlArray.forEach { url in
+      guard let url = URL(string: url) else { return }
+      AF.request(url)
+        .responseJSON { response in
+          guard let data = response.data else { return }
+          do {
+            let returnData = try self.jsonDecoder.decode(CharacterResultsDTO.self, from: data)
+            returnArray.append(returnData)
+            completion(returnArray)
+          } catch let error as NSError {
+            print("\(error), \(error.userInfo)")
+          }
+        }
+        .resume()
+    }
+  }
+
+  func requestForEpisodes(urlArray: [String], completion: @escaping ([EpisodesResultsDTO]) -> Void) {
+    jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+    var returnArray: [EpisodesResultsDTO] = []
+    urlArray.forEach { url in
+      guard let url = URL(string: url) else { return }
+      AF.request(url)
+        .responseJSON { response in
+          guard let data = response.data else { return }
+          do {
+            let returnData = try self.jsonDecoder.decode(EpisodesResultsDTO.self, from: data)
+            returnArray.append(returnData)
+            completion(returnArray)
+          } catch let error as NSError {
+            print("\(error), \(error.userInfo)")
+          }
+        }
+        .resume()
+    }
+  }
+}
+
+extension RequestServiceAPI: RequestSerivceSearchProtocol {
+  func characterSearch(tag: String, completion: @escaping ([CharacterResultsDTO]) -> Void) {
     jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
     guard let url = URL(string: "https://rickandmortyapi.com/api/character?name=\(tag)") else { return }
     AF.request(url)
@@ -67,70 +130,12 @@ class RequestServiceAPI: RequestServiceProtocol, RequestSerivceSearchProtocol, S
       guard let data = responce.data else { return }
         do {
           let returnData = try self.jsonDecoder.decode(CharacterDTO.self, from: data)
-          completion(returnData)
+          completion(returnData.results)
         } catch let error as NSError {
           print("\(error), \(error.userInfo)")
         }
       }
     .resume()
-  }
-
-  func requestForLocation(urlArray: [String], completion: @escaping ([LocationResultDTO]) -> Void) {
-    jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-    var returnArray: [LocationResultDTO] = []
-    urlArray.forEach { url in
-      guard let url = URL(string: url) else { return }
-      AF.request(url)
-        .responseJSON { response in
-          guard let data = response.data else { return }
-          do {
-            let returnData = try self.jsonDecoder.decode(LocationResultDTO.self, from: data)
-            returnArray.append(returnData)
-            completion(returnArray)
-          } catch let error as NSError {
-            print("\(error), \(error.userInfo)")
-          }
-        }
-        .resume()
-    }
-  }
-  func requestForCharacter(urlArray: [String], completion: @escaping ([CharacterResultDTO]) -> Void) {
-    jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-    var returnArray: [CharacterResultDTO] = []
-    urlArray.forEach { url in
-      guard let url = URL(string: url) else { return }
-      AF.request(url)
-        .responseJSON { response in
-          guard let data = response.data else { return }
-          do {
-            let returnData = try self.jsonDecoder.decode(CharacterResultDTO.self, from: data)
-            returnArray.append(returnData)
-            completion(returnArray)
-          } catch let error as NSError {
-            print("\(error), \(error.userInfo)")
-          }
-        }
-        .resume()
-    }
-  }
-  func requestForEpisodes(urlArray: [String], completion: @escaping ([EpisodesResultDTO]) -> Void) {
-    jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-    var returnArray: [EpisodesResultDTO] = []
-    urlArray.forEach { url in
-      guard let url = URL(string: url) else { return }
-      AF.request(url)
-        .responseJSON { response in
-          guard let data = response.data else { return }
-          do {
-            let returnData = try self.jsonDecoder.decode(EpisodesResultDTO.self, from: data)
-            returnArray.append(returnData)
-            completion(returnArray)
-          } catch let error as NSError {
-            print("\(error), \(error.userInfo)")
-          }
-        }
-        .resume()
-    }
   }
 }
 extension RequestServiceAPI: NSCopying {

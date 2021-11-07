@@ -5,7 +5,7 @@ class ContainerViewController: UIViewController {
   @IBOutlet weak var presentView: UIView!
   @IBOutlet weak var subNavigationBarOutlet: UINavigationItem!
 
-  private weak var userLocationDelegate: UserLocationProtocol?
+  private weak var userLocationDelegate: LocationProtocol?
   private var userLocationCache: [UserLocation]?
   private var tag = 0
 

@@ -9,20 +9,10 @@ class LocationTableViewController: UITableViewController {
   private var endOfScroll: Int?
   private var loadMoreStatus = false
   private var page = 0
-  private var locationRequestResults: [LocationResultDTO] = []
+  private var locationRequestResults: [LocationResultsDTO] = []
 
   private weak var requestLocationApi: RequestServiceProtocol?
-  private weak var userCacheLoadDelegate: UserCacheLoadProtocol?
-
-  @IBAction func segueButton(_ sender: UIButton) {
-    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
-    let indexPath = tableView.indexPathForRow(at: buttonPosition)
-    guard let presentVC = cardStoryboard.instantiateViewController(
-      withIdentifier: "LocationCardTVC") as? LocationCardTVC
-    else { return }
-    presentVC.locationURL.append(self.locationRequestResults[indexPath?.row ?? 0].url)
-    show(presentVC, sender: sender)
-  }
+  private weak var userCacheLoadDelegate: LocalCacheLoadProtocol?
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
@@ -86,6 +76,13 @@ class LocationTableViewController: UITableViewController {
     }
   }
 
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    guard let presentVC = cardStoryboard.instantiateViewController(
+      withIdentifier: "LocationCardTVC") as? LocationCardTVC
+    else { return }
+    presentVC.locationURL.append(self.locationRequestResults[indexPath.row].url)
+    show(presentVC, sender: nil)
+  }
   private func loadMore() {
     if !loadMoreStatus {
     self.loadMoreStatus = true

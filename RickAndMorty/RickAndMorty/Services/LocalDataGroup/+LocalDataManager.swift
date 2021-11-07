@@ -1,11 +1,7 @@
 import CoreData
 import UIKit
 
-extension LocalDataManager: NSCopying, UserLocationProtocol {
-  func copy(with zone: NSZone? = nil) -> Any {
-    return self
-  }
-
+extension LocalDataManager: LocationProtocol {
   func saveLocation(latitude: Double, longitude: Double) {
     guard let context = appDelegate?.persistentContainer.viewContext else { return }
     let entity = UserLocation(context: context)
@@ -25,5 +21,11 @@ extension LocalDataManager: NSCopying, UserLocationProtocol {
     } catch let error as NSError {
       print("Ошибка при загрузке данных: \(error), \(error.userInfo)")
     }
+  }
+}
+
+extension LocalDataManager: NSCopying {
+  func copy(with zone: NSZone? = nil) -> Any {
+    return self
   }
 }

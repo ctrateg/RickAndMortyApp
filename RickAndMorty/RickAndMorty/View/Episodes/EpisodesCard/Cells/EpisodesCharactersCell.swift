@@ -6,12 +6,12 @@ class EpisodesCharactersCell: UITableViewCell {
   @IBOutlet weak var characterStatus: UILabel!
   @IBOutlet weak var favoriteButton: UIButton!
 
-  private weak var deleteFromCache: UserCacheDeleteProtocol?
-  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
+  private weak var deleteFromCache: LocalCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: LocalCacheSaveProtocol?
 
   var clicked = false
   var deletObject: CharacterCache?
-  var dataCellRequest: CharacterResultDTO?
+  var dataCellRequest: CharacterResultsDTO?
   override func awakeFromNib() {
     super.awakeFromNib()
     characterImage.layer.cornerRadius = 23.5
@@ -24,7 +24,7 @@ class EpisodesCharactersCell: UITableViewCell {
     deleteFromCache = LocalDataManager.shared
     saveInCacheProtocol = LocalDataManager.shared
     if clicked {
-      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
+      deleteFromCache?.deleteItem(deleteData: deletObject ?? NSManagedObject())
       favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
       favoriteButton.tintColor = .darkGray
     } else {

@@ -6,18 +6,18 @@ class EpisodesTableViewCell: UITableViewCell {
   @IBOutlet weak var episodesNumber: UILabel!
   @IBOutlet weak var favoriteIconOutlet: UIButton!
 
-  private weak var deleteFromCache: UserCacheDeleteProtocol?
-  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
+  private weak var deleteFromCache: LocalCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: LocalCacheSaveProtocol?
 
   var clicked = false
   var deletObject: EpisodesCache?
   var indexPathRow: Int?
-  var dataCellRequest: EpisodesResultDTO?
+  var dataCellRequest: EpisodesResultsDTO?
   @IBAction func favoriteButton(_ sender: UIButton) {
     deleteFromCache = LocalDataManager.shared
     saveInCacheProtocol = LocalDataManager.shared
     if clicked {
-      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
+      deleteFromCache?.deleteItem(deleteData: deletObject ?? NSManagedObject())
       favoriteIconOutlet.setImage(UIImage(named: "LikeButton"), for: .normal)
       favoriteIconOutlet.tintColor = .darkGray
     } else {

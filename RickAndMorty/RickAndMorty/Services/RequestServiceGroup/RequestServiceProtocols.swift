@@ -5,11 +5,11 @@ protocol RequestServiceProtocol: AnyObject {
 }
 
 protocol RequestSerivceSearchProtocol: AnyObject {
-  func characterSearch(tag: String, completion: @escaping (CharacterDTO) -> Void)
+  func characterSearch(tag: String, completion: @escaping ([CharacterResultsDTO]) -> Void)
 }
 
 protocol SingleRequestProtocol: AnyObject {
-  func requestForCharacter(urlArray: [String], completion: @escaping ([CharacterResultDTO]) -> Void)
-  func requestForEpisodes(urlArray: [String], completion: @escaping ([EpisodesResultDTO]) -> Void)
-  func requestForLocation(urlArray: [String], completion: @escaping ([LocationResultDTO]) -> Void)
+  func requestForCharacter(urlArray: [String], completion: @escaping ([CharacterResultsDTO]) -> Void)
+  func requestForEpisodes(urlArray: [String], completion: @escaping ([EpisodesResultsDTO]) -> Void)
+  func requestForLocation(urlArray: [String], completion: @escaping ([LocationResultsDTO]) -> Void)
 }

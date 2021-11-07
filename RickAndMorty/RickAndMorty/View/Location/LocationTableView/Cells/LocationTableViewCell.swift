@@ -5,18 +5,18 @@ class LocationTableViewCell: UITableViewCell {
   @IBOutlet weak var favoritIconOutlet: UIButton!
   @IBOutlet weak var locationName: UILabel!
 
-  private weak var deleteFromCache: UserCacheDeleteProtocol?
-  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
+  private weak var deleteFromCache: LocalCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: LocalCacheSaveProtocol?
 
   var clicked = false
   var deletObject: LocationCache?
   var indexPathRow: Int?
-  var dataCellRequest: LocationResultDTO?
+  var dataCellRequest: LocationResultsDTO?
   @IBAction func favoriteButton(_ sender: UIButton) {
     deleteFromCache = LocalDataManager.shared
     saveInCacheProtocol = LocalDataManager.shared
     if clicked {
-      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
+      deleteFromCache?.deleteItem(deleteData: deletObject ?? NSManagedObject())
       favoritIconOutlet.setImage(UIImage(named: "LikeButton"), for: .normal)
       favoritIconOutlet.tintColor = .darkGray
     } else {

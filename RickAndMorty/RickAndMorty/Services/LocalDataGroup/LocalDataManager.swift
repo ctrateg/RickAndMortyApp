@@ -1,9 +1,7 @@
 import CoreData
 import UIKit
 
-class LocalDataManager: UserCacheSaveProtocol,
-  UserCacheLoadProtocol,
-  UserCacheDeleteProtocol {
+class LocalDataManager: LocalCacheSaveProtocol {
   static var shared: LocalDataManager = {
     let instance = LocalDataManager()
     return instance
@@ -14,7 +12,7 @@ class LocalDataManager: UserCacheSaveProtocol,
   private init() {}
   weak var appDelegate = UIApplication.shared.delegate as? AppDelegate
 
-  func saveData(data: CharacterResultDTO) {
+  func saveData(data: CharacterResultsDTO) {
     guard let context = appDelegate?.persistentContainer.viewContext else { return }
     let entity = CharacterCache(context: context)
     entity.id = Int64(data.id)
@@ -42,7 +40,7 @@ class LocalDataManager: UserCacheSaveProtocol,
     }
   }
 
-  func saveData(data: LocationResultDTO) {
+  func saveData(data: LocationResultsDTO) {
     guard let context = appDelegate?.persistentContainer.viewContext else { return }
     let entity = LocationCache(context: context)
     entity.id = Int64(data.id)
@@ -64,7 +62,7 @@ class LocalDataManager: UserCacheSaveProtocol,
       }
     }
   }
-  func saveData(data: EpisodesResultDTO) {
+  func saveData(data: EpisodesResultsDTO) {
     guard let context = appDelegate?.persistentContainer.viewContext else { return }
     let entity = EpisodesCache(context: context)
     entity.id = Int64(data.id)
@@ -85,7 +83,9 @@ class LocalDataManager: UserCacheSaveProtocol,
       }
     }
   }
+}
 
+extension LocalDataManager: LocalCacheLoadProtocol {
   func loadItems(completion: @escaping ([CharacterCache]) -> Void) {
     guard let context = appDelegate?.persistentContainer.viewContext else { return }
     let request = NSFetchRequest<CharacterCache>(entityName: "CharacterCache")
@@ -115,16 +115,18 @@ class LocalDataManager: UserCacheSaveProtocol,
       print("Ошибка при загрузке данных: \(error), \(error.userInfo)")
     }
   }
+}
 
-  func deleteItem(deletData: NSManagedObject) {
+extension LocalDataManager: LocalCacheDeleteProtocol {
+  func deleteItem(deleteData: NSManagedObject) {
     guard let context = appDelegate?.persistentContainer.viewContext else { return }
-    context.delete(deletData)
+    context.delete(deleteData)
     do {
       try context.save()
     } catch let error as NSError {
       print("Ошибка при удалении: \(error), \(error.userInfo)")
     }
-    switch deletData {
+    switch deleteData {
     case is CharacterCache:
       self.loadItems { responce in
         LocalDataManager.favoriteCharacters = responce

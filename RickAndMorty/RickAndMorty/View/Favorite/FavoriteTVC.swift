@@ -26,7 +26,28 @@ class FavoriteTVC: UITableViewController {
   override func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
-
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    switch tag {
+    case 1:
+      guard let presentVC = UIStoryboard(name: "LocationUI", bundle: nil).instantiateViewController(
+        withIdentifier: "LocationCardTVC") as? LocationCardTVC
+      else { return }
+      presentVC.locationURL.append(LocalDataManager.favoriteLocation[indexPath.row].url ?? "")
+      show(presentVC, sender: nil)
+    case 2:
+      guard let presentVC = UIStoryboard(name: "EpisodesUI", bundle: nil).instantiateViewController(
+        withIdentifier: "EpisodesCardTVC") as? EpisodesCardTVC
+      else { return }
+      presentVC.episodesURL.append(LocalDataManager.favoriteEpisodes[indexPath.row].url ?? "")
+      show(presentVC, sender: nil)
+    default:
+      guard let presentVC = UIStoryboard(name: "CharactersUI", bundle: nil).instantiateViewController(
+        withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
+      else { return }
+      presentVC.characterURL.append(LocalDataManager.favoriteCharacters[indexPath.row].url ?? "")
+      show(presentVC, sender: nil)
+    }
+  }
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     switch tag {
     case 1: return LocalDataManager.favoriteLocation.count
@@ -44,7 +65,6 @@ class FavoriteTVC: UITableViewController {
           return UITableViewCell()
         }
       let data = LocalDataManager.favoriteLocation[indexPath.row]
-      cell.showService = self
       cellConfiguration(inputCell: cell, inputData: data, indexPath: indexPath)
       return cell
     case 2: guard let cell = tableView.dequeueReusableCell(
@@ -53,7 +73,6 @@ class FavoriteTVC: UITableViewController {
         return UITableViewCell()
       }
       let data = LocalDataManager.favoriteEpisodes[indexPath.row]
-      cell.showService = self
       cellConfiguration(inputCell: cell, inputData: data, indexPath: indexPath)
       return cell
     default:
@@ -62,14 +81,13 @@ class FavoriteTVC: UITableViewController {
         for: indexPath) as? CharactersFavoriteCell else {
           return UITableViewCell()
         }
-      cell.showService = self
       let data = LocalDataManager.favoriteCharacters[indexPath.row]
       cellConfiguration(inputCell: cell, inputData: data, indexPath: indexPath)
       return cell
     }
   }
   override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-    let deletAction = UIContextualAction(style: .destructive, title: "Delet") { _, _, _ in
+    let deletAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, _ in
       switch self.segmenController.selectedSegmentIndex {
       case 1: LocalDataManager.favoriteLocation.remove(at: indexPath.row)
       case 2: LocalDataManager.favoriteEpisodes.remove(at: indexPath.row)
@@ -99,40 +117,41 @@ class FavoriteTVC: UITableViewController {
   private func cellConfiguration(inputCell: UITableViewCell, inputData: NSManagedObject, indexPath: IndexPath) {
     switch inputCell {
     case is CharactersFavoriteCell:
-      let cell = inputCell as? CharactersFavoriteCell
+      guard let cell = inputCell as? CharactersFavoriteCell else { return }
       guard let data = inputData as? CharacterCache else { return }
       let imageURL = URL(string: data.image ?? "")
 
-      cell?.characterName.text = data.name
-      cell?.characterIcon.kf.setImage(with: imageURL)
-      cell?.dataCell = data
-
-      switch data.status {
-      case "Alive":
-        cell?.characterStatus.textColor = .green
-        cell?.characterStatus.text = "\u{2022}" + (data.status ?? "")
-      case "Dead":
-        cell?.characterStatus.textColor = .red
-        cell?.characterStatus.text = "\u{2022}" + (data.status ?? "")
-      default:
-        cell?.characterStatus.text = ""
-      }
+      cell.characterName.text = data.name
+      cell.characterIcon.kf.setImage(with: imageURL)
+      statusConfig(cell: cell, status: data.status ?? "")
 
     case is LocationFavoriteCell:
-      let cell = inputCell as? LocationFavoriteCell
+      guard let cell = inputCell as? LocationFavoriteCell else { return }
       guard let data = inputData as? LocationCache else { return }
-      cell?.locationName.text = data.name
-      cell?.dataCell = data
+      cell.locationName.text = data.name
+
     case is EpisodesFavoriteCell:
-      let cell = inputCell as? EpisodesFavoriteCell
+      guard let cell = inputCell as? EpisodesFavoriteCell else { return }
       guard let data = inputData as? EpisodesCache else { return }
-      cell?.episodesName.text = data.name
-      cell?.dataCell = data
-      cell?.episodesSubName.text = "Season " + episodesSubTitleFix(line: data.episodes ?? "", tag: "S")
+      cell.episodesName.text = data.name
+      cell.episodesSubName.text = "Season " + episodesSubTitleFix(line: data.episodes ?? "", tag: "S")
       + ", " + "Episode " + episodesSubTitleFix(line: data.episodes ?? "", tag: "E")
 
     default:
       return
+    }
+  }
+
+  private func statusConfig(cell: CharactersFavoriteCell, status: String) {
+    switch status {
+    case "Alive":
+      cell.characterStatus.textColor = .green
+      cell.characterStatus.text = "\u{2022}" + status
+    case "Dead":
+      cell.characterStatus.textColor = .red
+      cell.characterStatus.text = "\u{2022}" + status
+    default:
+      cell.characterStatus.text = ""
     }
   }
   private func episodesSubTitleFix(line: String, tag: String) -> String {

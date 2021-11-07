@@ -2,17 +2,16 @@ import UIKit
 import Kingfisher
 
 class CharactersTableView: UITableViewController {
-  private weak var userCacheLoadDelegate: UserCacheLoadProtocol?
+  private weak var userCacheLoadDelegate: LocalCacheLoadProtocol?
   private weak var searchDelegate: RequestSerivceSearchProtocol?
   private weak var requestCharApi: RequestServiceProtocol?
 
   private var endOfScrolls: Int?
-  private var characterRequestResult: [CharacterResultDTO] = []
-  private var searchRequestResult: CharacterDTO?
+  private var characterRequestResult: [CharacterResultsDTO] = []
+  private var searchRequestResult: [CharacterResultsDTO]?
   private var loadMoreStatus = false
   private var searching = false
   private var page = 0
-  private var searchTimer: Timer?
 
   private let cardStoryboard = UIStoryboard(name: "CharactersUI", bundle: nil)
   private let loadView = UIView()
@@ -20,22 +19,17 @@ class CharactersTableView: UITableViewController {
   private let indicator = UIActivityIndicatorView()
   private let appearance = UINavigationBarAppearance()
 
-  @IBAction func segueButton(_ sender: UIButton) {
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     guard let presentVC = cardStoryboard.instantiateViewController(
       withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
     else { return }
-
-    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
-    let indexPath = tableView.indexPathForRow(at: buttonPosition)
-
     if searching == true {
-      presentVC.characterURL.append(self.searchRequestResult?.results[indexPath?.row ?? 0].url ?? "")
+      presentVC.characterURL.append(self.searchRequestResult?[indexPath.row].url ?? "")
     } else {
-      presentVC.characterURL.append(self.characterRequestResult[indexPath?.row ?? 0].url)
+      presentVC.characterURL.append(self.characterRequestResult[indexPath.row].url)
     }
-    show(presentVC, sender: sender)
+    show(presentVC, sender: nil)
   }
-
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     self.page = 0
@@ -76,7 +70,7 @@ class CharactersTableView: UITableViewController {
 
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     if searching == true {
-      return searchRequestResult?.results.count ?? 0
+      return searchRequestResult?.count ?? 0
     }
     return characterRequestResult.count
   }
@@ -88,19 +82,19 @@ class CharactersTableView: UITableViewController {
         return UITableViewCell()
     }
     if searching == true {
-      let data = searchRequestResult?.results[indexPath.row]
+      let data = searchRequestResult?[indexPath.row]
       return cellConfiguration(cell: cell, data: data, index: indexPath.row)
     }
     let data = characterRequestResult[indexPath.row]
     return cellConfiguration(cell: cell, data: data, index: indexPath.row)
   }
 
-  private func cellConfiguration(cell: CharacterTableViewCell, data: CharacterResultDTO?, index: Int) -> UITableViewCell {
+  private func cellConfiguration(cell: CharacterTableViewCell, data: CharacterResultsDTO?, index: Int) -> UITableViewCell {
     let imageURL = URL(string: data?.image ?? "")
     if LocalDataManager.favoriteCharacters.contains(where: { $0.id == (data?.id ?? 0) }) {
       cell.favoriteButton.setImage(UIImage(named: "LikeButtonFull"), for: .normal)
       cell.favoriteButton.tintColor = UIColor(named: "MainColor")
-      cell.deletObject = LocalDataManager.favoriteCharacters.first { $0.id == (data?.id ?? 0) }
+      cell.deleteObject = LocalDataManager.favoriteCharacters.first { $0.id == (data?.id ?? 0) }
       cell.clicked = true
     } else {
       cell.favoriteButton.setImage(UIImage(named: "LikeButton"), for: .normal)
@@ -194,17 +188,13 @@ class CharactersTableView: UITableViewController {
 
 extension CharactersTableView: UISearchBarDelegate {
   func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    self.searchTimer?.invalidate()
-
-    searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
-      DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-        self?.searchDelegate?.characterSearch(tag: searchText) { [weak self] searchResponce in
-          self?.searchRequestResult = searchResponce
-        }
-        DispatchQueue.main.async {
-          self?.searching = true
-          self?.tableView.reloadData()
-        }
+    DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+      self?.searchDelegate?.characterSearch(tag: searchText) { [weak self] searchResponce in
+        self?.searchRequestResult = searchResponce
+      }
+      DispatchQueue.main.async {
+        self?.searching = true
+        self?.tableView.reloadData()
       }
     }
   }

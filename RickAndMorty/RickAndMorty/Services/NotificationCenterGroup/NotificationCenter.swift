@@ -18,13 +18,13 @@ class NotificationCenter {
       }
     }
   }
-  func sendNotifications() {
+  func sendNotifications(interval: TimeInterval) {
     let content = UNMutableNotificationContent()
     content.title = "Please come back"
     content.body = "It is for 5 min only!"
     content.sound = UNNotificationSound.default
     content.badge = 1
-    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
     let request = UNNotificationRequest(identifier: "notification", content: content, trigger: trigger)
     notificationCenter.add(request) { error in
       print(error?.localizedDescription ?? "NotificationConnected")

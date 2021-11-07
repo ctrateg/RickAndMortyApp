@@ -7,18 +7,18 @@ class EpisodesCardTVC: UITableViewController {
   private let loadView = UIView()
   private let indicator = UIActivityIndicatorView()
 
-  private weak var deleteFromCache: UserCacheDeleteProtocol?
-  private weak var saveInCacheProtocol: UserCacheSaveProtocol?
+  private weak var deleteFromCache: LocalCacheDeleteProtocol?
+  private weak var saveInCacheProtocol: LocalCacheSaveProtocol?
   private weak var serviceRequest: SingleRequestProtocol?
 
   var episodesURL: [String] = []
   private var deletObject: EpisodesCache?
-  private var episodesRequestResult: [EpisodesResultDTO]?
+  private var episodesRequestResult: [EpisodesResultsDTO]?
   private var charactersDTO: CharacterDTO?
   private var titles: [String]?
   private var headerView: UIView?
   private var infoLabel: UILabel?
-  private var characterRequestResult: [CharacterResultDTO]?
+  private var characterRequestResult: [CharacterResultsDTO]?
   private var cardArray: [String]?
   private var clickedTopButton = false
   override func viewWillAppear(_ animated: Bool) {
@@ -28,15 +28,17 @@ class EpisodesCardTVC: UITableViewController {
     self.serviceRequest = RequestServiceAPI.shared
     self.episodesRequest(urlArray: episodesURL)
   }
+
   override func viewDidLoad() {
     super.viewDidLoad()
     self.tableView.backgroundColor = .systemGray6
     self.navigationItem.title = "Episode Card"
+    self.shareButtonConfig()
     self.titles = [ "Date", "Code" ]
   }
 
   private func episodesRequest(urlArray: [String]) {
-    DispatchQueue.global(qos: .userInteractive).sync {
+    DispatchQueue.global(qos: .default).sync {
       self.serviceRequest?.requestForEpisodes(urlArray: urlArray) { [weak self] responce in
         self?.episodesRequestResult = responce
         self?.cardArray = [
@@ -88,6 +90,7 @@ class EpisodesCardTVC: UITableViewController {
       return 38
     }
   }
+
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     switch indexPath.section {
     case 0:
@@ -96,6 +99,19 @@ class EpisodesCardTVC: UITableViewController {
       return 60
     }
   }
+
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    switch indexPath.section {
+    case 1:
+      guard let presentVC = characterStoryboard.instantiateViewController(
+        withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
+      else { return }
+      presentVC.characterURL.append(self.characterRequestResult?[indexPath.row].url ?? "")
+      show(presentVC, sender: nil)
+    default: return
+    }
+  }
+
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     switch indexPath.section {
     case 0:
@@ -185,18 +201,21 @@ class EpisodesCardTVC: UITableViewController {
     headerView?.addSubview(infoLabel ?? UILabel())
     return headerView
   }
-  @IBAction func segueButton(_ sender: UIButton) {
-    let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
-    let indexPath = tableView.indexPathForRow(at: buttonPosition)
-    guard let presentVC = characterStoryboard.instantiateViewController(
-      withIdentifier: "CharacterCardTVC") as? CharacterCardTVC
-    else { return }
-    presentVC.characterURL.append(self.characterRequestResult?[indexPath?.row ?? 0].url ?? "")
-    show(presentVC, sender: sender)
+
+  private func shareButtonConfig() {
+    let actionButton = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(activityAction))
+    self.navigationItem.rightBarButtonItem = actionButton
   }
+
+  @objc private func activityAction() {
+    let returnValue = [characterRequestResult?[0].name, characterRequestResult?[0].image]
+    let shareController = UIActivityViewController(activityItems: returnValue as [Any], applicationActivities: nil)
+    present(shareController, animated: true)
+  }
+
   @objc func favoriteButtonTap(_ sender: UIButton) {
     if clickedTopButton {
-      deleteFromCache?.deleteItem(deletData: deletObject ?? NSManagedObject())
+      deleteFromCache?.deleteItem(deleteData: deletObject ?? NSManagedObject())
       sender.setImage(UIImage(named: "LikeButton"), for: .normal)
       sender.tintColor = .black
     } else {

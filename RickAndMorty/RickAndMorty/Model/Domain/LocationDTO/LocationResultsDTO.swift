@@ -1,6 +1,4 @@
-import Foundation
-
-struct LocationResultDTO: Codable {
+struct LocationResultsDTO: Codable {
   let id: Int
   let name: String
   let type: String

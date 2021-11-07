@@ -1,6 +1,4 @@
-import Foundation
-
-struct EpisodesResultDTO: Codable {
+struct EpisodesResultsDTO: Codable {
   let id: Int
   let name: String
   let airDate: String
