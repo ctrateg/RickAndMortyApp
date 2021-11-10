@@ -8,11 +8,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   var window: UIWindow?
 
   private let locationManager = CLLocationManager()
-  private let storyboard = UIStoryboard(name: "Main", bundle: nil)
   private let userCacheData = LocalDataManager.shared
   private let firstOpenTime = Int(Date().timeIntervalSince1970)
 
-  private var rootVC: UIViewController?
   private weak var userLocationDelegate: LocationProtocol?
   private weak var loadDataDelegate: LocalCacheLoadProtocol?
 
@@ -23,14 +21,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     self.window?.windowScene = windowScene
 
     if UserDefaults.standard.bool(forKey: UserDefaultKeys.notFirstStart.rawValue) {
-      rootVC = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController
-      self.window?.rootViewController = rootVC
+      self.window?.rootViewController = LoginViewController.createFromStoryboard
       loadData()
     } else {
       UserDefaults.standard.set(true, forKey: UserDefaultKeys.notFirstStart.rawValue)
       UserDefaults.standard.set(firstOpenTime, forKey: UserDefaultKeys.firstOpenTime.rawValue)
-      rootVC = storyboard.instantiateViewController(withIdentifier: "PreviewViewController") as? PreviewViewController
-      self.window?.rootViewController = rootVC
+      self.window?.rootViewController = PreviewViewController.createFromStoryboard
     }
 
     Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in

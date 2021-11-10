@@ -8,7 +8,7 @@ struct CharacterResultsDTO: Codable {
   let origin: OriginDTO?
   let location: LocationArrayDTO?
   let image: String
-  let episode: [String]?
+  let episode: [String]
   let url: String
   let created: String
 }

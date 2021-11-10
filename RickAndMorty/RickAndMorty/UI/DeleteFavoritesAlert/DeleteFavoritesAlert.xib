@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="DeleteFavoritesAlert" translatesAutoresizingMaskIntoConstraints="NO" id="BjK-bp-Lpp" customClass="DeleteFavoritesAlert" customModule="RickAndMorty" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f5m-WY-msj">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item has been removed from Favs" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dK0-dR-Km5">
+                            <rect key="frame" x="24" y="17" width="231" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lKi-Ol-lum">
+                            <rect key="frame" x="289" y="18" width="79" height="16"/>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="79" id="sYb-7w-eCa"/>
+                                <constraint firstAttribute="height" constant="16" id="yc2-f3-vxt"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="tintColor" name="launchColor"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="CANCEL"/>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="lKi-Ol-lum" firstAttribute="centerY" secondItem="f5m-WY-msj" secondAttribute="centerY" id="6MA-qO-Kaz"/>
+                        <constraint firstAttribute="height" constant="52" id="Akt-ZU-UP2"/>
+                        <constraint firstAttribute="width" constant="375" id="W1f-l2-zdl"/>
+                        <constraint firstItem="dK0-dR-Km5" firstAttribute="centerY" secondItem="f5m-WY-msj" secondAttribute="centerY" id="cq6-vC-Ym6"/>
+                        <constraint firstAttribute="trailing" secondItem="lKi-Ol-lum" secondAttribute="trailing" constant="7" id="hP2-zf-lEy"/>
+                        <constraint firstItem="dK0-dR-Km5" firstAttribute="leading" secondItem="f5m-WY-msj" secondAttribute="leading" constant="24" id="xGG-mG-GqH"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="UBK-hR-eV0"/>
+            <color key="backgroundColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="f5m-WY-msj" firstAttribute="centerY" secondItem="BjK-bp-Lpp" secondAttribute="centerY" id="f9g-CB-KRr"/>
+                <constraint firstItem="f5m-WY-msj" firstAttribute="centerX" secondItem="BjK-bp-Lpp" secondAttribute="centerX" id="f9u-oN-LPs"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-33.333333333333336" y="139.95535714285714"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="launchColor">
+            <color red="0.99599999189376831" green="0.99599999189376831" blue="0.19900000095367432" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

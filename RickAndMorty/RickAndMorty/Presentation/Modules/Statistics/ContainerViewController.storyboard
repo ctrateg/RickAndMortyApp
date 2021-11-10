@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Qsb-82-zBh">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Container View Controller-->
+        <scene sceneID="VsM-9U-dRh">
+            <objects>
+                <viewController storyboardIdentifier="ContainerViewController" id="tN1-P9-bdi" customClass="ContainerViewController" customModule="RickAndMorty" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ByT-eH-vyQ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EXl-dg-dM7">
+                                <rect key="frame" x="0.0" y="88" width="414" height="44"/>
+                                <color key="backgroundColor" name="MainColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="PAq-sd-63W"/>
+                                </constraints>
+                                <color key="barTintColor" name="MainColor"/>
+                                <items>
+                                    <navigationItem id="2UA-Ma-2yF">
+                                        <nil key="title"/>
+                                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="rTI-PB-3Qm">
+                                            <rect key="frame" x="12" y="5.5" width="390" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <segments>
+                                                <segment title="In App Time"/>
+                                                <segment title="Map"/>
+                                            </segments>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="selectedSegmentTintColor" name="LaunchColor"/>
+                                            <connections>
+                                                <action selector="segmentControllerAction:" destination="tN1-P9-bdi" eventType="valueChanged" id="fvI-Cr-54l"/>
+                                            </connections>
+                                        </segmentedControl>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3fO-aq-a8c">
+                                <rect key="frame" x="0.0" y="132" width="414" height="730"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="b4l-VC-fgS"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="b4l-VC-fgS" firstAttribute="trailing" secondItem="3fO-aq-a8c" secondAttribute="trailing" id="3eT-ST-JWf"/>
+                            <constraint firstItem="EXl-dg-dM7" firstAttribute="top" secondItem="b4l-VC-fgS" secondAttribute="top" id="Bxu-gf-SOm"/>
+                            <constraint firstItem="b4l-VC-fgS" firstAttribute="bottom" secondItem="3fO-aq-a8c" secondAttribute="bottom" id="DnT-xK-9vL"/>
+                            <constraint firstItem="EXl-dg-dM7" firstAttribute="leading" secondItem="b4l-VC-fgS" secondAttribute="leading" id="Kjt-ns-qrp"/>
+                            <constraint firstItem="3fO-aq-a8c" firstAttribute="leading" secondItem="b4l-VC-fgS" secondAttribute="leading" id="LJD-H5-8TS"/>
+                            <constraint firstItem="3fO-aq-a8c" firstAttribute="top" secondItem="EXl-dg-dM7" secondAttribute="bottom" id="RvH-QT-3nE"/>
+                            <constraint firstItem="EXl-dg-dM7" firstAttribute="trailing" secondItem="b4l-VC-fgS" secondAttribute="trailing" id="qZt-fT-ehM"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="lbn-Yj-WPg"/>
+                    <connections>
+                        <outlet property="presentView" destination="3fO-aq-a8c" id="OJm-SX-vjP"/>
+                        <outlet property="segmenController" destination="rTI-PB-3Qm" id="SD4-ce-96g"/>
+                        <outlet property="subNavigationBarOutlet" destination="2UA-Ma-2yF" id="nKv-Fx-sDr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dox-sH-lUb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1910.144927536232" y="37.5"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="dOl-Vs-KJh">
+            <objects>
+                <navigationController storyboardIdentifier="StatisticsNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="Qsb-82-zBh" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="N2A-u4-pdl">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="tN1-P9-bdi" kind="relationship" relationship="rootViewController" id="jH4-oj-FlM"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fTB-lL-BJl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1146" y="38"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="LaunchColor">
+            <color red="0.99599999189376831" green="0.99599999189376831" blue="0.19900000095367432" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="MainColor">
+            <color red="0.0" green="0.69999998807907104" blue="0.8399999737739563" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="jdl-Z9-3fi">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Statistics View Controller-->
+        <scene sceneID="SdG-1d-Zsj">
+            <objects>
+                <viewController storyboardIdentifier="StatisticsViewController" id="jdl-Z9-3fi" customClass="StatisticsViewController" customModule="RickAndMorty" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="c8m-Kr-ZAR">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Jbm-ZH-28j">
+                                <rect key="frame" x="161.5" y="54" width="91.5" height="286"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qxX-G5-KF8" userLabel="Hours">
+                                        <rect key="frame" x="0.0" y="0.0" width="91.5" height="90"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="75"/>
+                                        <color key="textColor" name="MainColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nxl-sv-SvO" userLabel="Minute">
+                                        <rect key="frame" x="0.0" y="98" width="91.5" height="90"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="75"/>
+                                        <color key="textColor" name="MainColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mxP-jf-uxc" userLabel="Seconds">
+                                        <rect key="frame" x="0.0" y="196" width="91.5" height="90"/>
+                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="75"/>
+                                        <color key="textColor" name="MainColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="286" id="qch-08-kY0"/>
+                                </constraints>
+                                <variation key="heightClass=compact" axis="horizontal"/>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zw9-VX-dw2">
+                                <rect key="frame" x="161.5" y="360" width="91" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="jUu-3H-Pqf"/>
+                                    <constraint firstAttribute="width" constant="91" id="jsH-ey-ZRy"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="17"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title=" Reset Time">
+                                    <color key="titleColor" name="MainColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="resetButton:" destination="jdl-Z9-3fi" eventType="touchUpInside" id="68K-LO-Yim"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="o2f-oY-n8P"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Jbm-ZH-28j" firstAttribute="top" secondItem="o2f-oY-n8P" secondAttribute="top" constant="10" id="UQ0-GJ-qW9"/>
+                            <constraint firstItem="Zw9-VX-dw2" firstAttribute="top" secondItem="Jbm-ZH-28j" secondAttribute="bottom" constant="20" id="UiV-Ag-wmf"/>
+                            <constraint firstItem="Zw9-VX-dw2" firstAttribute="centerX" secondItem="c8m-Kr-ZAR" secondAttribute="centerX" id="ZGe-a1-lmm"/>
+                            <constraint firstItem="Jbm-ZH-28j" firstAttribute="centerX" secondItem="c8m-Kr-ZAR" secondAttribute="centerX" id="iGd-x1-uWI"/>
+                            <constraint firstItem="Jbm-ZH-28j" firstAttribute="top" secondItem="o2f-oY-n8P" secondAttribute="top" constant="10" id="xSQ-I2-AA4"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="0ag-pn-q5N"/>
+                    <connections>
+                        <outlet property="hoursLabel" destination="qxX-G5-KF8" id="s4f-DR-3bH"/>
+                        <outlet property="minuteLabel" destination="Nxl-sv-SvO" id="n9W-GC-iU5"/>
+                        <outlet property="resetButtonOutlet" destination="Zw9-VX-dw2" id="33W-tA-2uA"/>
+                        <outlet property="secondsLabel" destination="mxP-jf-uxc" id="X48-gz-LvQ"/>
+                        <outlet property="stackViewStatistic" destination="Jbm-ZH-28j" id="lz9-Ys-Zbg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Ug-Cm-lzs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2608.6956521739135" y="-317.41071428571428"/>
+        </scene>
+    </scenes>
+    <resources>
+        <namedColor name="MainColor">
+            <color red="0.0" green="0.69999998807907104" blue="0.8399999737739563" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
