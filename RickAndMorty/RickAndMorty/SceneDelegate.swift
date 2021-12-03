@@ -40,7 +40,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     UIApplication.shared.applicationIconBadgeNumber = 0
   }
   func sceneDidDisconnect(_ scene: UIScene) {
-    NotificationCenter.shared.sendNotifications(interval: 5)
     let userDefaultDate = UserDefaults.standard.integer(forKey: UserDefaultKeys.firstOpenTime.rawValue)
     let saveDate = userDefaultDate + SceneDelegate.timeInApp
     UserDefaults.standard.set(saveDate, forKey: UserDefaultKeys.firstOpenTime.rawValue)

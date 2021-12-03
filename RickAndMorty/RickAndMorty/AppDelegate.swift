@@ -10,6 +10,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     NotificationCenter.shared.author()
     return true
   }
+  func applicationWillTerminate(_ application: UIApplication) {
+    NotificationCenter.shared.sendNotifications(interval: 5)
+  }
   lazy var persistentContainer: NSPersistentContainer = {
     let container = NSPersistentContainer(name: "RickAndMorty")
     container.loadPersistentStores { _, error in
