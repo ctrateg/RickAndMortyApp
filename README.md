@@ -1,12 +1,11 @@
 # Проект для развития навыков
  ## Что используется:
-- Взаимодействие с Api через Alamofire 
-- Хранение значений в CoreData
+- Alamofire 
+- CoreData
 - TableView, CollectionView
-- Adaptive layout на экране логина 
-- GoogleMap (не много) 
-- Kingfisher для взаимодействием с image
-- Почти MVP
+- Adaptive layout
+- GoogleMap 
+- Kingfisher 
 - Locksmith
 - CoreAnimating
 - Local PushNotification
